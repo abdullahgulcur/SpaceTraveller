@@ -5,6 +5,7 @@ namespace Engine {
 
     void Input::init(android_app *app_) {
         this->app_ = app_;
+        pointerDelta = glm::ivec2(0);
     }
 
     void Input::handleInput() {

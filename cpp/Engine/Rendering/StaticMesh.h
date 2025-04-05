@@ -8,10 +8,6 @@ namespace Engine{
 
     namespace Mesh {
 
-        // bu sekilde olmasina gerek yok. her sahne icin gerekli olan degerleri cek.
-        // generic birsey yapmak zorunda degilsin.
-        // performance onemli.
-
         struct StaticMeshRenderer {
 
             unsigned int vao0, vao1, vao2;

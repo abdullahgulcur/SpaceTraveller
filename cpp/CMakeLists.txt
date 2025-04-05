@@ -13,6 +13,9 @@ file(GLOB sourceFiles
 
         "main.cpp"
 
+        "Game/Game.cpp"
+        "Game/Scene.cpp"
+
         "Engine/Core/Core.cpp"
         "Engine/Core/Input.cpp"
 
@@ -43,6 +46,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE ThirdParty/glm
         ThirdParty/stb
         ThirdParty/tinyobjloader
         ThirdParty/assimp
+
+        Game
 
         Engine/Precompiled
 

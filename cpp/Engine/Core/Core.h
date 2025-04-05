@@ -11,18 +11,6 @@ namespace Engine {
     class Core {
     private:
 
-        //float y = 0;
-        //int dir = -1;
-
-        float horizontalAngle = 0;
-        float targetHorizontalAngle = 0;
-
-        Vao::Vao vao;
-
-        std::vector<glm::mat4> models;
-
-        VertexBuffer::VertexBuffer instanceBuffer;
-
         static Core* instance;
 
         Core() {}
