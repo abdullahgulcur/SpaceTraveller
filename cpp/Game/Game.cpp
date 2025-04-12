@@ -10,9 +10,9 @@ namespace Game{
         scene.init();
     }
 
-    void Game::update(){
+    void Game::update(float dt){
 
-        scene.update();
+        scene.update(dt);
     }
 
     Game* Game::getInstance() {

@@ -20,6 +20,5 @@ namespace Engine{
         void loadStaticMeshTextured(std::string& path);
         void loadSkinnedMesh(std::string& path);
         void loadSkinnedMeshTextured(std::string& path);
-
     };
 }

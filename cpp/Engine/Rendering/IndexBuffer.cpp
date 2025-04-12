@@ -63,13 +63,15 @@ namespace Engine {
             };
         }
 
-        void draw(unsigned int totalIndices, unsigned int indexElementType){
-            glDrawElements(GL_TRIANGLES, totalIndices, indexElementType, (void*)0);
+        // not tested yet
+        void bufferData(IndexBuffer& indexBuffer, unsigned char* indices, unsigned int totalIndices){
+
+            indexBuffer.indexElementType = GL_UNSIGNED_BYTE;
+            indexBuffer.totalIndices = totalIndices;
+            bufferData(indexBuffer.bufferId, indexBuffer.totalIndices, indices);
         }
 
-        void drawInstanced(unsigned int totalIndices, unsigned int indexElementType, unsigned int instanceCount){
-            glDrawElementsInstanced(GL_TRIANGLES, totalIndices, indexElementType, (void*)0, instanceCount);
-        }
+
 
     }
 

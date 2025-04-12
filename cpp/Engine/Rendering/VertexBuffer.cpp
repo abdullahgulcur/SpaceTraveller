@@ -21,6 +21,11 @@ namespace Engine {
             glBufferData(GL_ARRAY_BUFFER, bufferSize, buffer, GL_STATIC_DRAW);
         }
 
+        void bufferSubData(unsigned int bufferId, unsigned int offset, unsigned int dataSize, void* data){
+            bind(bufferId);
+            glBufferSubData(GL_ARRAY_BUFFER, offset, dataSize, data);
+        }
+
         void clear(unsigned int& bufferId) {
             glDeleteBuffers(1, &bufferId);
         }

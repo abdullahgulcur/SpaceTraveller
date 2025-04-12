@@ -18,8 +18,9 @@ namespace Engine {
         void clear(unsigned int& bufferId);
         unsigned int getIndexElementType(unsigned int maxIndex);
         void bufferData(unsigned int bufferId, unsigned int size, void* ptr);
+        void bufferData(IndexBuffer& indexBuffer, unsigned char* indices, unsigned int totalIndices);
         void bufferData(IndexBuffer& indexBuffer, std::vector<unsigned int>& indices);
-        void draw(unsigned int totalIndices, unsigned int indexElementType);
-        void drawInstanced(unsigned int totalIndices, unsigned int indexElementType, unsigned int instanceCount);
+        //void draw(unsigned int totalIndices, unsigned int indexElementType);
+        //void drawInstanced(unsigned int totalIndices, unsigned int indexElementType, unsigned int instanceCount);
     }
 }

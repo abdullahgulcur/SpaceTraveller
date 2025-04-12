@@ -99,7 +99,7 @@ void android_main(struct android_app *pApp) {
             instance->update();
 
             Game::Game* gameInstance = Game::Game::getInstance();
-            gameInstance->update();
+            gameInstance->update(instance->systemTimer.getDeltaSeconds());
         }
     } while (!pApp->destroyRequested);
 }

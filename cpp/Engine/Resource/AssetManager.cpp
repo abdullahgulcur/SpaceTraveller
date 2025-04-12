@@ -35,4 +35,20 @@ namespace Engine{
         return &texture2DCache[key];
     }
 
+    VertexBuffer::VertexBuffer* AssetManager::loadBillboardMesh(std::string key){
+
+        float vertices[] = {
+                -0.5f, -0.5f,
+                0.5f, -0.5f,
+                -0.5f,  0.5f,
+                0.5f,  0.5f,
+        };
+
+        VertexBuffer::VertexBuffer billboardVertexBuffer;
+        VertexBuffer::generate(billboardVertexBuffer.bufferId);
+        VertexBuffer::bufferData(billboardVertexBuffer.bufferId, sizeof(vertices), &vertices[0]);
+        vertexBufferCache[key] = billboardVertexBuffer;
+        return &vertexBufferCache[key];
+    }
+
 }

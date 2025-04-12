@@ -25,6 +25,7 @@ namespace Engine {
 
     void Core::update() {
 
+        systemTimer.update();
         eglContext.swapBuffers();
         eglContext.updateRenderArea();
         input.handleInput();

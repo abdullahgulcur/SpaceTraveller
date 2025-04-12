@@ -15,9 +15,13 @@ file(GLOB sourceFiles
 
         "Game/Game.cpp"
         "Game/Scene.cpp"
+        "Game/Scene/ParticleScene.cpp"
 
         "Engine/Core/Core.cpp"
+        "Engine/Core/Timer.cpp"
         "Engine/Core/Input.cpp"
+
+        "Engine/Math/RandomValue.cpp"
 
         "Engine/Platform/Android/EglContext.cpp"
         "Engine/Platform/Android/AndroidAssetManager.cpp"
@@ -32,6 +36,9 @@ file(GLOB sourceFiles
         "Engine/Rendering/Texture2D.cpp"
         "Engine/Rendering/Vao.cpp"
         "Engine/Rendering/VertexBuffer.cpp"
+        "Engine/Rendering/ParticleSystem.cpp"
+        "Engine/Rendering/Particle.cpp"
+        "Engine/Rendering/DrawCommand.cpp"
 
         "Engine/Resource/AssetManager.cpp"
         "Engine/Resource/MeshData.cpp"
@@ -48,6 +55,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE ThirdParty/glm
         ThirdParty/assimp
 
         Game
+        Game/Scene
 
         Engine/Precompiled
 
@@ -55,7 +63,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE ThirdParty/glm
         Engine/Platform/Android
         Engine/Platform/Windows
         Engine/Rendering
-        Engine/Resource)
+        Engine/Resource
+        Engine/Math)
 
 # Searches for a package provided by the game activity dependency
 find_package(game-activity REQUIRED CONFIG)

@@ -74,6 +74,8 @@ namespace Engine{
             }
         }
 
+        VertexBuffer::generate(vertexBuffer.bufferId);
+        IndexBuffer::generate(indexBuffer.bufferId);
         VertexBuffer::bufferData(vertexBuffer.bufferId, vertices.size() * sizeof(Vertex), &vertices[0]);
         IndexBuffer::bufferData(indexBuffer, indices);
     }
@@ -155,6 +157,8 @@ namespace Engine{
             }
         }
 
+        VertexBuffer::generate(vertexBuffer.bufferId);
+        IndexBuffer::generate(indexBuffer.bufferId);
         VertexBuffer::bufferData(vertexBuffer.bufferId, vertices.size() * sizeof(Vertex), &vertices[0]);
         IndexBuffer::bufferData(indexBuffer, indices);
     }
@@ -166,4 +170,5 @@ namespace Engine{
     void MeshData::loadSkinnedMeshTextured(std::string& path){
 
     }
+
 }

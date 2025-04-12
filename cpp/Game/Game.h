@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Core.h"
-#include "Scene.h"
+//#include "Scene.h"
+#include "ParticleScene.h"
 
 namespace Game {
 
@@ -10,7 +11,7 @@ namespace Game {
 
         static Game* instance;
 
-        Scene scene;
+        ParticleScene scene;
 
     public:
 
@@ -18,7 +19,7 @@ namespace Game {
         ~Game() {}
 
         void init();
-        void update();
+        void update(float dt);
 
         static Game* getInstance();
     };

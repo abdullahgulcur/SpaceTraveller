@@ -5,6 +5,7 @@
 #include "EglContext.h"
 #include "AssetManager.h"
 #include "Input.h"
+#include "Timer.h"
 
 namespace Engine {
 
@@ -23,6 +24,7 @@ namespace Engine {
         EglContext eglContext;
         AssetManager assetManager;
         Input input;
+        Timer::SystemTimer systemTimer;
 
         void init(android_app *app_);
         void update();

@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Scene.h"
 
+#include "DrawCommand.h"
+
 #include <GLES3/gl32.h> // will be removed
 #include "ext/matrix_clip_space.hpp"  // will be removed
 #include "gtc/matrix_transform.hpp"   // will be removed
@@ -16,9 +18,11 @@ namespace Game{
         for(int x = -radius; x <= radius; x++){
             for(int y = -radius; y <= radius; y++){
                 for(int z = -radius; z <= radius; z++){
-                    glm::mat4 model = glm::mat4(1.0f);
-                    model = glm::translate(model, glm::vec3(x,y,z)) * glm::scale(model, glm::vec3(0.3));
-                    models.push_back(model);
+                    if(x == -radius || x == radius || y == -radius || y == radius || z == -radius || z == radius){
+                        glm::mat4 model = glm::mat4(1.0f);
+                        model = glm::translate(model, glm::vec3(x,y,z)) * glm::scale(model, glm::vec3(0.3));
+                        models.push_back(model);
+                    }
                 }
             }
         }
@@ -71,7 +75,7 @@ namespace Game{
         glBindTexture(GL_TEXTURE_2D, texture2D.textureId);
 
         Engine::Vao::bind(vao.vao);
-        Engine::IndexBuffer::drawInstanced(meshData.indexBuffer.totalIndices, meshData.indexBuffer.indexElementType, models.size());
+        Engine::DrawCommand::drawInstanced(meshData.indexBuffer.totalIndices, meshData.indexBuffer.indexElementType, models.size());
     }
 
 }

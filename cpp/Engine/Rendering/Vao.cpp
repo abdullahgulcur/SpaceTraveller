@@ -92,5 +92,34 @@ namespace Engine {
             unbind();
         }
 
+        void createBillboardMeshVao(unsigned int& vao, unsigned int vertexBufferId){
+            generate(vao);
+            bind(vao);
+
+            VertexBuffer::bind(vertexBufferId);
+
+            vertexAttributePointer(0, 2, GL_FLOAT, 8, 0);
+
+            unbind();
+        }
+
+        void createBillboardMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId){
+            generate(vao);
+            bind(vao);
+
+            VertexBuffer::bind(vertexBufferId);
+
+            vertexAttributePointer(0, 2, GL_FLOAT, 8, 0);
+
+            VertexBuffer::bind(instanceBufferId);
+
+            vertexAttributePointerInstanced(1, 3, GL_FLOAT, 64, 0);
+            vertexAttributePointerInstanced(2, 1, GL_FLOAT, 64, 12);
+            vertexAttributePointerInstanced(3, 4, GL_FLOAT, 64, 16);
+            vertexAttributePointerInstanced(4, 1, GL_FLOAT, 64, 32);
+
+            unbind();
+        }
+
     }
 }
