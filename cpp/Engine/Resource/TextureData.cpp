@@ -30,14 +30,14 @@ namespace Engine{
 
     //---------------------- TextureData2D ----------------------
 
-    TextureData2D::TextureData2D(std::string path){
+    TextureData2D::TextureData2D(std::string path, unsigned int desiredChannels){
 
         std::vector<unsigned char> buffer;
         AndroidAssetManager androidAssetManager;
         androidAssetManager.readBytesFromAsset(path.c_str(), buffer);
 
         int w, h, ch;
-        data = stbi_load_from_memory(&buffer[0], (int)buffer.size(), &w, &h, &ch, 3);
+        data = stbi_load_from_memory(&buffer[0], (int)buffer.size(), &w, &h, &ch, desiredChannels);
         width = w;
         height = h;
         channels = ch;

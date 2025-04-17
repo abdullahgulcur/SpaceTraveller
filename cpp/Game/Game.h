@@ -2,7 +2,8 @@
 
 #include "Core.h"
 //#include "Scene.h"
-#include "ParticleScene.h"
+//#include "ParticleScene.h"
+#include "UniverseScene.h"
 
 namespace Game {
 
@@ -11,7 +12,7 @@ namespace Game {
 
         static Game* instance;
 
-        ParticleScene scene;
+        UniverseScene scene;
 
     public:
 

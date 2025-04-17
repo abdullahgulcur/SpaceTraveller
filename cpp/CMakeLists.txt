@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.22.1)
 
 project("space")
 
-set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -16,6 +16,8 @@ file(GLOB sourceFiles
         "Game/Game.cpp"
         "Game/Scene.cpp"
         "Game/Scene/ParticleScene.cpp"
+        "Game/Scene/UniverseScene.cpp"
+
 
         "Engine/Core/Core.cpp"
         "Engine/Core/Timer.cpp"
@@ -39,6 +41,7 @@ file(GLOB sourceFiles
         "Engine/Rendering/ParticleSystem.cpp"
         "Engine/Rendering/Particle.cpp"
         "Engine/Rendering/DrawCommand.cpp"
+        "Engine/Rendering/FrameBuffer.cpp"
 
         "Engine/Resource/AssetManager.cpp"
         "Engine/Resource/MeshData.cpp"

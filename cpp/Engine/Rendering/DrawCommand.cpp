@@ -13,9 +13,15 @@ namespace Engine{
             glDrawElementsInstanced(GL_TRIANGLES, totalIndices, indexElementType, (void*)0, instanceCount);
         }
 
+        // rename: drawQuadsInstanced
         void drawBillboardsInstanced(unsigned int vao, unsigned int instanceCount){
             glBindVertexArray(vao);
             glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, instanceCount);
+        }
+
+        void drawQuad(unsigned int vao){
+            glBindVertexArray(vao);
+            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         }
 
     }

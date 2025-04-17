@@ -24,7 +24,7 @@ namespace Engine{
         unsigned int height;
         unsigned int channels;
 
-        TextureData2D(std::string path);
+        TextureData2D(std::string path, unsigned int desiredChannels);
         ~TextureData2D();
     };
 }

@@ -40,7 +40,7 @@ namespace Game{
         shaderProgram.uniform("albedoTexture", 0);
 
         core->assetManager.loadCompressedTexture2D("texture/marble.astc", "marble");
-        core->assetManager.loadTexture2D("texture/marble.jpg", "marble_");
+        core->assetManager.loadTexture2D("texture/marble.jpg", 3, "marble_");
     }
 
     void Scene::update(){

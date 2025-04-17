@@ -11,6 +11,7 @@ namespace Engine {
         void generate(unsigned int& vao);
         void bind(unsigned int vao);
         void unbind();
+        void deleteVao(unsigned int& vao);
         void enableVertexAttributeArray(unsigned int index);
         void vertexAttributePointer(unsigned int index, unsigned int size, unsigned int type, unsigned int stride, unsigned int offset);
         void vertexAttributeIntegerPointer(unsigned int index, unsigned int size, unsigned int type, unsigned int stride, unsigned int offset);
@@ -20,6 +21,7 @@ namespace Engine {
         void createMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int indexBufferId, unsigned int instanceBufferId, bool textured = false);
         void createBillboardMeshVao(unsigned int& vao, unsigned int vertexBufferId);
         void createBillboardMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId);
-
+        void createGalaxyMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId);
+        void createQuadMeshVao(unsigned int& vao, unsigned int vertexBufferId);
     }
 }

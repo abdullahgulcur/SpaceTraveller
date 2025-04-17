@@ -8,6 +8,11 @@ namespace Engine {
 
     namespace VertexBuffer{
 
+        void generate(unsigned int& bufferId, unsigned int bufferSize, void* buffer){
+            generate(bufferId);
+            bufferData(bufferId, bufferSize, buffer);
+        }
+
         void generate(unsigned int& bufferId){
             glGenBuffers(1, &bufferId);
         }
@@ -27,6 +32,7 @@ namespace Engine {
         }
 
         void clear(unsigned int& bufferId) {
+            unbind();
             glDeleteBuffers(1, &bufferId);
         }
 

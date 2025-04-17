@@ -5,7 +5,7 @@
 
 namespace Engine {
 
-    ShaderProgram::ShaderProgram(std::string& vertexPath, std::string& fragmentPath){
+    ShaderProgram::ShaderProgram(std::string vertexPath, std::string fragmentPath){
 
         auto shaderCode = [](std::string& path, std::string& shaderCode) {
             AndroidAssetManager androidAssetManager;
@@ -77,6 +77,11 @@ namespace Engine {
 
     void ShaderProgram::unbind(){
         glUseProgram(0);
+    }
+
+    void ShaderProgram::clear(){
+        ShaderProgram::unbind();
+        glDeleteShader(programId);
     }
 
     void ShaderProgram::uniform(std::string location, glm::mat4& value){

@@ -11,12 +11,13 @@ namespace Engine {
 
         unsigned int programId;
 
-        ShaderProgram(std::string& vertexPath, std::string& fragmentPath);
+        ShaderProgram(std::string vertexPath, std::string fragmentPath);
         ShaderProgram() {}
         ~ShaderProgram() {}
 
         void bind();
         void unbind();
+        void clear();
         void uniform(std::string location, glm::mat4& value);
         void uniform(std::string location, glm::vec3& value);
         void uniform(std::string location, glm::vec2& value);

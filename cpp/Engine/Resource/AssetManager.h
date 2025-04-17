@@ -24,7 +24,9 @@ namespace Engine{
         MeshData* loadStaticMeshDataTextured(std::string path, std::string key);
         ShaderProgram* loadShaderProgram(std::string vertexShaderPath, std::string fragmentShaderPath, std::string key);
         Texture2D* loadCompressedTexture2D(std::string path, std::string key);
-        Texture2D* loadTexture2D(std::string path, std::string key);
+        Texture2D* loadTexture2D(std::string path, unsigned int desiredChannels, std::string key);
         VertexBuffer::VertexBuffer* loadBillboardMesh(std::string key);
+        static VertexBuffer::VertexBuffer loadQuadMesh();
+        VertexBuffer::VertexBuffer* loadCircleMesh(std::string key);
     };
 }
