@@ -19,32 +19,20 @@ namespace Game{
 
     void UniverseScene::init(){
 
-/*        struct GalaxyData {
-            glm::mat4 model;
-            glm::vec4 color;
-            GalaxyData(glm::mat4 model, glm::vec4 color) : model(model), color(color) {}
-        };*/
-
         std::vector<Engine::ParticleSystem::ParticleData> galaxyData;
-
-/*        for(int i = 0; i < MAX_GALAXIES; i++){
-            glm::vec3 randomPos = Engine::Random::randomVec3(glm::vec3(-2.f, -2.f, -2.f), glm::vec3(2.f,2.f,2.f));
-            glm::vec3 randomRot = Engine::Random::randomVec3(glm::vec3(90.f, 0.f, 0.f), glm::vec3(90.f, 0.f, 0.f));
-
-            glm::mat4 model = glm::translate(glm::mat4(1), randomPos) * glm::eulerAngleXYZ(randomRot.x, randomRot.y, randomRot.z);
-            glm::vec4 color = glm::vec4(Engine::Random::randomVec3(glm::vec3(0.8, 0.8, 0.8), glm::vec3(1, 1, 1)), 1);
-
-            galaxyData.push_back(GalaxyData(model, color));
-        }*/
 
         for(int i = 0; i < MAX_GALAXIES; i++){
             Engine::ParticleSystem::ParticleData pd;
-            pd.position = glm::vec3(Engine::Random::randomFloat(-1.f, 1.f), Engine::Random::randomFloat(-1.f, 1.f), -i * 0.1f);//Engine::Random::randomVec3(glm::vec3(-5.f, -5.f, -5.f), glm::vec3(5.f,5.f,5.f));
+            pd.position = Engine::Random::randomVec3(glm::vec3(-10.f, -2.f, -30.f), glm::vec3(10.f,2.f,30.f));
             pd.rotation = Engine::Random::randomFloat(0.f, 360.f);
-            pd.scale = Engine::Random::randomFloat(0.1f, 0.3f);
-            pd.color = glm::vec4(Engine::Random::randomVec3(glm::vec3(0.f, 0.f, 0.f), glm::vec3(1.f,1.f,1.f)), 1.f);
+            pd.scale = Engine::Random::randomFloat(0.05f, 0.15f);
+            pd.color = glm::vec4(1.f);// glm::vec4(Engine::Random::randomVec3(glm::vec3(1.0f, 0.6f, 0.6f), glm::vec3(1.f,0.5f,0.5f)), 1.f); // glm::vec4(1.f);//
             galaxyData.push_back(pd);
         }
+
+        std::sort(galaxyData.begin(), galaxyData.end(), [](const Engine::ParticleSystem::ParticleData& a, const Engine::ParticleSystem::ParticleData& b) {
+            return a.position.z > b.position.z;
+        });
 
         Engine::Core* core = Engine::Core::getInstance();
 
@@ -53,12 +41,8 @@ namespace Game{
         Engine::VertexBuffer::generate(galaxyInstanceBuffer.bufferId);
         Engine::VertexBuffer::bufferData(galaxyInstanceBuffer.bufferId, MAX_GALAXIES * sizeof(Engine::ParticleSystem::ParticleData), &galaxyData[0]);
 
-        Engine::Vao::createBillboardMeshVao(galaxyMeshVao.vao, billboardMeshVertexBuffer->bufferId, galaxyInstanceBuffer.bufferId);
-
-        shaderProgram = *(core->assetManager.loadShaderProgram("shader/particle.vert", "shader/particle_textured.frag", "galaxy"));
-        shaderProgram.bind();
-        shaderProgram.uniform("particleTexture", 0);
-
+        Engine::Vao::createBillboardMeshVao(galaxyMeshVao, billboardMeshVertexBuffer->bufferId, galaxyInstanceBuffer.bufferId);
+        Engine::Shader::createShaderProgramParticle(shaderProgram);
         Engine::Texture::generateGalaxyFrameBufferTexture(texture2D.textureId, 256);//*(core->assetManager.loadTexture2D("texture/noise.jpg", 1, "noise"));
     }
 
@@ -74,17 +58,21 @@ namespace Game{
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        targetHorizontalPos += core->input.pointerDelta.x * 0.01;
+        horizontalPos = glm::mix(horizontalPos, targetHorizontalPos, 0.1);
+
         glm::mat4 projection = glm::perspective(glm::radians(2.0f), core->eglContext.width_ / (float)core->eglContext.height_, 0.1f, 1000.0f);
-        glm::vec3 cameraPosition(0,0,-200);
-        glm::mat4 view = glm::lookAt(cameraPosition, glm::vec3(0), glm::vec3(0,1,0));
+        glm::vec3 cameraPosition(horizontalPos,0,-100);
+        glm::mat4 view = glm::lookAt(cameraPosition, glm::vec3(horizontalPos,0,0), glm::vec3(0,1,0));
 
-        shaderProgram.bind();
-        shaderProgram.uniform("projection", projection);
-        shaderProgram.uniform("view", view);
-        glActiveTexture(GL_TEXTURE0 + 0);
-        glBindTexture(GL_TEXTURE_2D, texture2D.textureId);
+        Engine::Shader::updateUniformsShaderProgramParticle(shaderProgram, projection, view, texture2D.textureId);
+//
+//        Engine::Shader::bind(shaderProgram.programId);
+//        Engine::Shader::uniform(shaderProgram.locationProjection, projection);
+//        Engine::Shader::uniform(shaderProgram.locationView, view);
+//        Engine::Texture::setTexSlot2D(0, texture2D.textureId);
 
-        Engine::DrawCommand::drawBillboardsInstanced(galaxyMeshVao.vao, MAX_GALAXIES);
+        Engine::DrawCommand::drawBillboardsInstanced(galaxyMeshVao, MAX_GALAXIES);
     }
 
 }

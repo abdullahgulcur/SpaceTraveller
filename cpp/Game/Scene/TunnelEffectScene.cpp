@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "ParticleScene.h"
+#include "TunnelEffectScene.h"
 
 #include "DrawCommand.h"
 
@@ -7,33 +7,27 @@
 #include "ext/matrix_clip_space.hpp"  // will be removed
 #include "gtc/matrix_transform.hpp"   // will be removed
 
-#define MAX_PARTICLES 8192
-
 namespace Game{
 
-    void ParticleScene::init(){
+    void TunnelEffectScene::init(){
 
         Engine::Core* core = Engine::Core::getInstance();
 
         Engine::VertexBuffer::VertexBuffer* billboardMeshVertexBuffer = core->assetManager.loadBillboardMesh("billboard");
 
         Engine::VertexBuffer::generate(particleInstanceBuffer.bufferId);
-        Engine::VertexBuffer::bufferData(particleInstanceBuffer.bufferId, MAX_PARTICLES * sizeof(Engine::ParticleSystem::ParticleData), nullptr);
+        Engine::VertexBuffer::bufferData(particleInstanceBuffer.bufferId, 1024 * 16, nullptr);
 
-        Engine::Vao::createBillboardMeshVao(particleMeshVao, billboardMeshVertexBuffer->bufferId, particleInstanceBuffer.bufferId);
+        Engine::Vao::createBillboardMeshVao_P_S(particleMeshVao, billboardMeshVertexBuffer->bufferId, particleInstanceBuffer.bufferId);
 
-        particleSystem = new Engine::ParticleSystem::ParticleSystem;
-        shaderProgram = *(core->assetManager.loadShaderProgram("shader/particle.vert", "shader/particle.frag", "particle"));
-        //shaderProgram.bind();
-        //shaderProgram.uniform("albedoTexture", 0);
+        Engine::ParticleSystem::start(particleSystem, core->systemTimer.getTotalSeconds());
 
-        /*core->assetManager.loadCompressedTexture2D("texture/marble.astc", "marble");
-        core->assetManager.loadTexture2D("texture/marble.jpg", "marble_");*/
+        shaderProgram = *(core->assetManager.loadShaderProgram("shader/particle_p_s.vert", "shader/particle.frag", "particle"));
     }
 
-    void ParticleScene::update(float dt){
+    void TunnelEffectScene::update(float dt){
 
-        particleSystem->update(dt);
+        Engine::ParticleSystem::updateParticleTunnelEffect(particleSystem, dt);
 
         Engine::Core* core = Engine::Core::getInstance();
 
@@ -52,11 +46,9 @@ namespace Game{
         shaderProgram.bind();
         shaderProgram.uniform("projection", projection);
         shaderProgram.uniform("view", view);
-        //glActiveTexture(GL_TEXTURE0 + 0);
-        //glBindTexture(GL_TEXTURE_2D, texture2D.textureId);
 
-        Engine::VertexBuffer::bufferSubData(particleInstanceBuffer.bufferId, 0, particleSystem->particleCount * sizeof(Engine::ParticleSystem::ParticleData), &particleSystem->particleData[0]);
-        Engine::DrawCommand::drawBillboardsInstanced(particleMeshVao, particleSystem->particleCount);
+        Engine::VertexBuffer::bufferSubData(particleInstanceBuffer.bufferId, 0, particleSystem.particleCount * 16, &particleSystem.gpuData[0]);
+        Engine::DrawCommand::drawBillboardsInstanced(particleMeshVao, particleSystem.particleCount);
     }
 
 }

@@ -6,19 +6,30 @@
 
 namespace Engine{
 
-    class MeshData{
+    namespace MeshData{
 
-    private:
-    public:
+        struct MeshData{
+            unsigned int vertexBuffer;
+            IndexBuffer::IndexBuffer indexBuffer;
+        };
 
-        VertexBuffer::VertexBuffer vertexBuffer;
-        IndexBuffer::IndexBuffer indexBuffer;
+        void loadStaticMesh(MeshData& data, std::string& path);
+        void loadStaticMeshTextured(MeshData& data, std::string& path);
+    }
 
-        MeshData(){}
-        ~MeshData(){}
-        void loadStaticMesh(std::string& path);
-        void loadStaticMeshTextured(std::string& path);
-        void loadSkinnedMesh(std::string& path);
-        void loadSkinnedMeshTextured(std::string& path);
-    };
+//    class MeshData{
+//
+//    private:
+//    public:
+//
+//        VertexBuffer::VertexBuffer vertexBuffer;
+//        IndexBuffer::IndexBuffer indexBuffer;
+//
+//        MeshData(){}
+//        ~MeshData(){}
+//        void loadStaticMesh(std::string& path);
+//        void loadStaticMeshTextured(std::string& path);
+//        void loadSkinnedMesh(std::string& path);
+//        void loadSkinnedMeshTextured(std::string& path);
+//    };
 }

@@ -13,6 +13,7 @@ namespace Engine {
         };
 
         void generate(unsigned int& bufferId);
+        void generate(IndexBuffer& indexBuffer, std::vector<unsigned int>& indices);
         void bind(unsigned int bufferId);
         void unbind();
         void clear(unsigned int& bufferId);

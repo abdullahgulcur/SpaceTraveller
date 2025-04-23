@@ -7,12 +7,12 @@
 
 namespace Game {
 
-    class ParticleScene {
+    class TunnelEffectScene {
     private:
 
         float horizontalAngle = 0;
         float targetHorizontalAngle = 0;
-        Engine::ParticleSystem::ParticleSystem* particleSystem;
+        Engine::ParticleSystem::ParticleTunnelEffect particleSystem;
 
         unsigned int particleMeshVao;
         Engine::VertexBuffer::VertexBuffer particleInstanceBuffer;
@@ -20,8 +20,8 @@ namespace Game {
 
     public:
 
-        ParticleScene() {}
-        ~ParticleScene() {}
+        TunnelEffectScene() {}
+        ~TunnelEffectScene() {}
 
         void init();
         void update(float dt);

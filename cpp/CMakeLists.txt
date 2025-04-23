@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.22.1)
 
 project("space")
 
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
@@ -17,6 +17,7 @@ file(GLOB sourceFiles
         "Game/Scene.cpp"
         "Game/Scene/ParticleScene.cpp"
         "Game/Scene/UniverseScene.cpp"
+        "Game/Scene/TunnelEffectScene.cpp"
 
 
         "Engine/Core/Core.cpp"
@@ -24,6 +25,7 @@ file(GLOB sourceFiles
         "Engine/Core/Input.cpp"
 
         "Engine/Math/RandomValue.cpp"
+        "Engine/Math/Algebra.cpp"
 
         "Engine/Platform/Android/EglContext.cpp"
         "Engine/Platform/Android/AndroidAssetManager.cpp"
@@ -42,6 +44,7 @@ file(GLOB sourceFiles
         "Engine/Rendering/Particle.cpp"
         "Engine/Rendering/DrawCommand.cpp"
         "Engine/Rendering/FrameBuffer.cpp"
+        "Engine/Rendering/Renderer.cpp"
 
         "Engine/Resource/AssetManager.cpp"
         "Engine/Resource/MeshData.cpp"

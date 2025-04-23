@@ -39,5 +39,27 @@ namespace Engine {
         void unbind() {
             glBindBuffer(GL_ARRAY_BUFFER, 0);
         }
+
+        void generateBillboardVertexBuffer(unsigned int& bufferId){
+
+            float vertices[] = {
+                    -0.5f, -0.5f,
+                    0.5f, -0.5f,
+                    -0.5f,  0.5f,
+                    0.5f,  0.5f,
+            };
+            VertexBuffer::generate(bufferId,  sizeof(vertices), &vertices[0]);
+        }
+
+        void generateQuadVertexBuffer(unsigned int& bufferId){
+
+            float vertices[] = {
+                    -1.f, -1.f,
+                    1.f, -1.f,
+                    -1.f,  1.f,
+                    1.f,  1.f,
+            };
+            VertexBuffer::generate(bufferId,  sizeof(vertices), &vertices[0]);
+        }
     }
 }

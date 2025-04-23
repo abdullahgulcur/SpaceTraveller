@@ -126,6 +126,22 @@ namespace Engine {
             unbind();
         }
 
+        void createBillboardMeshVao_P_S(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId){
+            generate(vao);
+            bind(vao);
+
+            VertexBuffer::bind(vertexBufferId);
+
+            vertexAttributePointer(0, 2, GL_FLOAT, 8, 0);
+
+            VertexBuffer::bind(instanceBufferId);
+
+            vertexAttributePointerInstanced(1, 3, GL_FLOAT, 16, 0);
+            vertexAttributePointerInstanced(2, 1, GL_FLOAT, 16, 12);
+
+            unbind();
+        }
+
         void createGalaxyMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId){
             generate(vao);
             bind(vao);

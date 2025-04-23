@@ -9,9 +9,13 @@ namespace Game {
     class UniverseScene {
     private:
 
-        Engine::Vao::Vao galaxyMeshVao;
-        Engine::VertexBuffer::VertexBuffer galaxyInstanceBuffer;
-        Engine::ShaderProgram shaderProgram;
+        float horizontalPos = 0;
+        float targetHorizontalPos = 0;
+
+
+        unsigned int galaxyMeshVao;
+        unsigned int galaxyInstanceBuffer;
+        Engine::Shader::ShaderProgramParticle shaderProgram;
         Engine::Texture2D texture2D;
 
     public:

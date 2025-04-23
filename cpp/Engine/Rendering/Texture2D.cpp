@@ -60,6 +60,11 @@ namespace Engine{
             glDeleteTextures(1, &textureId);
         }
 
+        void setTexSlot2D(unsigned int slot, unsigned int textureId){
+            glActiveTexture(GL_TEXTURE0 + slot);
+            glBindTexture(GL_TEXTURE_2D, textureId);
+        }
+
         // should be in asset manager, i think
         void generateGalaxyFrameBufferTexture(unsigned int& galaxyTextureId, unsigned int dimension){
 

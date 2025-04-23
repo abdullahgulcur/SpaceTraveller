@@ -8,25 +8,25 @@
 
 namespace Engine{
 
-    class AssetManager{
-    private:
-    public:
-
-        // vao cache
-        std::map<std::string, MeshData> staticMeshDataCache;
-        std::map<std::string, ShaderProgram> shaderProgramCache;
-        std::map<std::string, Texture2D> texture2DCache;
-        std::map<std::string, VertexBuffer::VertexBuffer> vertexBufferCache;
-
-
-        AssetManager(){}
-        ~AssetManager(){}
-        MeshData* loadStaticMeshDataTextured(std::string path, std::string key);
-        ShaderProgram* loadShaderProgram(std::string vertexShaderPath, std::string fragmentShaderPath, std::string key);
-        Texture2D* loadCompressedTexture2D(std::string path, std::string key);
-        Texture2D* loadTexture2D(std::string path, unsigned int desiredChannels, std::string key);
-        VertexBuffer::VertexBuffer* loadBillboardMesh(std::string key);
-        static VertexBuffer::VertexBuffer loadQuadMesh();
-        VertexBuffer::VertexBuffer* loadCircleMesh(std::string key);
-    };
+//    class AssetManager{
+//    private:
+//    public:
+//
+//        // vao cache
+////        std::map<std::string, MeshData> staticMeshDataCache;
+////        std::map<std::string, ShaderProgram> shaderProgramCache;
+////        std::map<std::string, Texture2D> texture2DCache;
+////        std::map<std::string, unsigned int> vertexBufferCache;
+//
+//
+//        AssetManager(){}
+//        ~AssetManager(){}
+//        void loadStaticMeshDataTextured(MeshData& meshData, std::string path);
+//        void loadShaderProgram(ShaderProgram& program, std::string vertexShaderPath, std::string fragmentShaderPath);
+//        void loadCompressedTexture2D(Texture2D& tex, std::string path);
+//        void loadTexture2D(Texture2D& tex, std::string path, unsigned int desiredChannels);
+//        void loadBillboardMesh(unsigned int& vertexBuffer);
+//        void loadQuadMesh(unsigned int& vertexBuffer);
+//        //unsigned int loadCircleMesh(std::string key);
+//    };
 }

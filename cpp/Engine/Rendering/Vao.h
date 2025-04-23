@@ -4,10 +4,6 @@ namespace Engine {
 
     namespace Vao{
 
-        struct Vao{
-            unsigned int vao;
-        };
-
         void generate(unsigned int& vao);
         void bind(unsigned int vao);
         void unbind();
@@ -21,6 +17,7 @@ namespace Engine {
         void createMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int indexBufferId, unsigned int instanceBufferId, bool textured = false);
         void createBillboardMeshVao(unsigned int& vao, unsigned int vertexBufferId);
         void createBillboardMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId);
+        void createBillboardMeshVao_P_S(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId);
         void createGalaxyMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId);
         void createQuadMeshVao(unsigned int& vao, unsigned int vertexBufferId);
     }

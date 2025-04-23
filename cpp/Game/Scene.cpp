@@ -32,7 +32,7 @@ namespace Game{
         Engine::VertexBuffer::bufferData(instanceBuffer.bufferId, models.size() * sizeof(glm::mat4), &models[0]);
 
         //------ create mesh renderer (non instanced)
-        Engine::Vao::createMeshVao(vao.vao, meshData->vertexBuffer.bufferId, meshData->indexBuffer.bufferId, instanceBuffer.bufferId, true);
+        Engine::Vao::createMeshVao(vao, meshData->vertexBuffer.bufferId, meshData->indexBuffer.bufferId, instanceBuffer.bufferId, true);
         //------
 
         Engine::ShaderProgram shaderProgram = *(core->assetManager.loadShaderProgram("shader/phong.vert", "shader/phong.frag", "phong"));
@@ -74,7 +74,7 @@ namespace Game{
         glActiveTexture(GL_TEXTURE0 + 0);
         glBindTexture(GL_TEXTURE_2D, texture2D.textureId);
 
-        Engine::Vao::bind(vao.vao);
+        Engine::Vao::bind(vao);
         Engine::DrawCommand::drawInstanced(meshData.indexBuffer.totalIndices, meshData.indexBuffer.indexElementType, models.size());
     }
 

@@ -2,52 +2,49 @@
 precision mediump float;
 
 in vec2 vUV;
-
 out vec4 FragColor;
 
 uniform sampler2D noiseTexture;
 
-float tempFunc(float distance, float radius, float strength){
+float linstep(float edge0, float edge1, float x) {
+    return clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
+}
+
+float distanceBasedStrength(float distance, float radius, float strength){
     return clamp(((radius - distance) / radius), 0.0, 1.0) * strength;
 }
 
 void main() {
-
-//    vec2 middle = vec2(0.5, 0.5);
-//    float radius = 0.5;
-//    float distance = distance(vUV, middle);
-//    float temp = step(distance, radius);
-//
-////    if(temp < 0.0001)
-////        discard;
-//
-//    float col0 = tempFunc(distance, radius, 0.1);
-//    float col1 = tempFunc(distance, 0.01, 0.1);
-//    float col2 = tempFunc(distance, 0.3, 0.1);
-//
-//
-//    float col = clamp((col0+col1+col2) * 5.0, 0.0, 1.0);
-//
-//    float texValue = texture(noiseTexture, vUV * vec2(1.0, 6.0)).r * texture(noiseTexture, vUV * vec2(4.0, 1.0)).r * texture(noiseTexture, vUV * 8.0).r;//texture(noiseTexture, vUV * 3.0).r;
-//    float noise = clamp(pow(texValue * 4.0, 1.7), 0.0, 1.0);
-//
-//    float co = tempFunc(distance, 0.25, 1.0);
-//    float grad = mix(noise, col, co) * col;
-//
-//    //float blueFactor = 1.0 - (distance / radius);
-//
-//    float noise1 = texture(noiseTexture, vUV * 0.25).r;
-//    vec4 coll = mix(vec4(0.8,0.9,1.0,1.0), vec4(1.0, 0.5, 0.4, 1.0), noise1);
-//
-//    float coo = tempFunc(distance, 0.1, 1.0);
-//    vec4 ttt = mix(coll, vec4(1), coo);
-//    FragColor = vec4(vec3(grad) , 1) * ttt;
-
     vec2 middle = vec2(0.5, 0.5);
     float radius = 0.5;
     float distance = distance(vUV, middle);
-    float temp = step(distance, radius);
 
-    float col0 = tempFunc(distance, radius, 1.0);
-    FragColor = vec4(vec3(1.0) , col0);
+    float lightAmount = distanceBasedStrength(distance, radius, 0.05);
+    lightAmount += distanceBasedStrength(distance, 0.4, 0.05);
+    lightAmount += distanceBasedStrength(distance, 0.3, 0.1);
+    lightAmount += distanceBasedStrength(distance, 0.2, 0.3);
+    lightAmount += distanceBasedStrength(distance, 0.1, 0.5);
+    //lightAmount = clamp(lightAmount * 5.0, 0.0, 1.0);
+
+    float tttt = linstep(0.5, 1.0, distance / radius);
+    float temp = 1.0 - tttt;//linstep(1.2, 0.0, distance / radius);
+
+    float noise = texture(noiseTexture, vUV * vec2(1.0, 6.0)).r * texture(noiseTexture, vUV * vec2(4.0, 1.0)).r * texture(noiseTexture, vUV * 8.0).r;
+    noise = clamp(pow(noise * 4.0, 1.7), 0.0, 1.0);
+
+    float co = distanceBasedStrength(distance, 0.5, 1.0);
+    float grad = mix(noise, 1.0, temp) * temp;
+
+    float colorNoise = texture(noiseTexture, vUV * 4.0).r;
+    vec3 galaxyColor = mix(vec3(1.0,0.8,0.6), vec3(0.8, 0.8, 1.0), colorNoise);
+
+    galaxyColor = vec3(1.0, 0.5, 0.1);
+    float hotCoreAmount = distanceBasedStrength(distance, 0.1, 1.0);
+
+    hotCoreAmount = 1.0 - linstep(0.3, 1.0, distance / radius);
+
+
+    vec3 finalColor = mix(galaxyColor, vec3(1.0), hotCoreAmount);
+
+    FragColor = vec4(finalColor, grad);
 }

@@ -6,42 +6,91 @@
 #include "Vao.h"
 #include "VertexBuffer.h"
 
-#define MAX_PARTICLES
+//#define MAX_PARTICLES
 
 namespace Engine{
 
     namespace ParticleSystem{
 
-        // write all the necessary functions
-        // you can make them templated in the future maybe
-        // write just the most necessary ones first...
+        struct ParticleTunnelEffect {
+            float startTime[1024];
+            float lifeTime[1024];
 
-/*        template <typename Particle>
-        void emission(Particle* particles, unsigned int particleCount, unsigned int rateOverTime, float time){
+            //float velocityOffset[1024];
 
-        }*/
+            float posX[1024];
+            float posY[1024];
+            float posZ[1024];
+            float scale[1024];
 
-        //void burst(Particle& particle, unsigned int count);
-        inline void forceOverLifetime(glm::vec3& position, glm::vec3 force, float time, float lifeTime, float dt){
-            position += force * dt;
+            float gpuData[1024*4];
+
+            unsigned int particleCount = 0;
+            float particleStartTime;
+            float particleLastTriggerTime;
+            float force;
+            float velocity = 60.f;
+        };
+
+        template <typename T>
+        void start(T& t, unsigned int time){
+            t.particleStartTime = time;//static_cast<float>(Core::getInstance()->systemTimer.getTotalSeconds());
+            t.particleLastTriggerTime = t.particleStartTime;
         }
 
-        //void forceOverLifetime(glm::vec3& position, glm::vec3 force0, glm::vec3 force1, float time, float lifeTime);
-        void colorOverLifetime(glm::vec4& color, glm::vec3 col0, glm::vec3 col1, float time, float lifeTime);
 
-        void sizeOverLifetimeConstant(float& size, float size0, float time, float lifeTime);
-        void sizeOverLifetimeLinear(float& size, float size0, float size1, float time, float lifeTime);
-        void sizeOverLifetimeCubic(float& size, float size0, float size1, float time, float lifeTime);
+        bool shouldTrigger(float duration, float interval);
 
-        inline void rotationOverLifetime(float& rotation, float angVel0, float angVel1, float time, float lifeTime, float dt){
-            rotation += angVel0 * dt;
+        void reorderParticleTunnelEffect(ParticleTunnelEffect& p, float duration);
+        void updateParticleTunnelEffect(ParticleTunnelEffect& p, float dt);
+
+        //void update_(float dt);
+
+
+
+        //--------------------------------------------------------
+
+        inline void velocityOverLifetimeConstant(glm::vec3& p, glm::vec3 v, float dt){
+            p += v * dt;
         }
 
-        //void noise(Particle& particle, );
-        //void OverLifetime(Particle& particle, );
+        inline void forceOverLifetimeConstant(glm::vec3& v, glm::vec3 f, float dt){
+            v += f * dt;
+        }
+
+        inline void forceOverLifetimeLinear(glm::vec3& v, glm::vec3 f0, glm::vec3 f1, float time, float lifeTime, float dt){
+            v += glm::mix(f0, f1, time / lifeTime) * dt;
+        }
+
+        inline void forceOverLifetimeCubic(glm::vec3& v, glm::vec3 f0, glm::vec3 f1, float time, float lifeTime, float dt){
+            v += glm::smoothstep(f0, f1, glm::vec3(time / lifeTime)) * dt;
+        }
+
+        inline void colorOverLifetimeLinear(glm::vec3& c, glm::vec3 c0, glm::vec3 c1, float time, float lifeTime){
+            c = glm::mix(c0, c1, time / lifeTime);
+        }
+
+        inline void colorOverLifetimeCubic(glm::vec3& c, glm::vec3 c0, glm::vec3 c1, float time, float lifeTime){
+            c = glm::smoothstep(c0, c1, glm::vec3(time / lifeTime));
+        }
+
+        inline void sizeOverLifetimeLinear(float& s, float s0, float s1, float time, float lifeTime){
+            s = glm::mix(s0, s1, time / lifeTime);
+        }
+
+        inline void sizeOverLifetimeCubic(float& s, float s0, float s1, float time, float lifeTime){
+            s = glm::smoothstep(s0, s1, time / lifeTime);
+        }
+
+        inline void rotationOverLifetimeConstant(float& r, float v, float dt){
+            r += v * dt;
+        }
+
+        //--------------------------------------------------------
+
 
         struct ParticleData {
-            glm::vec3 position;
+            glm::vec3 position; // common
             float rotation;
             glm::vec4 color;
             float scale;
@@ -50,14 +99,17 @@ namespace Engine{
 
         class ParticleSystem{
 
-            // add velocity
             struct ParticleSimulationData {
-                float startTime;
-                float lifeTime;
+                float startTime; // common
+                float lifeTime; // common
                 float angularVelocity;
                 int padding0;
                 glm::vec3 force;
                 int padding1;
+                glm::vec3 velocity;
+                int padding2[5];
+                // color0
+                // color1
             };
 
         private:

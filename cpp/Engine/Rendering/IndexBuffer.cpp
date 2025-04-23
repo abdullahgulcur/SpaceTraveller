@@ -10,6 +10,11 @@ namespace Engine {
             glGenBuffers(1, &bufferId);
         }
 
+        void generate(IndexBuffer& indexBuffer, std::vector<unsigned int>& indices){
+            generate(indexBuffer.bufferId);
+            bufferData(indexBuffer, indices);
+        }
+
         void bind(unsigned int bufferId){
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferId);
         }

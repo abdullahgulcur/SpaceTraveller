@@ -12,7 +12,7 @@ namespace Game {
         float horizontalAngle = 0;
         float targetHorizontalAngle = 0;
 
-        Engine::Vao::Vao vao;
+        unsigned int vao;
         std::vector<glm::mat4> models;
         Engine::VertexBuffer::VertexBuffer instanceBuffer;
 

@@ -22,7 +22,7 @@ namespace Engine {
         android_app *app_;
 
         EglContext eglContext;
-        AssetManager assetManager;
+        //AssetManager assetManager;
         Input input;
         Timer::SystemTimer systemTimer;
 
