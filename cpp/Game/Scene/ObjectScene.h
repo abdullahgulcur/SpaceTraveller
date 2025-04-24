@@ -6,20 +6,26 @@
 
 namespace Game {
 
-    class Scene {
+    class ObjectScene {
     private:
 
         float horizontalAngle = 0;
         float targetHorizontalAngle = 0;
 
+        Engine::MeshData::MeshData meshData;
+
+        Engine::Shader::SimpleShaderProgram shaderProgram;
+
+        unsigned int textureId;
+
         unsigned int vao;
         std::vector<glm::mat4> models;
-        Engine::VertexBuffer::VertexBuffer instanceBuffer;
+        unsigned int instanceBuffer;
 
     public:
 
-        Scene() {}
-        ~Scene() {}
+        ObjectScene() {}
+        ~ObjectScene() {}
 
         void init();
         void update();

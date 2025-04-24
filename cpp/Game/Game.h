@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core.h"
-#include "Scene.h"
+#include "ObjectScene.h"
 #include "ParticleScene.h"
 #include "UniverseScene.h"
 #include "TunnelEffectScene.h"
@@ -13,8 +13,9 @@ namespace Game {
 
         static Game* instance;
 
+        ObjectScene scene;
         //ParticleScene scene;
-        UniverseScene scene;
+        //UniverseScene scene;
         //TunnelEffectScene scene;
 
     public:

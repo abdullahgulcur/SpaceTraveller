@@ -8,7 +8,7 @@ namespace Engine{
 
     namespace MeshData{
 
-        void loadStaticMesh(MeshData& data, std::string& path){
+        void loadStaticMesh(MeshData& data, std::string path){
 
             struct Vertex{
                 glm::vec3 position;
@@ -80,7 +80,7 @@ namespace Engine{
             IndexBuffer::generate(data.indexBuffer, indices);
         }
 
-        void loadStaticMeshTextured(MeshData& data, std::string &path) {
+        void loadStaticMeshTextured(MeshData& data, std::string path) {
 
             struct Vertex{
                 glm::vec3 position;

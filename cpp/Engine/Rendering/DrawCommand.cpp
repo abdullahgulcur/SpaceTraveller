@@ -1,4 +1,5 @@
 #include "DrawCommand.h"
+#include "Vao.h"
 #include <GLES3/gl32.h>
 
 namespace Engine{
@@ -11,6 +12,11 @@ namespace Engine{
 
         void drawInstanced(unsigned int totalIndices, unsigned int indexElementType, unsigned int instanceCount){
             glDrawElementsInstanced(GL_TRIANGLES, totalIndices, indexElementType, (void*)0, instanceCount);
+        }
+
+        void drawInstanced(unsigned int vao, unsigned int totalIndices, unsigned int indexElementType, unsigned int instanceCount){
+            Vao::bind(vao);
+            drawInstanced(totalIndices, indexElementType, instanceCount);
         }
 
         // rename: drawQuadsInstanced

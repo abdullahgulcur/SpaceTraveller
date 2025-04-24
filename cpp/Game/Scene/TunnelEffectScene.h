@@ -15,8 +15,8 @@ namespace Game {
         Engine::ParticleSystem::ParticleTunnelEffect particleSystem;
 
         unsigned int particleMeshVao;
-        Engine::VertexBuffer::VertexBuffer particleInstanceBuffer;
-        Engine::ShaderProgram shaderProgram;
+        unsigned int particleInstanceBuffer;
+        Engine::Shader::SimpleShaderProgram shaderProgram;
 
     public:
 

@@ -17,8 +17,10 @@ namespace Engine{
             unsigned int wrap_t  = GL_REPEAT;
             unsigned int minFilter = GL_LINEAR_MIPMAP_LINEAR;
             unsigned int magFilter = GL_LINEAR;
+            unsigned int desiredChannels = 0;
         };
 
+        void createTexture2D(unsigned int& textureId, Texture2DConfig& config, std::string path);
         void createTexture2D(unsigned int& textureId, Texture2DConfig& config);
         void texImage2D(unsigned int internalFormat, unsigned int format, unsigned int width, unsigned int height, unsigned int type, const void* data);
         void texParams2D(unsigned int wrap_s, unsigned int wrap_t, unsigned int minFilter, unsigned int magFilter);
@@ -33,16 +35,16 @@ namespace Engine{
 
     }
 
-    class Texture2D {
-    private:
-    public:
-
-        unsigned int textureId;
-
-        Texture2D(){}
-        ~Texture2D(){}
-
-        Texture2D(std::vector<unsigned char>& buffer, unsigned int width, unsigned int height, unsigned int blockDimension);
-        Texture2D(const void* buffer, unsigned int width, unsigned int height, unsigned int channels);
-    };
+//    class Texture2D {
+//    private:
+//    public:
+//
+//        unsigned int textureId;
+//
+//        Texture2D(){}
+//        ~Texture2D(){}
+//
+//        Texture2D(std::vector<unsigned char>& buffer, unsigned int width, unsigned int height, unsigned int blockDimension);
+//        Texture2D(const void* buffer, unsigned int width, unsigned int height, unsigned int channels);
+//    };
 }

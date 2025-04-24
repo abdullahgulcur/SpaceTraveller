@@ -13,8 +13,8 @@ namespace Engine{
             IndexBuffer::IndexBuffer indexBuffer;
         };
 
-        void loadStaticMesh(MeshData& data, std::string& path);
-        void loadStaticMeshTextured(MeshData& data, std::string& path);
+        void loadStaticMesh(MeshData& data, std::string path);
+        void loadStaticMeshTextured(MeshData& data, std::string path);
     }
 
 //    class MeshData{

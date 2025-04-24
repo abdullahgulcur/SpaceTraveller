@@ -4,7 +4,7 @@ precision mediump float;
 in vec2 vUV;
 out vec4 FragColor;
 
-uniform sampler2D noiseTexture;
+uniform sampler2D texture;
 
 float linstep(float edge0, float edge1, float x) {
     return clamp((x - edge0) / (edge1 - edge0), 0.0, 1.0);
@@ -29,13 +29,13 @@ void main() {
     float tttt = linstep(0.5, 1.0, distance / radius);
     float temp = 1.0 - tttt;//linstep(1.2, 0.0, distance / radius);
 
-    float noise = texture(noiseTexture, vUV * vec2(1.0, 6.0)).r * texture(noiseTexture, vUV * vec2(4.0, 1.0)).r * texture(noiseTexture, vUV * 8.0).r;
+    float noise = texture(texture, vUV * vec2(1.0, 6.0)).r * texture(texture, vUV * vec2(4.0, 1.0)).r * texture(texture, vUV * 8.0).r;
     noise = clamp(pow(noise * 4.0, 1.7), 0.0, 1.0);
 
     float co = distanceBasedStrength(distance, 0.5, 1.0);
     float grad = mix(noise, 1.0, temp) * temp;
 
-    float colorNoise = texture(noiseTexture, vUV * 4.0).r;
+    float colorNoise = texture(texture, vUV * 4.0).r;
     vec3 galaxyColor = mix(vec3(1.0,0.8,0.6), vec3(0.8, 0.8, 1.0), colorNoise);
 
     galaxyColor = vec3(1.0, 0.5, 0.1);

@@ -14,7 +14,7 @@ file(GLOB sourceFiles
         "main.cpp"
 
         "Game/Game.cpp"
-        "Game/Scene.cpp"
+        "Game/Scene/ObjectScene.cpp"
         "Game/Scene/ParticleScene.cpp"
         "Game/Scene/UniverseScene.cpp"
         "Game/Scene/TunnelEffectScene.cpp"
