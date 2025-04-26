@@ -22,6 +22,7 @@ namespace Engine{
 
         void createTexture2D(unsigned int& textureId, Texture2DConfig& config, std::string path);
         void createTexture2D(unsigned int& textureId, Texture2DConfig& config);
+        void createTexture2D(unsigned int& textureId, std::string path);
         void texImage2D(unsigned int internalFormat, unsigned int format, unsigned int width, unsigned int height, unsigned int type, const void* data);
         void texParams2D(unsigned int wrap_s, unsigned int wrap_t, unsigned int minFilter, unsigned int magFilter);
         void mipmapTex2D(unsigned int textureId);

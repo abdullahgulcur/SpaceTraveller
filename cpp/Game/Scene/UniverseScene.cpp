@@ -25,7 +25,7 @@ namespace Game{
             Engine::ParticleSystem::ParticleData pd;
             pd.position = Engine::Random::randomVec3(glm::vec3(-10.f, -2.f, -30.f), glm::vec3(10.f,2.f,30.f));
             pd.rotation = Engine::Random::randomFloat(0.f, 360.f);
-            pd.scale = Engine::Random::randomFloat(0.05f, 0.15f);
+            pd.scale = Engine::Random::randomFloat(1.05f, 1.15f);
             pd.color = glm::vec4(1.f);// glm::vec4(Engine::Random::randomVec3(glm::vec3(1.0f, 0.6f, 0.6f), glm::vec3(1.f,0.5f,0.5f)), 1.f); // glm::vec4(1.f);//
             galaxyData.push_back(pd);
         }
@@ -34,16 +34,14 @@ namespace Game{
             return a.position.z > b.position.z;
         });
 
-        Engine::Core* core = Engine::Core::getInstance();
+        unsigned int billboardMeshVertexBuffer;
+        Engine::VertexBuffer::generateBillboardVertexBuffer(billboardMeshVertexBuffer);
 
-        Engine::VertexBuffer::VertexBuffer* billboardMeshVertexBuffer = core->assetManager.loadBillboardMesh("billboard");
+        Engine::VertexBuffer::generate(galaxyInstanceBuffer, MAX_GALAXIES * sizeof(Engine::ParticleSystem::ParticleData), &galaxyData[0]);
 
-        Engine::VertexBuffer::generate(galaxyInstanceBuffer.bufferId);
-        Engine::VertexBuffer::bufferData(galaxyInstanceBuffer.bufferId, MAX_GALAXIES * sizeof(Engine::ParticleSystem::ParticleData), &galaxyData[0]);
-
-        Engine::Vao::createBillboardMeshVao(galaxyMeshVao, billboardMeshVertexBuffer->bufferId, galaxyInstanceBuffer.bufferId);
-        Engine::Shader::createShaderProgramParticle(shaderProgram);
-        Engine::Texture::generateGalaxyFrameBufferTexture(texture2D.textureId, 256);//*(core->assetManager.loadTexture2D("texture/noise.jpg", 1, "noise"));
+        Engine::Vao::createBillboardMeshVao(galaxyMeshVao, billboardMeshVertexBuffer, galaxyInstanceBuffer);
+        Engine::Shader::createShaderProgramParticleTextured(shaderProgram);
+        Engine::Texture::generateGalaxyFrameBufferTexture(texture2D, 256);
     }
 
     void UniverseScene::update(float dt){
@@ -65,12 +63,7 @@ namespace Game{
         glm::vec3 cameraPosition(horizontalPos,0,-100);
         glm::mat4 view = glm::lookAt(cameraPosition, glm::vec3(horizontalPos,0,0), glm::vec3(0,1,0));
 
-        Engine::Shader::updateUniformsShaderProgramParticle(shaderProgram, projection, view, texture2D.textureId);
-//
-//        Engine::Shader::bind(shaderProgram.programId);
-//        Engine::Shader::uniform(shaderProgram.locationProjection, projection);
-//        Engine::Shader::uniform(shaderProgram.locationView, view);
-//        Engine::Texture::setTexSlot2D(0, texture2D.textureId);
+        Engine::Shader::updateUniforms(shaderProgram, projection, view, texture2D);
 
         Engine::DrawCommand::drawBillboardsInstanced(galaxyMeshVao, MAX_GALAXIES);
     }

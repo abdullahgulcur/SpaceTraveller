@@ -11,6 +11,7 @@ namespace Engine{
         void deleteFbo(unsigned int& fbo);
         void setFrameBufferTexture(unsigned int attachment, unsigned int textureId);
         bool frameBufferComplete();
+        void refreshScreen();
     }
 
 }

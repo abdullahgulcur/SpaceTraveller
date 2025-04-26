@@ -6,13 +6,23 @@ namespace Engine {
 
     namespace Shader{
 
+        //enum class ShaderType
+
         struct SimpleShaderProgram {
             unsigned int programId;
             unsigned int locationView;
             unsigned int locationProjection;
         };
 
+//        struct ShaderParticlePS {
+//            unsigned int programId;
+//            unsigned int locationView;
+//            unsigned int locationProjection;
+//        };
 
+
+        void createShaderGalaxy(unsigned int& program);
+        void createShaderParticlePS(SimpleShaderProgram& program);
         void createShaderProgramParticle(SimpleShaderProgram& program);
         void createShaderProgramParticleTextured(SimpleShaderProgram& program);
         void createSimpleShaderProgram(SimpleShaderProgram& program, const char* vert, const char* frag);

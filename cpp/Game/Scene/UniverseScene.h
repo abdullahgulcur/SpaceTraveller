@@ -15,8 +15,8 @@ namespace Game {
 
         unsigned int galaxyMeshVao;
         unsigned int galaxyInstanceBuffer;
-        Engine::Shader::ShaderProgramParticle shaderProgram;
-        Engine::Texture2D texture2D;
+        Engine::Shader::SimpleShaderProgram shaderProgram;
+        unsigned int texture2D;
 
     public:
 

@@ -28,6 +28,6 @@ namespace Game {
         ~ObjectScene() {}
 
         void init();
-        void update();
+        void update(float dt);
     };
 }

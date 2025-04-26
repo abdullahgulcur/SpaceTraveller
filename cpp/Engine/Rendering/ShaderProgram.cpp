@@ -7,14 +7,27 @@ namespace Engine {
 
     namespace Shader{
 
-        //
+//        void createShaderParticlePST(SimpleShaderProgram& program){
+//            createSimpleShaderProgram(program, "shader/particle_p_s.vert", "shader/particle.frag");
+//        }
+
+        void createShaderGalaxy(unsigned int& program){
+            createShaderProgram(program, "shader/quad.vert", "shader/galaxy.frag");
+            bind(program);
+            //setTextureLocation(program, 0, "tex");
+        }
+
+        void createShaderParticlePS(SimpleShaderProgram& program){
+            createSimpleShaderProgram(program, "shader/particle_p_s.vert", "shader/particle.frag");
+        }
+
         void createShaderProgramParticle(SimpleShaderProgram& program){
             createSimpleShaderProgram(program, "shader/particle.vert", "shader/particle.frag");
         }
 
         void createShaderProgramParticleTextured(SimpleShaderProgram& program){
             createSimpleShaderProgram(program, "shader/particle.vert", "shader/particle_textured.frag");
-            setTextureLocation(program.programId, 0, "texture");
+            //setTextureLocation(program.programId, 0, "tex");
         }
 
         void createShaderProgramPhong(SimpleShaderProgram& program){

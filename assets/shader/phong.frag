@@ -1,7 +1,7 @@
 #version 320 es
 precision mediump float;
 
-uniform sampler2D texture;
+uniform sampler2D tex;
 
 out vec4 FragColor;
 
@@ -20,7 +20,7 @@ void main()
 
     float diffuse = max(dot(norm, lightDir), 0.0);
 
-    vec3 albedo = texture(texture, vec2(TexCoord * 1.f)).rgb;
+    vec3 albedo = texture(tex, vec2(TexCoord * 1.f)).rgb;
     vec3 result = albedo * (ambient + diffuse);
     FragColor = vec4(result, 1.0);
 }

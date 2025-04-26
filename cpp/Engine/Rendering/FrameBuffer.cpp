@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "Core.h"
 #include <GLES3/gl32.h>
 
 #include "FrameBuffer.h"
@@ -36,6 +37,13 @@ namespace Engine{
 
         bool frameBufferComplete(){
             return glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
+        }
+
+        void refreshScreen(){
+            Engine::Core* core = Engine::Core::getInstance();
+            glViewport(0, 0, core->eglContext.width_, core->eglContext.height_);
+            glClearColor(0.15f, 0.15f, 0.15, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         }
     }
 }

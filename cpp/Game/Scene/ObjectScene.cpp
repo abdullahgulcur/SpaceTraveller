@@ -36,7 +36,7 @@ namespace Game{
         Engine::Texture::createTexture2D(textureId, config, "texture/marble.jpg");
     }
 
-    void ObjectScene::update(){
+    void ObjectScene::update(float dt){
 
         Engine::Core* core = Engine::Core::getInstance();
 

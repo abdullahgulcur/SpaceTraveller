@@ -50,6 +50,11 @@ namespace Engine{
                 mipmapTex2D();
         }
 
+        void createTexture2D(unsigned int& textureId, std::string path){
+            Texture2DConfig config;
+            createTexture2D(textureId, config, path);
+        }
+
         void texImage2D(unsigned int internalFormat, unsigned int format, unsigned int width, unsigned int height, unsigned int type, const void* data){
             glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, data);
         }
@@ -95,20 +100,8 @@ namespace Engine{
         // should be in asset manager, i think
         void generateGalaxyFrameBufferTexture(unsigned int& galaxyTextureId, unsigned int dimension){
 
-//            GLint supported;
-//            glGetInternalformativ(GL_RENDERBUFFER, GL_RGBA8, GL_FRAMEBUFFER_RENDERABLE, 1, &supported);
-
-            TextureData2D data("texture/noise.jpg", 1);
-
-            Texture2DConfig noiseTexConfig;
-            noiseTexConfig.data = data.data;
-            noiseTexConfig.width = data.width;
-            noiseTexConfig.height = data.height;
-            noiseTexConfig.internalFormat = GL_R8;
-            noiseTexConfig.format = GL_RED;
-
             unsigned int noiseTextureId;
-            createTexture2D(noiseTextureId, noiseTexConfig);
+            createTexture2D(noiseTextureId, "texture/noise.jpg");
 
             Texture2DConfig galaxyTexConfig;
             galaxyTexConfig.width = dimension;
@@ -121,20 +114,15 @@ namespace Engine{
             unsigned int fbo;
             FrameBuffer::generateFbo(fbo, galaxyTextureId, GL_COLOR_ATTACHMENT0);
 
-            if(FrameBuffer::frameBufferComplete())
-                int x = 5;
-
-            ShaderProgram shaderProgram("shader/quad.vert", "shader/galaxy.frag");
-            shaderProgram.bind();
-            shaderProgram.uniform("noiseTexture", 0);
+            unsigned int galaxyShader;
+            Shader::createShaderGalaxy(galaxyShader);
 
             glViewport(0, 0, dimension, dimension);
             glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             glDisable(GL_DEPTH_TEST);
             glClear(GL_COLOR_BUFFER_BIT);
 
-            glActiveTexture(GL_TEXTURE0 + 0);
-            glBindTexture(GL_TEXTURE_2D, noiseTextureId);
+            Texture::setTexSlot2D(0, noiseTextureId);
 
             unsigned int vb;
             VertexBuffer::generateQuadVertexBuffer(vb);
@@ -148,7 +136,7 @@ namespace Engine{
 
             VertexBuffer::clear(vb);
             Vao::deleteVao(vao);
-            shaderProgram.clear();
+            Shader::deleteShaderProgram(galaxyShader);
             clearTex(noiseTextureId);
             FrameBuffer::deleteFbo(fbo);
         }
