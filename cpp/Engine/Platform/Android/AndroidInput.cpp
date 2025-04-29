@@ -1,23 +1,23 @@
 #include "pch.h"
-#include "Input.h"
+#include "AndroidInput.h"
 
 namespace Engine {
 
-    void Input::init() {
-        pointerDelta = glm::ivec2(0);
+    void AndroidInput::init(Input& input) {
+        input.pointerDelta = glm::ivec2(0);
     }
 
-    void Input::handleInput() {
+    void AndroidInput::update(Input& input) {
 
         auto *inputBuffer = android_app_swap_input_buffers(AndroidApplication::application);
         if (!inputBuffer)
             return;
 
-        Input::handleMotionEvents(inputBuffer);
-        Input::handleKeyEvents(inputBuffer);
+        AndroidInput::handleMotionEvents(input, inputBuffer);
+        AndroidInput::handleKeyEvents(input, inputBuffer);
     }
 
-    void Input::handleMotionEvents(android_input_buffer* inputBuffer){
+    void AndroidInput::handleMotionEvents(Input& input, android_input_buffer* inputBuffer){
 
         // handle motion events (motionEventsCounts can be 0).
         for (auto i = 0; i < inputBuffer->motionEventsCount; i++) {
@@ -39,7 +39,7 @@ namespace Engine {
                 case AMOTION_EVENT_ACTION_DOWN:
                 case AMOTION_EVENT_ACTION_POINTER_DOWN:{
 
-                    pointerPosition = glm::ivec2(x,y);
+                    input.pointerPosition = glm::ivec2(x,y);
 
                     //aout << "(" << pointer.id << ", " << x << ", " << y << ") "
                     //<< "Pointer Down";
@@ -52,8 +52,8 @@ namespace Engine {
                 case AMOTION_EVENT_ACTION_UP:
                 case AMOTION_EVENT_ACTION_POINTER_UP:
 
-                    pointerPosition = glm::ivec2(x,y);
-                    pointerDelta = glm::ivec2(0);
+                    input.pointerPosition = glm::ivec2(x,y);
+                    input.pointerDelta = glm::ivec2(0);
                     //aout << "(" << pointer.id << ", " << x << ", " << y << ") "
                     //<< "Pointer Up";
                     break;
@@ -68,8 +68,8 @@ namespace Engine {
                         y = GameActivityPointerAxes_getY(&pointer);
 
                         glm::ivec2 newPosition = glm::ivec2(x,y);
-                        pointerDelta = newPosition - pointerPosition;
-                        pointerPosition = newPosition;
+                        input.pointerDelta = newPosition - input.pointerPosition;
+                        input.pointerPosition = newPosition;
 
                         //aout << "(" << pointer.id << ", " << x << ", " << y << ")";
 
@@ -87,7 +87,7 @@ namespace Engine {
         android_app_clear_motion_events(inputBuffer);
     }
 
-    void Input::handleKeyEvents(android_input_buffer* inputBuffer){
+    void AndroidInput::handleKeyEvents(Input& input, android_input_buffer* inputBuffer){
 
         // handle input key events.
         for (auto i = 0; i < inputBuffer->keyEventsCount; i++) {

@@ -9,13 +9,13 @@ namespace Engine {
 
     public:
 
-        EGLDisplay display_;
-        EGLSurface surface_;
-        EGLContext context_;
-        EGLint width_;
-        EGLint height_;
+        EGLDisplay display;
+        EGLSurface surface;
+        EGLContext context;
+        EGLint width;
+        EGLint height;
 
-        EglContext();
+        EglContext() {}
         ~EglContext() {}
 
         void init();

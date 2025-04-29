@@ -6,6 +6,9 @@
 #include "Camera.h"
 #include "CameraController.h"
 
+#include "MeshData.h"
+#include "ShaderProgram.h"
+
 namespace Game {
 
     class ObjectScene {

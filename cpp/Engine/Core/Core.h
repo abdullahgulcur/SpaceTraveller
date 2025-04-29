@@ -1,8 +1,7 @@
 #pragma once
 
 #include "AndroidApplication.h"
-#include "EglContext.h"
-#include "AssetManager.h"
+#include "AppSurface.h"
 #include "Input.h"
 #include "Timer.h"
 
@@ -18,7 +17,7 @@ namespace Engine {
 
     public:
 
-        EglContext eglContext; // WindowContext !!!
+        AppSurface appSurface;
         Input input;
         Timer::SystemTimer systemTimer;
 

@@ -1,4 +1,11 @@
-#version 320 es
+#ifdef ANDROID
+
+#endif
+
+#ifdef WIN
+
+#endif
+
 layout(location = 0) in vec2 aLocalPos;
 layout(location = 1) in mat4 aModel;
 layout(location = 5) in vec4 aColor;

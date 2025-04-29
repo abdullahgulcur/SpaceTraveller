@@ -1,4 +1,11 @@
-#version 320 es
+#ifdef ANDROID
+
+#endif
+
+#ifdef WIN
+
+#endif
+
 layout(location = 0) in vec2 aLocalPos;
 
 out vec2 vUV;

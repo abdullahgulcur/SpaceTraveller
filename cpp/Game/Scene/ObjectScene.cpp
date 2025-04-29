@@ -3,6 +3,8 @@
 
 #include "DrawCommand.h"
 #include "FrameBuffer.h"
+#include "Vao.h"
+#include "Texture2D.h"
 
 #include "gtc/matrix_transform.hpp"   // will be removed
 

@@ -1,6 +1,5 @@
 #pragma once
 #include "glm.hpp"
-#include "AndroidApplication.h"
 
 namespace Engine {
 
@@ -15,9 +14,6 @@ namespace Engine {
         Input(){}
         ~Input(){}
         void init();
-        void handleInput();
-        void handleMotionEvents(android_input_buffer* inputBuffer);
-        void handleKeyEvents(android_input_buffer* inputBuffer);
-
+        void update();
     };
 }

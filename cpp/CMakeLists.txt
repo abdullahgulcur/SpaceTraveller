@@ -9,6 +9,7 @@ set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+
 #"Game/Scene/UniverseScene.cpp"
 file(GLOB sourceFiles
 
@@ -24,7 +25,7 @@ file(GLOB sourceFiles
 
         "Engine/Core/Core.cpp"
         "Engine/Core/Timer.cpp"
-        "Engine/Core/Input.cpp"
+        "Engine/Platform/Input.cpp"
 
         "Engine/Math/RandomValue.cpp"
         "Engine/Math/Algebra.cpp"
@@ -34,8 +35,9 @@ file(GLOB sourceFiles
         "Engine/Platform/Android/AndroidApplication.cpp"
         "Engine/Platform/Android/EglContext.cpp"
         "Engine/Platform/Android/AndroidAssetManager.cpp"
-
-
+        "Engine/Platform/Android/AndroidInput.cpp"
+        "Engine/Platform/Input.cpp"
+        "Engine/Platform/AppSurface.cpp"
 
         "Engine/Precompiled/pch.cpp"
 
@@ -53,9 +55,7 @@ file(GLOB sourceFiles
         "Engine/Rendering/FrameBuffer.cpp"
         "Engine/Rendering/Renderer.cpp"
 
-        "Engine/Resource/AssetManager.cpp"
         "Engine/Resource/MeshData.cpp"
-        "Engine/Resource/TextureData.cpp"
 
         "ThirdParty/tinyobjloader/tiny_obj_loader.cpp"
         "ThirdParty/stb/stb_image.cpp")
@@ -73,11 +73,15 @@ target_include_directories(${PROJECT_NAME} PRIVATE ThirdParty/glm
         Engine/Precompiled
 
         Engine/Core
+        Engine/Platform
         Engine/Platform/Android
         Engine/Platform/Windows
         Engine/Rendering
         Engine/Resource
         Engine/Math)
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC PLATFORM="ANDROID")
+
 
 # Searches for a package provided by the game activity dependency
 find_package(game-activity REQUIRED CONFIG)

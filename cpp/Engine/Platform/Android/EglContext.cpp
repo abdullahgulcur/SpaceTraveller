@@ -4,15 +4,6 @@
 
 namespace Engine {
 
-    EglContext::EglContext() {
-
-        display_ = EGL_NO_DISPLAY;
-        surface_ = EGL_NO_SURFACE;
-        context_ = EGL_NO_CONTEXT;
-        width_ = 0;
-        height_ = 0;
-    }
-
     void EglContext::init() {
 
         // Choose your render attributes
@@ -74,31 +65,31 @@ namespace Engine {
         auto madeCurrent = eglMakeCurrent(display, surface, surface, context);
         //assert(madeCurrent);
 
-        display_ = display;
-        surface_ = surface;
-        context_ = context;
+        this->display = display;
+        this->surface = surface;
+        this->context = context;
 
         // make width and height invalid so it gets updated the first frame in @a updateRenderArea()
-        width_ = -1;
-        height_ = -1;
+        this->width = -1;
+        this->height = -1;
     }
 
     void EglContext::updateRenderArea() {
 
         EGLint width;
-        eglQuerySurface(display_, surface_, EGL_WIDTH, &width);
+        eglQuerySurface(display, surface, EGL_WIDTH, &width);
 
         EGLint height;
-        eglQuerySurface(display_, surface_, EGL_HEIGHT, &height);
+        eglQuerySurface(display, surface, EGL_HEIGHT, &height);
 
-        if (width != width_ || height != height_) {
-            width_ = width;
-            height_ = height;
+        if (this->width != width || this->height != height) {
+            this->width = width;
+            this->height = height;
         }
     }
 
     void EglContext::swapBuffers() {
-        eglSwapBuffers(display_, surface_);
+        eglSwapBuffers(display, surface);
     }
 
 }

@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "ParticleSystem.h"
 #include "CameraController.h"
+#include "ShaderProgram.h"
 
 namespace Game {
 

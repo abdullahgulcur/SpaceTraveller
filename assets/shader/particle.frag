@@ -1,5 +1,10 @@
-#version 320 es
+#ifdef ANDROID
 precision mediump float;
+#endif
+
+#ifdef WIN
+
+#endif
 
 in vec2 vUV;
 in vec4 vColor;

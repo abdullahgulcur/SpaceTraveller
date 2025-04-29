@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "ShaderProgram.h"
-#include "AndroidAssetManager.h"
+#include "AssetManager.h"
 #include "GraphicsApi.h"
 #include "Texture2D.h"
 
@@ -64,8 +64,11 @@ namespace Engine {
         void createShaderProgram(unsigned int& shaderProgramId, const char* vertexPath, const char* fragmentPath){
 
             auto shaderCode = [](const char* path, std::string& shaderCode) {
-                AndroidAssetManager androidAssetManager; // AssetManager !!!
-                androidAssetManager.readBytesFromAsset(path, shaderCode);
+                AssetManager assetManager;
+                assetManager.readBytesFromAsset(path, shaderCode);
+                std::string macros;
+                assetManager.getShaderMacros(macros);
+                shaderCode = macros + shaderCode;
             };
 
             auto shaderCompile = [](const char* path, std::string& shaderCode, unsigned int& shaderId) {

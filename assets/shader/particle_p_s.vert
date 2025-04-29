@@ -1,4 +1,11 @@
-#version 320 es
+#ifdef ANDROID
+
+#endif
+
+#ifdef WIN
+
+#endif
+
 layout(location = 0) in vec2 aLocalPos;
 layout(location = 1) in vec3 aWorldPos;
 layout(location = 2) in float aSize;
