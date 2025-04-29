@@ -1,6 +1,4 @@
 #include "pch.h"
-#include <GLES3/gl32.h>
-
 #include "Texture2D.h"
 #include "FrameBuffer.h"
 #include "ShaderProgram.h"
@@ -17,7 +15,7 @@ namespace Engine{
         void createTexture2D(unsigned int& textureId, Texture2DConfig& config, std::string path){
 
             std::vector<unsigned char> buffer;
-            AndroidAssetManager androidAssetManager;
+            AndroidAssetManager androidAssetManager; // AssetManager !!!
             androidAssetManager.readBytesFromAsset(path.c_str(), buffer);
 
             int w, h, ch;

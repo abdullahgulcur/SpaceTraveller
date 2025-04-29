@@ -1,19 +1,16 @@
 #include "pch.h"
 #include "core.h"
 
-#include <GLES3/gl32.h> // will be removed
+#include "GraphicsApi.h"
 
 namespace Engine {
 
     Core* Core::instance;
 
-    void Core::init(android_app *app_) {
+    void Core::init() {
 
-        this->app_ = app_;
-        app_->userData = this;
-
-        eglContext.init(this->app_);
-        input.init(app_);
+        eglContext.init();
+        input.init();
 
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);

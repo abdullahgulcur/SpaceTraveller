@@ -2,8 +2,6 @@
 
 #include <EGL/egl.h>
 
-struct android_app;
-
 namespace Engine {
 
     class EglContext {
@@ -20,7 +18,7 @@ namespace Engine {
         EglContext();
         ~EglContext() {}
 
-        void init(android_app *app_);
+        void init();
         void updateRenderArea();
         void swapBuffers();
     };

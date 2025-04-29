@@ -13,10 +13,10 @@ namespace Game {
 
         static Game* instance;
 
-        //ObjectScene scene;
-        //ParticleScene scene;
+//        ObjectScene scene;
+        ParticleScene scene;
         //UniverseScene scene;
-        TunnelEffectScene scene;
+        //TunnelEffectScene scene;
 
     public:
 

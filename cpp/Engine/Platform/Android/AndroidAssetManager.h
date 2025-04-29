@@ -1,7 +1,6 @@
 #pragma once
+#include "AndroidApplication.h"
 #include <android/asset_manager.h>
-#include <game-activity/native_app_glue/android_native_app_glue.h>
-#include "Core.h"
 
 namespace Engine{
 
@@ -15,7 +14,7 @@ namespace Engine{
         template<typename T>
         void readBytesFromAsset(const char* filename, T& buffer) {
 
-            AAsset* asset = AAssetManager_open(Core::getInstance()->app_->activity->assetManager, filename, AASSET_MODE_BUFFER);
+            AAsset* asset = AAssetManager_open(AndroidApplication::application->activity->assetManager, filename, AASSET_MODE_BUFFER);
             if (asset == nullptr) {
                 std::cerr << "Failed to open asset file: " << filename << std::endl;
                 return;

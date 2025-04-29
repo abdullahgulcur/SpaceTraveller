@@ -9,14 +9,16 @@ set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+#"Game/Scene/UniverseScene.cpp"
 file(GLOB sourceFiles
 
         "main.cpp"
 
         "Game/Game.cpp"
+        "Game/CameraController.cpp"
         "Game/Scene/ObjectScene.cpp"
         "Game/Scene/ParticleScene.cpp"
-        "Game/Scene/UniverseScene.cpp"
+
         "Game/Scene/TunnelEffectScene.cpp"
 
 
@@ -27,8 +29,13 @@ file(GLOB sourceFiles
         "Engine/Math/RandomValue.cpp"
         "Engine/Math/Algebra.cpp"
 
+
+
+        "Engine/Platform/Android/AndroidApplication.cpp"
         "Engine/Platform/Android/EglContext.cpp"
         "Engine/Platform/Android/AndroidAssetManager.cpp"
+
+
 
         "Engine/Precompiled/pch.cpp"
 

@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Core.h"
+#include "Camera.h"
 #include "ParticleSystem.h"
-
-#include "glm.hpp"
+#include "CameraController.h"
 
 namespace Game {
 
@@ -17,6 +17,8 @@ namespace Game {
         unsigned int particleMeshVao;
         unsigned int particleInstanceBuffer;
         Engine::Shader::SimpleShaderProgram shaderProgram;
+        Engine::Camera::Camera camera;
+        CameraController cameraCtrl;
 
     public:
 

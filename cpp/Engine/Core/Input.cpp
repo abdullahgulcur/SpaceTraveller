@@ -3,14 +3,13 @@
 
 namespace Engine {
 
-    void Input::init(android_app *app_) {
-        this->app_ = app_;
+    void Input::init() {
         pointerDelta = glm::ivec2(0);
     }
 
     void Input::handleInput() {
 
-        auto *inputBuffer = android_app_swap_input_buffers(app_);
+        auto *inputBuffer = android_app_swap_input_buffers(AndroidApplication::application);
         if (!inputBuffer)
             return;
 

@@ -36,7 +36,7 @@ namespace Engine{
             std::vector<tinyobj::material_t> materials;
             std::string warn, err;
 
-            AndroidAssetManager androidAssetManager;
+            AndroidAssetManager androidAssetManager; // AssetManager !!!
             std::string objStr;
             androidAssetManager.readBytesFromAsset(path.c_str(), objStr);
             std::stringstream ss(objStr);
@@ -111,7 +111,7 @@ namespace Engine{
             std::vector<tinyobj::material_t> materials;
             std::string warn, err;
 
-            AndroidAssetManager androidAssetManager;
+            AndroidAssetManager androidAssetManager; // AssetManager !!!
             std::string objStr;
             androidAssetManager.readBytesFromAsset(path.c_str(), objStr);
             std::stringstream ss(objStr);

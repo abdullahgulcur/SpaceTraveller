@@ -6,10 +6,6 @@ namespace Engine {
 
     namespace VertexBuffer {
 
-//        struct VertexBuffer{
-//            unsigned int bufferId;
-//        };
-
         void generate(unsigned int& bufferId, unsigned int bufferSize, void* buffer);
         void generate(unsigned int& bufferId);
         void bind(unsigned int bufferId);

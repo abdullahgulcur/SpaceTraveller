@@ -1,7 +1,6 @@
 #pragma once
 
-#include <game-activity/native_app_glue/android_native_app_glue.h>
-
+#include "AndroidApplication.h"
 #include "EglContext.h"
 #include "AssetManager.h"
 #include "Input.h"
@@ -19,14 +18,11 @@ namespace Engine {
 
     public:
 
-        android_app *app_;
-
-        EglContext eglContext;
-        //AssetManager assetManager;
+        EglContext eglContext; // WindowContext !!!
         Input input;
         Timer::SystemTimer systemTimer;
 
-        void init(android_app *app_);
+        void init();
         void update();
         static Core* getInstance();
     };

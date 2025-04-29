@@ -1,8 +1,6 @@
-#include "VertexBuffer.h"
-
 #include "pch.h"
-
-#include <GLES3/gl32.h>
+#include "VertexBuffer.h"
+#include "GraphicsApi.h"
 
 namespace Engine {
 

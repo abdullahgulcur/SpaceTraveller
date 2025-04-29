@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "EglContext.h"
-#include <game-activity/native_app_glue/android_native_app_glue.h>
+#include "AndroidApplication.h"
 
 namespace Engine {
 
@@ -13,7 +13,7 @@ namespace Engine {
         height_ = 0;
     }
 
-    void EglContext::init(android_app *app_) {
+    void EglContext::init() {
 
         // Choose your render attributes
         constexpr EGLint attribs[] = {
@@ -64,7 +64,7 @@ namespace Engine {
         // create the proper window surface
         EGLint format;
         eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
-        EGLSurface surface = eglCreateWindowSurface(display, config, app_->window, nullptr);
+        EGLSurface surface = eglCreateWindowSurface(display, config, AndroidApplication::application->window, nullptr);
 
         // Create a GLES 3 context
         EGLint contextAttribs[] = {EGL_CONTEXT_CLIENT_VERSION, 3, EGL_CONTEXT_MINOR_VERSION, 2, EGL_NONE};

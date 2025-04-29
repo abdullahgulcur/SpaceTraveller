@@ -4,14 +4,16 @@
 
 namespace Engine{
 
-    class PerspectiveCamera {
+    namespace Camera{
 
-    private:
-    public:
+        struct Camera{
+            glm::mat4 view;
+            glm::mat4 projection;
+            glm::vec3 position;
+        };
 
-        PerspectiveCamera(float fov, float aspectRatio, float nearPlane, float farPlane);
-        ~PerspectiveCamera();
-        glm::mat4 getProjectionMatrix();
-
-    };
+        void perspectiveProjection(glm::mat4& projection, float fovY, float aspect, float zNear, float zFar);
+        void view(glm::mat4& view, glm::vec3& camPos, glm::vec3 center);
+        void view(glm::mat4& view, glm::vec3& camPos, glm::vec3 center, glm::vec3 up);
+    }
 }
