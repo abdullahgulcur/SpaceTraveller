@@ -60,46 +60,4 @@ namespace Engine{
         }
     }
 
-
-/*    Timer::Timer()
-            : running(false), startTime(Clock::now()), endTime(startTime) {}
-
-    void Timer::reset() {
-        running = false;
-        startTime = Clock::now();
-        endTime = startTime;
-    }
-
-    void Timer::start() {
-        if (!running) {
-            startTime = Clock::now();
-            running = true;
-        }
-    }
-
-    void Timer::stop() {
-        if (running) {
-            endTime = Clock::now();
-            running = false;
-        }
-    }
-
-    float Timer::getElapsedSeconds() {
-        auto duration = running ? Clock::now() - startTime : endTime - startTime;
-        return std::chrono::duration<float>(duration).count();
-    }
-
-    double Timer::getElapsedMilliseconds() {
-        auto duration = running ? Clock::now() - startTime : endTime - startTime;
-        return std::chrono::duration<double, std::milli>(duration).count();
-    }
-
-    long long Timer::getElapsedMicroseconds() {
-        auto duration = running ? Clock::now() - startTime : endTime - startTime;
-        return std::chrono::duration_cast<std::chrono::microseconds>(duration).count();
-    }
-
-    bool Timer::isRunning() {
-        return running;
-    }*/
 }

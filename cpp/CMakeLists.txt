@@ -1,7 +1,7 @@
 # For more information about using CMake with Android Studio, read the
 # documentation: https://d.android.com/studio/projects/add-native-code.html
 
-cmake_minimum_required(VERSION 3.22.1)
+cmake_minimum_required(VERSION 3.20)
 
 project("space")
 
@@ -9,9 +9,12 @@ set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+set(win 0)
+set(android 1)
+set(platform ${android})
 
 #"Game/Scene/UniverseScene.cpp"
-file(GLOB sourceFiles
+set(sourceFiles
 
         "main.cpp"
 
@@ -22,24 +25,15 @@ file(GLOB sourceFiles
 
         "Game/Scene/TunnelEffectScene.cpp"
 
-
         "Engine/Core/Core.cpp"
         "Engine/Core/Timer.cpp"
-        "Engine/Platform/Input.cpp"
+        "Engine/Core/pch.cpp"
 
-        "Engine/Math/RandomValue.cpp"
-        "Engine/Math/Algebra.cpp"
-
-
-
-        "Engine/Platform/Android/AndroidApplication.cpp"
-        "Engine/Platform/Android/EglContext.cpp"
-        "Engine/Platform/Android/AndroidAssetManager.cpp"
-        "Engine/Platform/Android/AndroidInput.cpp"
         "Engine/Platform/Input.cpp"
         "Engine/Platform/AppSurface.cpp"
 
-        "Engine/Precompiled/pch.cpp"
+        "Engine/Math/RandomValue.cpp"
+        "Engine/Math/Algebra.cpp"
 
         "Engine/Rendering/Camera.cpp"
         "Engine/Rendering/IndexBuffer.cpp"
@@ -58,43 +52,104 @@ file(GLOB sourceFiles
         "Engine/Resource/MeshData.cpp"
 
         "ThirdParty/tinyobjloader/tiny_obj_loader.cpp"
-        "ThirdParty/stb/stb_image.cpp")
+        "ThirdParty/stb/stb_image.cpp"
+)
 
-add_library(${PROJECT_NAME} SHARED ${sourceFiles})
+if(${platform} STREQUAL ${android})
 
-target_include_directories(${PROJECT_NAME} PRIVATE ThirdParty/glm
+    list(APPEND sourceFiles
+            "Engine/Platform/Android/AndroidApplication.cpp"
+            "Engine/Platform/Android/EglContext.cpp"
+            "Engine/Platform/Android/AndroidAssetManager.cpp"
+            "Engine/Platform/Android/AndroidInput.cpp"
+            )
+elseif (${platform} STREQUAL ${win})
+
+    list(APPEND sourceFiles
+            "Engine/Platform/Glfw/GlfwContext.cpp"
+            "Engine/Platform/Glfw/GlfwInput.cpp"
+            "Engine/Platform/Windows/WindowsAssetManager.cpp"
+    )
+endif()
+
+if(${platform} STREQUAL ${android})
+    add_library(${PROJECT_NAME} SHARED ${sourceFiles})
+elseif (${platform} STREQUAL ${win})
+    add_executable(${PROJECT_NAME} ${sourceFiles})
+endif()
+
+## -------------------- INCLUDE DIRS --------------------
+
+set(includeDirectories
+        ThirdParty/glm
         ThirdParty/stb
         ThirdParty/tinyobjloader
-        ThirdParty/assimp
-
-        Game
-        Game/Scene
-
-        Engine/Precompiled
 
         Engine/Core
         Engine/Platform
-        Engine/Platform/Android
-        Engine/Platform/Windows
         Engine/Rendering
         Engine/Resource
-        Engine/Math)
+        Engine/Math
 
-target_compile_definitions(${PROJECT_NAME} PUBLIC PLATFORM="ANDROID")
+        Game
+        Game/Scene
+)
+
+if(${platform} STREQUAL ${android})
+    list(APPEND includeDirectories
+            Engine/Platform/Android
+    )
+elseif (${platform} STREQUAL ${win})
+    list(APPEND includeDirectories
+            ThirdParty/glew/include
+            ThirdParty/glfw/include
+
+            Engine/Platform/Windows
+            Engine/Platform/Glfw
+    )
+endif()
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${includeDirectories})
 
 
-# Searches for a package provided by the game activity dependency
-find_package(game-activity REQUIRED CONFIG)
+## -------------------- PREPROCESSOR MACROS --------------------
 
-# Configure libraries CMake uses to link your target library.
-target_link_libraries(${PROJECT_NAME}
-        # The game activity
-        game-activity::game-activity
+target_compile_definitions(${PROJECT_NAME} PUBLIC ANDROID=${android})
+target_compile_definitions(${PROJECT_NAME} PUBLIC WIN=${win})
+target_compile_definitions(${PROJECT_NAME} PUBLIC PLATFORM=${platform})
 
-        # EGL and other dependent libraries required for drawing
-        # and interacting with Android system
-        EGL
-        GLESv3
-        jnigraphics
-        android
-        log)
+if (${platform} STREQUAL ${win})
+    target_compile_definitions(${PROJECT_NAME} PRIVATE GLEW_STATIC)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC ASSETS_PATH="C:/Users/Abdullah/AndroidStudioProjects/Space/app/src/main/assets/")
+endif()
+
+## -------------------- PACKAGE FIND --------------------
+
+if(${platform} STREQUAL ${android})
+    find_package(game-activity REQUIRED CONFIG)
+elseif (${platform} STREQUAL ${win})
+    find_package(OpenGL REQUIRED)
+endif()
+
+## -------------------- LINKING --------------------
+
+if(${platform} STREQUAL ${android})
+    target_link_libraries(${PROJECT_NAME}
+            game-activity::game-activity
+            EGL
+            GLESv3
+            jnigraphics
+            android
+            log)
+elseif (${platform} STREQUAL ${win})
+
+    target_link_directories(${PROJECT_NAME} PRIVATE
+        ThirdParty/glew/lib
+        ThirdParty/glfw/lib
+    )
+
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+            OpenGL::GL
+            glew32s
+            glfw3)
+endif()

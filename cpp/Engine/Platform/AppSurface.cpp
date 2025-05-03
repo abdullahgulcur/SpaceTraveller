@@ -5,43 +5,43 @@ namespace Engine {
 
     void AppSurface::init() {
 
-#ifdef PLATFORM "ANDROID"
+#if PLATFORM == ANDROID
         eglContext.init();
-#elif PLATFORM "WIN"
-
+#elif PLATFORM == WIN
+        glfwContext.init();
 #endif
     }
 
     void AppSurface::update() {
-#ifdef PLATFORM "ANDROID"
+#if PLATFORM == ANDROID
         eglContext.swapBuffers();
         eglContext.updateRenderArea();
-#elif PLATFORM "WIN"
-
+#elif PLATFORM == WIN
+        glfwContext.swapBuffers();
 #endif
     }
 
     float AppSurface::getAspectRatio(){
-#ifdef PLATFORM "ANDROID"
+#if PLATFORM == ANDROID
         return (float)eglContext.width / eglContext.height;
-#elif PLATFORM "WIN"
-
+#elif PLATFORM == WIN
+        return (float)glfwContext.mode->width / glfwContext.mode->height;
 #endif
     }
 
     unsigned int AppSurface::getWidth(){
-#ifdef PLATFORM "ANDROID"
+#if PLATFORM == ANDROID
         return eglContext.width;
-#elif PLATFORM "WIN"
-
+#elif PLATFORM == WIN
+        return glfwContext.mode->width;
 #endif
     }
 
     unsigned int AppSurface::getHeight(){
-#ifdef PLATFORM "ANDROID"
+#if PLATFORM == ANDROID
         return eglContext.height;
-#elif PLATFORM "WIN"
-
+#elif PLATFORM == WIN
+        return glfwContext.mode->height;
 #endif
     }
 

@@ -9,7 +9,7 @@ namespace Game{
 
         unsigned int billboardMeshVertexBuffer;
         Engine::VertexBuffer::generateBillboardVertexBuffer(billboardMeshVertexBuffer);
-        Engine::VertexBuffer::generate(particleInstanceBuffer, 2048 * sizeof(Engine::ParticleSystem::ParticleData), nullptr);
+        Engine::VertexBuffer::generate(particleInstanceBuffer, 8192 * sizeof(Engine::ParticleSystem::ParticleData), nullptr);
         Engine::Vao::createBillboardMeshVao(particleMeshVao, billboardMeshVertexBuffer, particleInstanceBuffer);
         Engine::Shader::createShaderProgramParticle(shaderProgram);
         cameraCtrl.init(camera);

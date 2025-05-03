@@ -1,12 +1,14 @@
-#ifdef PLATFORM "ANDROID"
+#include "pch.h"
+#include "Core.h"
+#include "Game.h"
+
+#if PLATFORM == ANDROID
 
 #include <jni.h>
 #include <game-activity/GameActivity.cpp>
 #include <game-text-input/gametextinput.cpp>
 #include <game-activity/native_app_glue/android_native_app_glue.c>
 
-#include "Core.h"
-#include "Game.h"
 #include "AndroidApplication.h"
 
 extern "C" {
@@ -108,7 +110,27 @@ void android_main(struct android_app *pApp) {
 }
 }
 
-#elif PLATFORM "WIN"
+#elif PLATFORM == WIN
 
+int main() {
+
+    std::cout << "Welcome to Space game !" << std::endl;
+
+    Engine::Core* coreInstance = Engine::Core::getInstance();
+    Game::Game* gameInstance = Game::Game::getInstance();
+    coreInstance->init();
+    gameInstance->init();
+
+    while (!coreInstance->appSurface.glfwContext.shouldClose()) {
+
+        //Engine code
+        coreInstance->update();
+
+        //Game code
+        gameInstance->update(coreInstance->systemTimer.getDeltaSeconds());
+    }
+   
+    return 0;
+}
 
 #endif

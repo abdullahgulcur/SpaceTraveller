@@ -1,7 +1,7 @@
 #pragma once
 
-#ifdef ANDROID
+#if PLATFORM == ANDROID
 #include <GLES3/gl32.h>
-#else
-
+#elif PLATFORM == WIN
+#include "glew.h"
 #endif

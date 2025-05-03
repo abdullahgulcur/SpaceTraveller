@@ -8,9 +8,12 @@
 #include <queue>
 #include <fstream>
 #include <sstream>
-//#include <basetsd.h>
 #include <chrono>
 #include <unordered_map>
 #include <algorithm>
 #include <memory>
 #include <random>
+
+#if PLATFORM == WIN
+#include <basetsd.h>
+#endif

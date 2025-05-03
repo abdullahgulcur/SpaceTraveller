@@ -1,9 +1,9 @@
 #pragma once
 
-#ifdef PLATFORM "ANDROID"
+#if PLATFORM == ANDROID
 #include "EglContext.h"
-#elif PLATFORM "WIN"
-
+#elif PLATFORM == WIN
+#include "GlfwContext.h"
 #endif
 
 namespace Engine {
@@ -13,10 +13,10 @@ namespace Engine {
 
     public:
 
-#ifdef PLATFORM "ANDROID"
+#if PLATFORM == ANDROID
         EglContext eglContext;
-#elif PLATFORM "WIN"
-
+#elif PLATFORM == WIN
+        GlfwContext glfwContext;
 #endif
 
         AppSurface() {}

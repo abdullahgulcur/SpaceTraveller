@@ -1,8 +1,9 @@
 #pragma once
 
-#ifdef PLATFORM "ANDROID"
+#if PLATFORM == ANDROID
 #include "AndroidAssetManager.h"
-#elif PLATFORM "WIN"
+#elif PLATFORM == WIN
+#include "WindowsAssetManager.h"
 #endif
 
 namespace Engine{
@@ -15,22 +16,25 @@ namespace Engine{
         ~AssetManager(){}
 
         template<typename T>
-        void readBytesFromAsset(const char* filename, T& buffer) {
-#ifdef PLATFORM "ANDROID"
+        void readBytesFromAsset(std::string filename, T& buffer) {
+#if PLATFORM == ANDROID
             AndroidAssetManager androidAssetManager;
-            androidAssetManager.readBytesFromAsset(filename, buffer);
-#elif PLATFORM "WIN"
-
+            androidAssetManager.readBytesFromAsset(filename.c_str(), buffer);
+#elif PLATFORM == WIN
+            WindowsAssetManager assetManager;
+            std::string path = ASSETS_PATH + filename;
+            assetManager.readBytesFromAsset(path.c_str(), buffer);
 #endif
         }
 
         void getShaderMacros(std::string& macros){
-#ifdef PLATFORM "ANDROID"
+#if PLATFORM == ANDROID
             macros += std::string("#version 320 es\n");
-#elif PLATFORM "WIN"
-
+            macros += std::string("#define ANDROID") + std::string("\n");
+#elif PLATFORM == WIN
+            macros += std::string("#version 460 core\n");
+            macros += std::string("#define WIN") + std::string("\n");
 #endif
-            macros += std::string("#define ") + std::string(PLATFORM) + std::string("\n");
         }
     };
 }

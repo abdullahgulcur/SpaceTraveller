@@ -1,6 +1,5 @@
 #pragma once
 
-#include "AndroidApplication.h"
 #include "AppSurface.h"
 #include "Input.h"
 #include "Timer.h"

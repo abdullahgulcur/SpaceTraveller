@@ -12,6 +12,11 @@ namespace Engine {
         appSurface.init();
         input.init();
 
+#if PLATFORM == WIN
+        glewExperimental = true;
+        glewInit();
+#endif
+
         // should not be here ---------
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
@@ -24,9 +29,14 @@ namespace Engine {
 
     void Core::update() {
 
+#if PLATFORM == WIN
+        appSurface.glfwContext.pollEvents();
+#endif
+        input.update();
+
         systemTimer.update();
         appSurface.update();
-        input.update();
+
     }
 
     Core* Core::getInstance() {

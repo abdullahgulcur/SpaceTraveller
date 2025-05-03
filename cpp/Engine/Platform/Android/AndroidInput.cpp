@@ -1,10 +1,10 @@
 #include "pch.h"
 #include "AndroidInput.h"
+#include "Input.h"
 
 namespace Engine {
 
-    void AndroidInput::init(Input& input) {
-        input.pointerDelta = glm::ivec2(0);
+    void AndroidInput::init() {
     }
 
     void AndroidInput::update(Input& input) {

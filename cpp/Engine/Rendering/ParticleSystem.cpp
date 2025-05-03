@@ -64,7 +64,7 @@ namespace Engine{
                 //p.velocityOffset[index] = 0.f;//Random::randomFloat(0,10);
                 p.scale[index] = Random::randomFloat(0.02,0.05);
 
-                p.posX[index] = Random::randomFloat(-3.f,3.f);
+                p.posX[index] = Random::randomFloat(-13.f,13.f);
                 p.posY[index] = Random::randomFloat(-6.f,6.f);
                 p.posZ[index] = 0.f;
             }
@@ -119,14 +119,14 @@ namespace Engine{
             particleCount = last + 1;
 
             // add new particle if triggers
-            if(shouldTrigger(duration, 0.0001)){
+            if(shouldTrigger(duration, 0.01)){
                 unsigned int index = particleCount++;
 
                 particleSimulationData[index].startTime = duration;
                 particleSimulationData[index].lifeTime = Random::randomFloat(3,7);
                 particleSimulationData[index].angularVelocity = Random::randomFloat(10,360);
                 //particleSimulationData[index].force = Random::randomVec3(glm::vec3(50,50,-100), glm::vec3(-50,-50,-150));
-                particleSimulationData[index].force = Random::randomVec3(glm::vec3(10,-10,10), glm::vec3(-10,-10,-10));
+                particleSimulationData[index].force = Random::randomVec3(glm::vec3(-10,-10,-10), glm::vec3(10,-10,10));
                 particleSimulationData[index].velocity = glm::vec3(0,10,0);
 
 
