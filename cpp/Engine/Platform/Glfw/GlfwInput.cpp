@@ -41,7 +41,7 @@ namespace Engine {
 
 		auto releaseButton = [&](InputCode key) {
 
-			BitOperation::setBit(upBuffer, int(key));
+			BitOperation::clearBit(downBuffer, int(key));
 			BitOperation::clearBit(pressLockBuffer, int(key));
 
 			if (!BitOperation::getBit(upLockBuffer, int(key))) {

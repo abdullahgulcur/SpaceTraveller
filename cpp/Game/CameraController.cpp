@@ -18,10 +18,11 @@ namespace Game{
         Engine::Camera::perspectiveProjection(camera.projection, 90.0f, core->appSurface.getAspectRatio(), 0.1f, 1000.0f);
 
 #if PLATFORM == WIN
-        if(core->input.getButtonDown(Engine::InputCode::Mouse_Right)) {
+        if(core->input.getButtonDown(Engine::InputCode::Mouse_Left)) {
 #endif
-            //targetHorizontalAngle += -core->input.getPointerDelta().x * 0.01f;
-            //horizontalAngle = glm::mix(horizontalAngle, targetHorizontalAngle, 0.1);
+            // TODO
+//            targetHorizontalAngle += -core->input.getPointerDelta().x * 0.01f;
+//            horizontalAngle = glm::mix(horizontalAngle, targetHorizontalAngle, 0.1);
 
             //core->input.set
 
@@ -29,7 +30,7 @@ namespace Game{
         }
 #endif
 
-        float radius = 30;
+        float radius = 5;
         camera.position = glm::vec3(radius * glm::sin(horizontalAngle), 0, radius * glm::cos(horizontalAngle));
         Engine::Camera::view(camera.view, camera.position, glm::vec3(0));
     }

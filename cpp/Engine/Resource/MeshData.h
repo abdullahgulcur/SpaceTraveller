@@ -15,6 +15,8 @@ namespace Engine{
 
         void loadStaticMesh(MeshData& data, std::string path);
         void loadStaticMeshTextured(MeshData& data, std::string path);
+        void generateQuadSphereVertexBuffer(MeshData& data);
+
     }
 
 //    class MeshData{

@@ -11,6 +11,11 @@ namespace Engine{
             glDrawElements(GL_TRIANGLES, totalIndices, indexElementType, (void*)0);
         }
 
+        void draw(unsigned int vao, unsigned int totalIndices, unsigned int indexElementType) {
+            Vao::bind(vao);
+            draw(totalIndices, indexElementType);
+        }
+
         void drawInstanced(unsigned int totalIndices, unsigned int indexElementType, unsigned int instanceCount){
             glDrawElementsInstanced(GL_TRIANGLES, totalIndices, indexElementType, (void*)0, instanceCount);
         }

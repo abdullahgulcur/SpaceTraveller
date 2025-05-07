@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(win 0)
 set(android 1)
-set(platform ${android})
+set(platform ${win})
 
 #"Game/Scene/UniverseScene.cpp"
 set(sourceFiles
@@ -20,8 +20,10 @@ set(sourceFiles
 
         "Game/Game.cpp"
         "Game/CameraController.cpp"
+        "Game/OrbitCameraController.cpp"
         "Game/Scene/ObjectScene.cpp"
         "Game/Scene/ParticleScene.cpp"
+        "Game/Scene/PlanetScene.cpp"
 
         "Game/Scene/TunnelEffectScene.cpp"
 

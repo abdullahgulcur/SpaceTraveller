@@ -32,7 +32,37 @@ namespace Engine {
         }
 
         void createShaderProgramPhong(SimpleShaderProgram& program){
-            createSimpleShaderProgram(program, "shader/phong.vert", "shader/phong.frag");
+            createSimpleShaderProgram(program, "shader/lit_textured.vert", "shader/phong.frag");
+        }
+
+        //void createShaderProgram_(SimpleShaderProgram_& program) {
+        //    //createSimpleShaderProgram(program, "shader/phong.vert", "shader/phong.frag");
+        //}
+
+        void createShaderPlanet(PlanetShader& shader) {
+            createShaderPlanet(shader, "shader/lit.vert", "shader/planet.frag");
+        }
+
+        void createShaderPlanet(PlanetShader& shader, const char* vert, const char* frag) {
+            createShaderProgram(shader.programId, vert, frag);
+            bind(shader.programId);
+            getLocation(shader.locationView, shader.programId, "view");
+            getLocation(shader.locationProjection, shader.programId, "projection");
+            getLocation(shader.locationModel, shader.programId, "model");
+            getLocation(shader.locationCameraPosition, shader.programId, "cameraPosition");
+
+            getLocation(shader.loc_WaterScale, shader.programId, "waterScale");
+            getLocation(shader.loc_WaterTreshold, shader.programId, "waterTreshold");
+            getLocation(shader.loc_WaterPower, shader.programId, "waterPower");
+            getLocation(shader.loc_WaterColor, shader.programId, "waterColor");
+            getLocation(shader.loc_WaterContinentalShelf, shader.programId, "waterContinentalShelf");
+            getLocation(shader.loc_WaterDepth, shader.programId, "waterDepth");
+
+            getLocation(shader.loc_Tex0, shader.programId, "noiseTex0");
+            getLocation(shader.loc_Tex1, shader.programId, "noiseTex1");
+
+            /*setTextureLocation(shader.programId, 0, "noiseTex0");
+            setTextureLocation(shader.programId, 1, "noiseTex1");*/
         }
 
         void createSimpleShaderProgram(SimpleShaderProgram& program, const char* vert, const char* frag){
@@ -173,6 +203,12 @@ namespace Engine {
 
         void uniform(unsigned int location, glm::uvec2& value){
             glUniform2uiv(location, 1, &value[0]);
+        }
+
+        void uniform(unsigned int location, unsigned int slot, unsigned int textureId) {
+            glActiveTexture(GL_TEXTURE0 + slot);
+            glBindTexture(GL_TEXTURE_2D, textureId);
+            glUniform1i(location, slot);
         }
 
         void getLocation(unsigned int& location, unsigned int shaderProgramId, const char* uniformName){

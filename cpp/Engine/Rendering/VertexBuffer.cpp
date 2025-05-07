@@ -59,5 +59,6 @@ namespace Engine {
             };
             VertexBuffer::generate(bufferId,  sizeof(vertices), &vertices[0]);
         }
+
     }
 }

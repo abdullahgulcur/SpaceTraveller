@@ -51,18 +51,28 @@ namespace Engine {
             glVertexAttribDivisor(index, 1);
         }
 
-        void createMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int indexBufferId, bool textured){
+        void createLitMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int indexBufferId) {
+            generate(vao);
+            bind(vao);
+            VertexBuffer::bind(vertexBufferId);
+            IndexBuffer::bind(indexBufferId);
+            vertexAttributePointer(0, 3, GL_FLOAT, 24, 0);
+            vertexAttributePointer(1, 3, GL_FLOAT, 24, 12);            
+            unbind();
+        }
+
+        void createMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int indexBufferId, bool textured) {
             generate(vao);
             bind(vao);
             VertexBuffer::bind(vertexBufferId);
             IndexBuffer::bind(indexBufferId);
 
             unsigned int stride = 24;
-            if(textured) stride += 8;
+            if (textured) stride += 8;
 
             vertexAttributePointer(0, 3, GL_FLOAT, stride, 0);
             vertexAttributePointer(1, 3, GL_FLOAT, stride, 12);
-            if(textured)
+            if (textured)
                 vertexAttributePointer(2, 2, GL_FLOAT, stride, 24);
 
             unbind();

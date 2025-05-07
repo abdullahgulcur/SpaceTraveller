@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <memory>
 #include <random>
+#include <cmath>
 
 #if PLATFORM == WIN
 #include <basetsd.h>

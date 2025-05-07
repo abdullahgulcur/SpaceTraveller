@@ -95,6 +95,7 @@ namespace Engine{
         void setTexSlot2D(unsigned int slot, unsigned int textureId){
             glActiveTexture(GL_TEXTURE0 + slot);
             glBindTexture(GL_TEXTURE_2D, textureId);
+            //glUniform1i(uTextureLocation, 1);
         }
 
         // should be in asset manager, i think

@@ -41,7 +41,7 @@ namespace Engine{
         void refreshScreen(){
             Engine::Core* core = Engine::Core::getInstance();
             glViewport(0, 0, core->appSurface.getWidth(), core->appSurface.getHeight());
-            glClearColor(0.15f, 0.15f, 0.15, 1.0f);
+            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         }
     }

@@ -3,7 +3,7 @@
 #include "Core.h"
 #include "Camera.h"
 #include "ParticleSystem.h"
-#include "CameraController.h"
+#include "OrbitCameraController.h"
 #include "ShaderProgram.h"
 
 namespace Game {
@@ -16,7 +16,7 @@ namespace Game {
         unsigned int particleInstanceBuffer;
         Engine::Shader::SimpleShaderProgram shaderProgram;
         Engine::Camera::Camera camera;
-        CameraController cameraCtrl;
+        OrbitCameraController cameraCtrl;
 
     public:
 

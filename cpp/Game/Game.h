@@ -2,6 +2,7 @@
 
 #include "Core.h"
 #include "ObjectScene.h"
+#include "PlanetScene.h"
 #include "ParticleScene.h"
 #include "UniverseScene.h"
 #include "TunnelEffectScene.h"
@@ -13,8 +14,9 @@ namespace Game {
 
         static Game* instance;
 
+        PlanetScene scene;
         //ObjectScene scene;
-        ParticleScene scene;
+        //ParticleScene scene;
         //UniverseScene scene;
         //TunnelEffectScene scene;
 
