@@ -41,6 +41,11 @@ namespace Engine{
             glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         }
 
+        void drawGrid(unsigned int vao, unsigned int vertexCount) {
+            glBindVertexArray(vao);
+            glDrawArrays(GL_LINES, 0, vertexCount);
+        }
+
     }
 }
 

@@ -23,11 +23,13 @@ namespace Game {
         unsigned int vao;
         glm::mat4 model;
 
-        /*Engine::MeshData::MeshData planeMeshData;
-        Engine::Shader::SimpleShaderProgram planeShader;
-        unsigned int planeTextureId;
-        unsigned int planeVao;*/
 
+        unsigned int vao1;
+        Engine::MeshData::MeshData meshData1;
+        Engine::Shader::ShaderPhong shader1;
+        unsigned int textureId2;
+
+        
     public:
 
         PlanetScene() {}

@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "GlfwInput.h"
-#include "Input.h"
 #include "BitOperation.h"
 
 namespace Engine {

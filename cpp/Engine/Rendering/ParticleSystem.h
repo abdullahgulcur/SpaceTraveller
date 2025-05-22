@@ -6,31 +6,67 @@
 #include "Vao.h"
 #include "VertexBuffer.h"
 
-//#define MAX_PARTICLES
-
 namespace Engine{
 
     namespace ParticleSystem{
 
-        struct ParticleTunnelEffect {
-            float startTime[1024];
-            float lifeTime[1024];
+        struct ParticleGPUDataTunnelEffect {
+            glm::i8vec3 position;
+            unsigned char color;
+        };
 
-            //float velocityOffset[1024];
+        struct ParticleGPUDataBurst {
+            glm::i8vec3 position;
+            glm::u8vec4 color;
+            unsigned char scaleRotation;
+        };
 
-            float posX[1024];
-            float posY[1024];
-            float posZ[1024];
-            float scale[1024];
+        struct ParticleGPUData {
+            unsigned short scale;
+            glm::i16vec3 positionD;
+            glm::i8vec3 positionF;
+            glm::u8vec4 color;
+            unsigned char rotation;
+        };
 
-            float gpuData[1024*4];
+        //template <typename Size>
+        struct ParticleSmoke {
+            float startTime[4096];
+            float lifeTime[4096];
+
+            float posX[4096];
+            float posY[4096];
+            float posZ[4096];
+            float scale[4096];
+            float rotation[4096];
+            glm::u8vec4 color[4096];
+
+            ParticleGPUData gpuData[4096];
 
             unsigned int particleCount = 0;
             float particleStartTime;
             float particleLastTriggerTime;
-            float force;
-            float velocity = 60.f;
         };
+
+        //struct ParticleTunnelEffect {
+        //    float startTime[1024];
+        //    float lifeTime[1024];
+
+        //    //float velocityOffset[1024];
+
+        //    float posX[1024];
+        //    float posY[1024];
+        //    float posZ[1024];
+        //    float scale[1024];
+
+        //    float gpuData[1024*4];
+
+        //    unsigned int particleCount = 0;
+        //    float particleStartTime;
+        //    float particleLastTriggerTime;
+        //    float force;
+        //    float velocity = 60.f;
+        //};
 
         template <typename T>
         void start(T& t, unsigned int time){
@@ -39,18 +75,19 @@ namespace Engine{
         }
 
 
-        bool shouldTrigger(float duration, float interval);
+        //bool shouldTrigger(float duration, float interval);
 
-        void reorderParticleTunnelEffect(ParticleTunnelEffect& p, float duration);
-        void updateParticleTunnelEffect(ParticleTunnelEffect& p, float dt);
+        /*void reorderParticleTunnelEffect(ParticleTunnelEffect& p, float duration);
+        void updateParticleTunnelEffect(ParticleTunnelEffect& p, float dt);*/
 
         //void update_(float dt);
 
-
+        void reorderParticleSmoke(ParticleSmoke& p, float duration);
+        void updateParticleSmoke(ParticleSmoke& p, float dt);
 
         //--------------------------------------------------------
 
-        inline void velocityOverLifetimeConstant(glm::vec3& p, glm::vec3 v, float dt){
+        /*inline void velocityOverLifetimeConstant(glm::vec3& p, glm::vec3 v, float dt){
             p += v * dt;
         }
 
@@ -84,49 +121,49 @@ namespace Engine{
 
         inline void rotationOverLifetimeConstant(float& r, float v, float dt){
             r += v * dt;
-        }
+        }*/
 
         //--------------------------------------------------------
 
 
-        struct ParticleData {
-            glm::vec3 position; // common
-            float rotation;
-            glm::vec4 color;
-            float scale;
-            int padding[7];
-        };
+        //struct ParticleData {
+        //    glm::vec3 position; // common
+        //    float rotation;
+        //    glm::vec4 color;
+        //    float scale;
+        //    int padding[7];
+        //};
 
-        class ParticleSystem{
+        //class ParticleSystem{
 
-            struct ParticleSimulationData {
-                float startTime; // common
-                float lifeTime; // common
-                float angularVelocity;
-                int padding0;
-                glm::vec3 force;
-                int padding1;
-                glm::vec3 velocity;
-                int padding2[5];
-                // color0
-                // color1
-            };
+        //    struct ParticleSimulationData {
+        //        float startTime; // common
+        //        float lifeTime; // common
+        //        float angularVelocity;
+        //        int padding0;
+        //        glm::vec3 force;
+        //        int padding1;
+        //        glm::vec3 velocity;
+        //        int padding2[5];
+        //        // color0
+        //        // color1
+        //    };
 
-        private:
-        public:
+        //private:
+        //public:
 
-            ParticleData particleData[8192];
-            ParticleSimulationData particleSimulationData[8192];
-            unsigned int particleCount = 0;
-            float startTime;
-            float lastTriggerTime;
+        //    ParticleData particleData[8192];
+        //    ParticleSimulationData particleSimulationData[8192];
+        //    unsigned int particleCount = 0;
+        //    float startTime;
+        //    float lastTriggerTime;
 
-            ParticleSystem();
-            ~ParticleSystem() {}
-            void update(float dt);
-            bool shouldTrigger(float duration, float interval);
+        //    ParticleSystem();
+        //    ~ParticleSystem() {}
+        //    void update(float dt);
+        //    bool shouldTrigger(float duration, float interval);
 
-        };
+        //};
 
     }
 

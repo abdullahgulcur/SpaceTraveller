@@ -6,10 +6,13 @@ precision mediump float;
 
 #endif
 
+uniform sampler2D tex;
 uniform vec3 cameraPosition;
+
 
 in vec3 Normal;
 in vec3 FragPos;
+in vec2 TexCoord;
 
 out vec4 FragColor;
 
@@ -22,7 +25,7 @@ void main()
 
     float diffuse = max(dot(norm, lightDir), 0.0);
 
-    vec3 albedo = vec3(0.2, 0.2, 0.2);
+    vec3 albedo = texture(tex, TexCoord).rgb;
     vec3 result = albedo * (ambient + diffuse);
     FragColor = vec4(result, 1.0);
 }

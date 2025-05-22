@@ -14,10 +14,17 @@ namespace Game{
         model = glm::mat4(1);
 
         Engine::MeshData::generateQuadSphereVertexBuffer(meshData);
-        Engine::Vao::createLitMeshVao(vao, meshData.vertexBuffer, meshData.indexBuffer.bufferId);
+        Engine::Vao::createLitMeshTexturedVao(vao, meshData.vertexBuffer, meshData.indexBuffer.bufferId);
         Engine::Shader::createShaderPlanet(shader);
         Engine::Texture::createTexture2D(textureId0, "texture/noise/perlinnoise.jpg");
         Engine::Texture::createTexture2D(textureId1, "texture/noise/macrovariation.jpg");
+
+
+        Engine::MeshData::loadStaticMeshTextured(meshData1, "model/plane.obj");
+        Engine::Vao::createLitMeshTexturedVao(vao1, meshData1.vertexBuffer, meshData1.indexBuffer.bufferId);
+        Engine::Shader::createShaderPhong(shader1);
+
+        Engine::Texture::createTexture2D(textureId2, "texture/marble.jpg");
 
         cameraCtrl.SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
         cameraCtrl.SetDistance(3.0f);
@@ -40,8 +47,8 @@ namespace Game{
 
         if (core->input.getButtonDown(Engine::InputCode::Mouse_Left)) {
 #endif
-            deltaX = core->input.getPointerDelta().x;
-            deltaY = -core->input.getPointerDelta().y;
+            //deltaX = core->input.getPointerDelta().x;
+            //deltaY = -core->input.getPointerDelta().y;
             // set cursor invisible
 #if PLATFORM == WIN
         }
@@ -56,15 +63,22 @@ namespace Game{
 
         Engine::FrameBuffer::refreshScreen();
 
+        glm::mat4 projectionView = camera.projection * camera.view;
 
         glm::vec3 waterColor(0.1f, 0.3f, 0.9f);
 
-        Engine::Shader::updateUniforms(shader, camera.projection, camera.view, model, camera.position, 
+        Engine::Shader::updateUniforms(shader, projectionView, model, camera.position,
             waterColor, 5.0f, 0.5f, 2.5f, 0.1f, 0.1f, textureId0, textureId1);
 
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
         Engine::DrawCommand::draw(vao, meshData.indexBuffer.totalIndices, meshData.indexBuffer.indexElementType);
+
+        glm::mat4 model1 = glm::scale(glm::mat4(1.f), glm::vec3(5.f));
+        Engine::Shader::updateUniforms(shader1, projectionView, model1, camera.position);
+
+        Engine::DrawCommand::draw(vao1, meshData1.indexBuffer.totalIndices, meshData1.indexBuffer.indexElementType);
+
 
         //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 

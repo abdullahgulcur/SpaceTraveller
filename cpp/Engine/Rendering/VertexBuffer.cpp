@@ -60,5 +60,27 @@ namespace Engine {
             VertexBuffer::generate(bufferId,  sizeof(vertices), &vertices[0]);
         }
 
+        void generateGridVertexBuffer(unsigned int& bufferId, unsigned int& gridVertexCount) {
+
+            // Parameters
+            const int gridSize = 20; // grid lines from -gridSize to +gridSize
+            std::vector<float> gridVertices;
+
+            // Generate grid lines (XZ plane)
+            for (int i = -gridSize; i <= gridSize; ++i) {
+                // Vertical line (parallel to Z)
+                gridVertices.push_back((float)i); gridVertices.push_back(0.0f); gridVertices.push_back((float)-gridSize);
+                gridVertices.push_back((float)i); gridVertices.push_back(0.0f); gridVertices.push_back((float)gridSize);
+
+                // Horizontal line (parallel to X)
+                gridVertices.push_back((float)-gridSize); gridVertices.push_back(0.0f); gridVertices.push_back((float)i);
+                gridVertices.push_back((float)gridSize);  gridVertices.push_back(0.0f); gridVertices.push_back((float)i);
+            }
+
+            VertexBuffer::generate(bufferId, gridVertices.size() * sizeof(float), &gridVertices[0]);
+
+            gridVertexCount = gridVertices.size() / 3;
+        }
+
     }
 }

@@ -21,12 +21,20 @@ namespace Engine {
     void Input::update(){
 
 #if PLATFORM == ANDROID
-        input.update(*this);
+        input.update();
 #elif PLATFORM == WIN
         input.update();
 
 #endif
 
+    }
+
+    const glm::ivec2& Input::getPointerDelta() const {
+        return input.pointerDelta;
+    }
+
+    const glm::ivec2& Input::getPointerPosition() const {
+        return input.pointerPosition;
     }
 
 #if PLATFORM == WIN
@@ -43,13 +51,7 @@ namespace Engine {
         return input.getButtonUp(inputCode);
     }
 
-    const glm::ivec2& Input::getPointerDelta() const {
-        return input.pointerDelta;
-    }
 
-    const glm::ivec2& Input::getPointerPosition() const {
-        return input.pointerPosition;
-    }
 
 #endif
 

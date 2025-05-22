@@ -20,6 +20,10 @@ namespace Engine{
             view = glm::lookAt(camPos, center, up);
         }
 
+        void getCameraRightAndUp(glm::mat4& view, glm::vec3& camRight, glm::vec3& camUp) {
+            camRight = glm::vec3(view[0][0], view[1][0], view[2][0]);
+            camUp = glm::vec3(view[0][1], view[1][1], view[2][1]);
+        }
 
 
     }

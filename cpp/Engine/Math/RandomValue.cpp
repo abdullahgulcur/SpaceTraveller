@@ -14,6 +14,15 @@ namespace Engine{
             return distX(gen);
         }
 
+        int random(int min, int max) {
+            static std::random_device rd;
+            static std::mt19937 gen(rd());
+
+            std::uniform_int_distribution<int> distX(min, max);
+
+            return static_cast<int>(distX(gen));
+        }
+
         glm::vec2 randomVec2(glm::vec2 min, glm::vec2 max){
             static std::random_device rd;
             static std::mt19937 gen(rd());

@@ -12,5 +12,6 @@ namespace Engine{
         void drawBillboardsInstanced(unsigned int vao, unsigned int instanceCount);
         void drawQuadsInstanced(unsigned int vao, unsigned int instanceCount, unsigned int instanceBuffer, unsigned int stride, void* bufferPtr);
         void drawQuad(unsigned int vao);
+        void drawGrid(unsigned int vao, unsigned int vertexCount);
     }
 }

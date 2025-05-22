@@ -163,181 +163,166 @@ namespace Engine{
 
         void generateQuadSphereVertexBuffer(MeshData& data) {
 
-            //// Helper to hash glm::ivec3 for unordered_map
-            //struct ivec3_hash
+
+            //struct Vertex
             //{
-            //    size_t operator()(const glm::ivec3& v) const noexcept
-            //    {
-            //        return std::hash<int>()(v.x) ^ (std::hash<int>()(v.y) << 1) ^ (std::hash<int>()(v.z) << 2);
-            //    }
+            //    glm::vec3 position;
+            //    glm::vec3 normal;
             //};
 
-            //int subdivision = 16;
+            //const float PI = 3.14159265359;
+            //int latitudeSegments = 32;
+            //int longitudeSegments = 64;
             //std::vector<Vertex> outVertices;
             //std::vector<uint32_t> outIndices;
 
-            //// Maps grid position to vertex index
-            //std::unordered_map<glm::ivec3, uint32_t, ivec3_hash> vertexMap;
 
-            //auto getVertexIndex = [&](const glm::ivec3& gridPos) -> uint32_t
+            //// Top vertex
+            //Vertex topVertex;
+            //topVertex.position = glm::vec3(0, 1, 0);
+            //topVertex.normal = glm::vec3(0, 1, 0);
+            //outVertices.push_back(topVertex);
+
+            //// Generate vertices
+            //for (int lat = 1; lat < latitudeSegments; ++lat)
             //{
-            //    auto it = vertexMap.find(gridPos);
-            //    if (it != vertexMap.end())
-            //        return it->second;
+            //    float v = float(lat) / latitudeSegments;
+            //    float theta = v * PI;
 
-            //    glm::vec3 p = glm::normalize(glm::vec3(gridPos));
-            //    Vertex v;
-            //    v.position = p;
-            //    v.normal = p;
-            //    uint32_t idx = static_cast<uint32_t>(outVertices.size());
-            //    outVertices.push_back(v);
-            //    vertexMap[gridPos] = idx;
-            //    return idx;
-            //};
+            //    float sinTheta = std::sin(theta);
+            //    float cosTheta = std::cos(theta);
 
-            //auto buildFace = [&](const glm::vec3& axisU, const glm::vec3& axisV, const glm::vec3& faceNormal)
-            //{
-            //    glm::vec3 origin = faceNormal;
-
-            //    for (int y = 0; y < subdivision; ++y)
+            //    for (int lon = 0; lon <= longitudeSegments; ++lon)
             //    {
-            //        for (int x = 0; x < subdivision; ++x)
-            //        {
-            //            float fx0 = float(x) / subdivision;
-            //            float fy0 = float(y) / subdivision;
-            //            float fx1 = float(x + 1) / subdivision;
-            //            float fy1 = float(y + 1) / subdivision;
+            //        float u = float(lon) / longitudeSegments;
+            //        float phi = u * PI * 2;
 
-            //            glm::vec3 p00 = origin + (fx0 - 0.5f) * 2.0f * axisU + (fy0 - 0.5f) * 2.0f * axisV;
-            //            glm::vec3 p10 = origin + (fx1 - 0.5f) * 2.0f * axisU + (fy0 - 0.5f) * 2.0f * axisV;
-            //            glm::vec3 p11 = origin + (fx1 - 0.5f) * 2.0f * axisU + (fy1 - 0.5f) * 2.0f * axisV;
-            //            glm::vec3 p01 = origin + (fx0 - 0.5f) * 2.0f * axisU + (fy1 - 0.5f) * 2.0f * axisV;
+            //        float sinPhi = std::sin(phi);
+            //        float cosPhi = std::cos(phi);
 
-            //            glm::ivec3 i00 = glm::round(p00 * float(subdivision));
-            //            glm::ivec3 i10 = glm::round(p10 * float(subdivision));
-            //            glm::ivec3 i11 = glm::round(p11 * float(subdivision));
-            //            glm::ivec3 i01 = glm::round(p01 * float(subdivision));
+            //        glm::vec3 pos;
+            //        pos.x = sinTheta * cosPhi;
+            //        pos.y = cosTheta;
+            //        pos.z = sinTheta * sinPhi;
 
-            //            uint32_t idx00 = getVertexIndex(i00);
-            //            uint32_t idx10 = getVertexIndex(i10);
-            //            uint32_t idx11 = getVertexIndex(i11);
-            //            uint32_t idx01 = getVertexIndex(i01);
+            //        Vertex vtx;
+            //        vtx.position = pos;
+            //        vtx.normal = glm::normalize(pos);
 
-            //            outIndices.push_back(idx00);
-            //            outIndices.push_back(idx10);
-            //            outIndices.push_back(idx11);
-
-            //            outIndices.push_back(idx00);
-            //            outIndices.push_back(idx11);
-            //            outIndices.push_back(idx01);
-            //        }
+            //        outVertices.push_back(vtx);
             //    }
-            //};
+            //}
 
-            //// Build 6 faces
-            //buildFace({ 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 });  // Front
-            //buildFace({ -1, 0, 0 }, { 0, 1, 0 }, { 0, 0, -1 }); // Back
-            //buildFace({ 1, 0, 0 }, { 0, 0, -1 }, { 0, 1, 0 }); // Top
-            //buildFace({ 1, 0, 0 }, { 0, 0, 1 }, { 0, -1, 0 }); // Bottom
-            //buildFace({ 0, 0, -1 }, { 0, 1, 0 }, { 1, 0, 0 }); // Right
-            //buildFace({ 0, 0, 1 }, { 0, 1, 0 }, { -1, 0, 0 });  // Left
+            //// Bottom vertex
+            //Vertex bottomVertex;
+            //bottomVertex.position = glm::vec3(0, -1, 0);
+            //bottomVertex.normal = glm::vec3(0, -1, 0);
+            //outVertices.push_back(bottomVertex);
 
+            //int topIndex = 0;
+            //int bottomIndex = int(outVertices.size()) - 1;
+
+            //// Top cap
+            //for (int lon = 0; lon < longitudeSegments; ++lon)
+            //{
+            //    outIndices.push_back(topIndex);
+            //    outIndices.push_back(1 + lon + 1);
+            //    outIndices.push_back(1 + lon);
+            //}
+
+            //// Middle
+            //for (int lat = 0; lat < latitudeSegments - 2; ++lat)
+            //{
+            //    for (int lon = 0; lon < longitudeSegments; ++lon)
+            //    {
+            //        int current = 1 + lat * (longitudeSegments + 1) + lon;
+            //        int next = current + longitudeSegments + 1;
+
+            //        outIndices.push_back(current);
+            //        outIndices.push_back(current + 1);
+            //        outIndices.push_back(next);
+
+            //        outIndices.push_back(current + 1);
+            //        outIndices.push_back(next + 1);
+            //        outIndices.push_back(next);
+            //    }
+            //}
+
+            //// Bottom cap
+            //int baseIndex = 1 + (latitudeSegments - 2) * (longitudeSegments + 1);
+            //for (int lon = 0; lon < longitudeSegments; ++lon)
+            //{
+            //    outIndices.push_back(bottomIndex);
+            //    outIndices.push_back(baseIndex + lon);
+            //    outIndices.push_back(baseIndex + lon + 1);
+            //}
+
+            //VertexBuffer::generate(data.vertexBuffer, sizeof(Vertex) * outVertices.size(), &outVertices[0]);
+            //IndexBuffer::generate(data.indexBuffer, outIndices);
 
             struct Vertex
             {
                 glm::vec3 position;
                 glm::vec3 normal;
+                glm::vec2 uv;
             };
 
             const float PI = 3.14159265359;
             int latitudeSegments = 32;
             int longitudeSegments = 64;
-            std::vector<Vertex> outVertices;
-            std::vector<uint32_t> outIndices;
+            std::vector<Vertex> vertices;
+            std::vector<uint32_t> indices;
+            float radius = 1.0f;
+            int sectorCount = 36;
+            int stackCount = 18;
 
+            float sectorStep = 2 * PI / sectorCount;
+            float stackStep = PI / stackCount;
 
-            // Top vertex
-            Vertex topVertex;
-            topVertex.position = glm::vec3(0, 1, 0);
-            topVertex.normal = glm::vec3(0, 1, 0);
-            outVertices.push_back(topVertex);
+            for (int i = 0; i <= stackCount; ++i) {
+                float stackAngle = PI / 2 - i * stackStep; // from +pi/2 to -pi/2
+                float xy = radius * cosf(stackAngle);      // r * cos(u)
+                float z = radius * sinf(stackAngle);       // r * sin(u)
 
-            // Generate vertices
-            for (int lat = 1; lat < latitudeSegments; ++lat)
-            {
-                float v = float(lat) / latitudeSegments;
-                float theta = v * PI;
+                for (int j = 0; j <= sectorCount; ++j) {
+                    float sectorAngle = j * sectorStep;    // from 0 to 2pi
 
-                float sinTheta = std::sin(theta);
-                float cosTheta = std::cos(theta);
+                    float x = xy * cosf(sectorAngle);      // x = r * cos(u) * cos(v)
+                    float y = xy * sinf(sectorAngle);      // y = r * cos(u) * sin(v)
 
-                for (int lon = 0; lon <= longitudeSegments; ++lon)
-                {
-                    float u = float(lon) / longitudeSegments;
-                    float phi = u * PI * 2;
+                    glm::vec3 position(x, y, z);
 
-                    float sinPhi = std::sin(phi);
-                    float cosPhi = std::cos(phi);
+                    glm::vec3 normal = glm::normalize(position);
+                    glm::vec2 uv(
+                        (float)j / sectorCount,
+                        (float)i / stackCount
+                    );
 
-                    glm::vec3 pos;
-                    pos.x = sinTheta * cosPhi;
-                    pos.y = cosTheta;
-                    pos.z = sinTheta * sinPhi;
-
-                    Vertex vtx;
-                    vtx.position = pos;
-                    vtx.normal = glm::normalize(pos);
-
-                    outVertices.push_back(vtx);
+                    vertices.push_back({ position, normal, uv });
                 }
             }
 
-            // Bottom vertex
-            Vertex bottomVertex;
-            bottomVertex.position = glm::vec3(0, -1, 0);
-            bottomVertex.normal = glm::vec3(0, -1, 0);
-            outVertices.push_back(bottomVertex);
+            // indices
+            for (int i = 0; i < stackCount; ++i) {
+                int k1 = i * (sectorCount + 1);     // beginning of current stack
+                int k2 = k1 + sectorCount + 1;      // beginning of next stack
 
-            int topIndex = 0;
-            int bottomIndex = int(outVertices.size()) - 1;
-
-            // Top cap
-            for (int lon = 0; lon < longitudeSegments; ++lon)
-            {
-                outIndices.push_back(topIndex);
-                outIndices.push_back(1 + lon + 1);
-                outIndices.push_back(1 + lon);
-            }
-
-            // Middle
-            for (int lat = 0; lat < latitudeSegments - 2; ++lat)
-            {
-                for (int lon = 0; lon < longitudeSegments; ++lon)
-                {
-                    int current = 1 + lat * (longitudeSegments + 1) + lon;
-                    int next = current + longitudeSegments + 1;
-
-                    outIndices.push_back(current);
-                    outIndices.push_back(current + 1);
-                    outIndices.push_back(next);
-
-                    outIndices.push_back(current + 1);
-                    outIndices.push_back(next + 1);
-                    outIndices.push_back(next);
+                for (int j = 0; j < sectorCount; ++j, ++k1, ++k2) {
+                    if (i != 0) {
+                        indices.push_back(k1);
+                        indices.push_back(k2);
+                        indices.push_back(k1 + 1);
+                    }
+                    if (i != (stackCount - 1)) {
+                        indices.push_back(k1 + 1);
+                        indices.push_back(k2);
+                        indices.push_back(k2 + 1);
+                    }
                 }
             }
 
-            // Bottom cap
-            int baseIndex = 1 + (latitudeSegments - 2) * (longitudeSegments + 1);
-            for (int lon = 0; lon < longitudeSegments; ++lon)
-            {
-                outIndices.push_back(bottomIndex);
-                outIndices.push_back(baseIndex + lon);
-                outIndices.push_back(baseIndex + lon + 1);
-            }
-
-            VertexBuffer::generate(data.vertexBuffer, sizeof(Vertex) * outVertices.size(), &outVertices[0]);
-            IndexBuffer::generate(data.indexBuffer, outIndices);
+            VertexBuffer::generate(data.vertexBuffer, sizeof(Vertex) * vertices.size(), &vertices[0]);
+            IndexBuffer::generate(data.indexBuffer, indices);
         }
     }
 

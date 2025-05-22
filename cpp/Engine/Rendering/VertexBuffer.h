@@ -15,5 +15,6 @@ namespace Engine {
         void unbind();
         void generateBillboardVertexBuffer(unsigned int& bufferId);
         void generateQuadVertexBuffer(unsigned int& bufferId);
+        void generateGridVertexBuffer(unsigned int& bufferId, unsigned int& gridVertexCount);
     }
 }

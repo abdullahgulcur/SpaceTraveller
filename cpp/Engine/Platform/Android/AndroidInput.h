@@ -4,20 +4,19 @@
 
 namespace Engine {
 
-    class Input;
-
     class AndroidInput {
     private:
 
     public:
 
-        // add pointer position etc ... 
+        glm::i16vec2 pointerPosition;
+        glm::i16vec2 pointerDelta;
 
         AndroidInput(){}
         ~AndroidInput(){}
         void init();
-        void update(Input& input);
-        void handleMotionEvents(Input& input, android_input_buffer* inputBuffer);
-        void handleKeyEvents(Input& input, android_input_buffer* inputBuffer);
+        void update();
+        void handleMotionEvents(android_input_buffer* inputBuffer);
+        void handleKeyEvents(android_input_buffer* inputBuffer);
     };
 }

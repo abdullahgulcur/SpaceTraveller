@@ -32,12 +32,14 @@ namespace Engine {
         void init();
         void update();
 
+        const glm::ivec2& getPointerDelta() const;
+        const glm::ivec2& getPointerPosition() const;
+
 #if PLATFORM == WIN
         bool getButtonDown(InputCode inputCode);
         bool getButtonPress(InputCode inputCode);
         bool getButtonUp(InputCode inputCode);
-        const glm::ivec2& getPointerDelta() const;
-        const glm::ivec2& getPointerPosition() const;
+
 #endif
 
     };

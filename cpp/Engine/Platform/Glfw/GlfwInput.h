@@ -4,8 +4,6 @@
 
 namespace Engine {
 
-    class Input;
-
     enum class GlfwInputCode {
         Q = GLFW_KEY_Q,
         W = GLFW_KEY_W,

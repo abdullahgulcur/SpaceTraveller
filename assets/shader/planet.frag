@@ -8,6 +8,7 @@ precision mediump float;
 
 in vec3 Normal;
 in vec3 FragPos;
+in vec2 TexCoord;
 out vec4 FragColor;
 
 uniform sampler2D noiseTex0;
@@ -71,14 +72,14 @@ float fresnelAtmosphre(float power, float scale, float bias){
 
 float getNoiseOctave(vec2 uv){
 
-    float scale = 0.5; // make it parameter
+    float scale = 0.2; // make it parameter
     float albedo0 = texture(noiseTex1, vec2(uv.x, uv.y) * scale).r;
-    float albedo1 = texture(noiseTex1, vec2(uv.x, uv.y) * scale * 0.2).r;
+    float albedo1 = texture(noiseTex0, vec2(uv.x, uv.y) * scale * 0.2).r;
     float albedo2 = texture(noiseTex1, vec2(uv.x, uv.y) * scale * 0.05).r;
 
-    //float albedo = (albedo0 + albedo1 + albedo2) * 0.33;
+    float albedo = (albedo0 + albedo1 + albedo2) * 0.33;
     //float albedo = albedo2;
-    float albedo = (albedo1 + albedo2) * 0.5;
+    //float albedo = (albedo1 + albedo2) * 0.5;
 
     return albedo;
 }
@@ -170,21 +171,21 @@ void main()
     float blendNoise = weights.x * blendNoiseYZ + weights.y * blendNoiseXZ + weights.z * blendNoiseXY;
     blendNoise = clamp(pow(blendNoise * 4.0, 2.5), 0.0, 1.0);
 
-    float seaAmount = 0.7;
-    float continentalShelf = 0.07;
-    vec3 seaColor = vec3(0.0, 0.1, 0.5);
+    float seaAmount = 0.6;
+    float continentalShelf = 0.1;
+    vec3 seaColor = vec3(0.3, 0.1, 0.5);
     float fresnel0 = fresnel(3.0, 0.25, 0.0);
     float fresnel1 = fresnelAtmosphre(15.0, 2.0, 0.75);
 
     vec3 continentalShelfColor = seaColor + vec3(0.05, 0.15, 0.05);
 
-    vec3 grassColor = vec3(0.23, 0.36, 0.11);
-    vec3 desertColor = vec3(0.6, 0.4, 0.2);
+    vec3 grassColor = vec3(0.33, 0.36, 0.11);
+    vec3 desertColor = vec3(0.6, 0.6, 0.2);
     vec3 landColor = vec3(0.4, 0.35, 0.2);
 
     float seaBlend = getSeaBlend(height, seaAmount);
     float continentalShelfBlend = getContinentalShelfBlend(height, seaAmount, continentalShelf);
-    float brownBlend = getBrownBlend(height, seaAmount, 0.2, 0.05);
+    float brownBlend = getBrownBlend(height, seaAmount, 0.3, 0.15);
 
 
 
@@ -196,7 +197,7 @@ void main()
     vec3 albedo = mix(landColor * macro, waterColor, seaBlend);
 
     vec3 color = mix(albedo, vec3(1.0), fresnel0);
-    color = mix(color, vec3(0.0, 0.1, 0.95), fresnel1);
+    color = mix(color, vec3(0.9, 0.1, 0.95), fresnel1);
 
 //
 //    vec3 N = normal;

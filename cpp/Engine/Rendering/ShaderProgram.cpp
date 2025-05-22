@@ -8,48 +8,71 @@ namespace Engine {
 
     namespace Shader{
 
-//        void createShaderParticlePST(SimpleShaderProgram& program){
-//            createSimpleShaderProgram(program, "shader/particle_p_s.vert", "shader/particle.frag");
-//        }
-
         void createShaderGalaxy(unsigned int& program){
             createShaderProgram(program, "shader/quad.vert", "shader/galaxy.frag");
             bind(program);
             //setTextureLocation(program, 0, "tex");
         }
 
-        void createShaderParticlePS(SimpleShaderProgram& program){
-            createSimpleShaderProgram(program, "shader/particle_p_s.vert", "shader/particle.frag");
+        void createShaderPhong(ShaderPhongTextured& program) {
+            createShaderProgram(program.programId, "shader/lit_textured.vert", "shader/phong_textured.frag");
+            bind(program.programId);
+            getLocation(program.loc_View, program.programId, "view");
+            getLocation(program.loc_Projection, program.programId, "projection");
+            getLocation(program.loc_Model, program.programId, "model");
+            getLocation(program.loc_CameraPosition, program.programId, "cameraPosition");
+            getLocation(program.loc_Tex, program.programId, "tex");
         }
 
-        void createShaderProgramParticle(SimpleShaderProgram& program){
-            createSimpleShaderProgram(program, "shader/particle.vert", "shader/particle.frag");
+        void createShaderPhong(ShaderPhong& program) {
+            createShaderProgram(program.programId, "shader/lit.vert", "shader/phong.frag");
+            bind(program.programId);
+            getLocation(program.loc_ProjectionView, program.programId, "projectionView");
+            getLocation(program.loc_Model, program.programId, "model");
+            getLocation(program.loc_CameraPosition, program.programId, "cameraPosition");
         }
 
-        void createShaderProgramParticleTextured(SimpleShaderProgram& program){
-            createSimpleShaderProgram(program, "shader/particle.vert", "shader/particle_textured.frag");
-            //setTextureLocation(program.programId, 0, "tex");
+        void createShaderGrid(ShaderGrid& program) {
+            createShaderProgram(program.programId, "shader/grid.vert", "shader/grid.frag");
+            bind(program.programId);
+            getLocation(program.loc_ProjectionView, program.programId, "projectionView");
         }
 
-        void createShaderProgramPhong(SimpleShaderProgram& program){
-            createSimpleShaderProgram(program, "shader/lit_textured.vert", "shader/phong.frag");
+        void createShaderParticle(ShaderParticle& program) {
+
+            std::string vertShader = "shader/particle/vert/particle.vert";
+            std::string fragShader = "shader/particle/frag/particle_base.frag";
+
+            createShaderProgram(program.programId, vertShader.c_str(), fragShader.c_str());
+            bind(program.programId);
+            getLocation(program.loc_ProjectionView, program.programId, "projectionView");
+            getLocation(program.loc_CameraRight, program.programId, "cameraRight");
+            getLocation(program.loc_CameraUp, program.programId, "cameraUp");
         }
 
-        //void createShaderProgram_(SimpleShaderProgram_& program) {
-        //    //createSimpleShaderProgram(program, "shader/phong.vert", "shader/phong.frag");
-        //}
+        void createShaderParticle(ShaderParticleTextured& program) {
+
+            std::string vertShader = "shader/particle/vert/particle.vert";
+            std::string fragShader = "shader/particle/frag/particle_texture.vert";
+
+            createShaderProgram(program.programId, vertShader.c_str(), fragShader.c_str());
+            bind(program.programId);
+            getLocation(program.loc_ProjectionView, program.programId, "projectionView");
+            getLocation(program.loc_CameraRight, program.programId, "cameraRight");
+            getLocation(program.loc_CameraUp, program.programId, "cameraUp");
+            getLocation(program.loc_Tex, program.programId, "tex");
+        }
 
         void createShaderPlanet(PlanetShader& shader) {
-            createShaderPlanet(shader, "shader/lit.vert", "shader/planet.frag");
+            createShaderPlanet(shader, "shader/lit_textured.vert", "shader/planet.frag");
         }
 
         void createShaderPlanet(PlanetShader& shader, const char* vert, const char* frag) {
             createShaderProgram(shader.programId, vert, frag);
             bind(shader.programId);
-            getLocation(shader.locationView, shader.programId, "view");
-            getLocation(shader.locationProjection, shader.programId, "projection");
-            getLocation(shader.locationModel, shader.programId, "model");
-            getLocation(shader.locationCameraPosition, shader.programId, "cameraPosition");
+            getLocation(shader.loc_ProjectionView, shader.programId, "projectionView");
+            getLocation(shader.loc_Model, shader.programId, "model");
+            getLocation(shader.loc_CameraPosition, shader.programId, "cameraPosition");
 
             getLocation(shader.loc_WaterScale, shader.programId, "waterScale");
             getLocation(shader.loc_WaterTreshold, shader.programId, "waterTreshold");
@@ -60,35 +83,6 @@ namespace Engine {
 
             getLocation(shader.loc_Tex0, shader.programId, "noiseTex0");
             getLocation(shader.loc_Tex1, shader.programId, "noiseTex1");
-
-            /*setTextureLocation(shader.programId, 0, "noiseTex0");
-            setTextureLocation(shader.programId, 1, "noiseTex1");*/
-        }
-
-        void createSimpleShaderProgram(SimpleShaderProgram& program, const char* vert, const char* frag){
-            createShaderProgram(program.programId, vert, frag);
-            bind(program.programId);
-            getLocation(program.locationView, program.programId, "view");
-            getLocation(program.locationProjection, program.programId, "projection");
-        }
-
-        void updateUniforms(SimpleShaderProgram& program, glm::mat4& projection, glm::mat4& view){
-            bind(program.programId);
-            uniform(program.locationProjection, projection);
-            uniform(program.locationView, view);
-        }
-
-        void updateUniforms(SimpleShaderProgram& program, glm::mat4& projection, glm::mat4& view, unsigned int textureId){
-            bind(program.programId);
-            uniform(program.locationProjection, projection);
-            uniform(program.locationView, view);
-            Texture::setTexSlot2D(0, textureId);
-        }
-
-        void setTextureLocation(unsigned int& shaderProgramId, unsigned int index, const char* uniformName){
-            unsigned int texLocation;
-            getLocation(texLocation, shaderProgramId, uniformName);
-            uniform(texLocation, index);
         }
 
         void createShaderProgram(unsigned int& shaderProgramId, const char* vertexPath, const char* fragmentPath){
@@ -211,10 +205,15 @@ namespace Engine {
             glUniform1i(location, slot);
         }
 
+        void setTextureLocation(unsigned int& shaderProgramId, unsigned int index, const char* uniformName) {
+            unsigned int texLocation;
+            getLocation(texLocation, shaderProgramId, uniformName);
+            uniform(texLocation, index);
+        }
+
         void getLocation(unsigned int& location, unsigned int shaderProgramId, const char* uniformName){
             location = glGetUniformLocation(shaderProgramId, uniformName);
         }
-
 
     }
 

@@ -11,7 +11,7 @@ namespace Game{
         Engine::VertexBuffer::generateBillboardVertexBuffer(billboardMeshVertexBuffer);
         Engine::VertexBuffer::generate(particleInstanceBuffer, 8192 * sizeof(Engine::ParticleSystem::ParticleData), nullptr);
         Engine::Vao::createBillboardMeshVao(particleMeshVao, billboardMeshVertexBuffer, particleInstanceBuffer);
-        Engine::Shader::createShaderProgramParticle(shaderProgram);
+//        Engine::Shader::createShaderProgramParticle(shaderProgram);
         
         cameraCtrl.SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
         cameraCtrl.SetDistance(15.0f);

@@ -11,7 +11,7 @@ namespace Game{
         Engine::VertexBuffer::generateBillboardVertexBuffer(billboardMeshVertexBuffer);
         Engine::VertexBuffer::generate(particleInstanceBuffer, 1024 * sizeof(Engine::ParticleSystem::ParticleData), nullptr);
         Engine::Vao::createBillboardMeshVao_P_S(particleMeshVao, billboardMeshVertexBuffer, particleInstanceBuffer);
-        Engine::Shader::createShaderParticlePS(shaderProgram);
+        //Engine::Shader::createShaderParticlePS(shaderProgram);
         cameraCtrl.init(camera);
         Engine::ParticleSystem::start(particleSystem, Engine::Core::getInstance()->systemTimer.getTotalSeconds());
     }

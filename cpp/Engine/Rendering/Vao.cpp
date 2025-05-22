@@ -3,6 +3,7 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "GraphicsApi.h"
+#include "ParticleSystem.h"
 
 namespace Engine {
 
@@ -34,6 +35,11 @@ namespace Engine {
             glVertexAttribPointer(index, size, type, GL_FALSE, stride, (void*)offset);
         }
 
+        void vertexAttributePointerNormalized(unsigned int index, unsigned int size, unsigned int type, unsigned int stride, unsigned int offset) {
+            enableVertexAttributeArray(index);
+            glVertexAttribPointer(index, size, type, GL_TRUE, stride, (void*)offset);
+        }
+
         void vertexAttributeIntegerPointer(unsigned int index, unsigned int size, unsigned int type, unsigned int stride, unsigned int offset) {
             enableVertexAttributeArray(index);
             glVertexAttribIPointer(index, size, type, stride, (void*)offset);
@@ -42,6 +48,12 @@ namespace Engine {
         void vertexAttributePointerInstanced(unsigned int index, unsigned int size, unsigned int type, int stride, unsigned int offset) {
             glEnableVertexAttribArray(index);
             glVertexAttribPointer(index, size, type, GL_FALSE, stride, (void*)offset);
+            glVertexAttribDivisor(index, 1);
+        }
+
+        void vertexAttributePointerInstancedNormalized(unsigned int index, unsigned int size, unsigned int type, int stride, unsigned int offset) {
+            glEnableVertexAttribArray(index);
+            glVertexAttribPointer(index, size, type, GL_TRUE, stride, (void*)offset);
             glVertexAttribDivisor(index, 1);
         }
 
@@ -58,6 +70,17 @@ namespace Engine {
             IndexBuffer::bind(indexBufferId);
             vertexAttributePointer(0, 3, GL_FLOAT, 24, 0);
             vertexAttributePointer(1, 3, GL_FLOAT, 24, 12);            
+            unbind();
+        }
+
+        void createLitMeshTexturedVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int indexBufferId) {
+            generate(vao);
+            bind(vao);
+            VertexBuffer::bind(vertexBufferId);
+            IndexBuffer::bind(indexBufferId);
+            vertexAttributePointer(0, 3, GL_FLOAT, 32, 0);
+            vertexAttributePointer(1, 3, GL_FLOAT, 32, 12);
+            vertexAttributePointer(2, 2, GL_FLOAT, 32, 24);
             unbind();
         }
 
@@ -118,36 +141,19 @@ namespace Engine {
             unbind();
         }
 
-        void createBillboardMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId){
+        void createParticleMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId) {
+
             generate(vao);
             bind(vao);
-
             VertexBuffer::bind(vertexBufferId);
-
             vertexAttributePointer(0, 2, GL_FLOAT, 8, 0);
+            VertexBuffer::bind(instanceBufferId); // do we really need that here?
 
-            VertexBuffer::bind(instanceBufferId);
-
-            vertexAttributePointerInstanced(1, 3, GL_FLOAT, 64, 0);
-            vertexAttributePointerInstanced(2, 1, GL_FLOAT, 64, 12);
-            vertexAttributePointerInstanced(3, 4, GL_FLOAT, 64, 16);
-            vertexAttributePointerInstanced(4, 1, GL_FLOAT, 64, 32);
-
-            unbind();
-        }
-
-        void createBillboardMeshVao_P_S(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId){
-            generate(vao);
-            bind(vao);
-
-            VertexBuffer::bind(vertexBufferId);
-
-            vertexAttributePointer(0, 2, GL_FLOAT, 8, 0);
-
-            VertexBuffer::bind(instanceBufferId);
-
-            vertexAttributePointerInstanced(1, 3, GL_FLOAT, 16, 0);
-            vertexAttributePointerInstanced(2, 1, GL_FLOAT, 16, 12);
+            vertexAttributeIntegerPointerInstanced(1, 1, GL_UNSIGNED_SHORT, sizeof(ParticleSystem::ParticleGPUData), 0);
+            vertexAttributeIntegerPointerInstanced(2, 3, GL_SHORT, sizeof(ParticleSystem::ParticleGPUData), 2);
+            vertexAttributeIntegerPointerInstanced(3, 3, GL_BYTE, sizeof(ParticleSystem::ParticleGPUData), 8);
+            vertexAttributePointerInstancedNormalized(4, 4, GL_UNSIGNED_BYTE, sizeof(ParticleSystem::ParticleGPUData), 11);
+            vertexAttributeIntegerPointerInstanced(5, 1, GL_UNSIGNED_BYTE, sizeof(ParticleSystem::ParticleGPUData), 15);
 
             unbind();
         }
@@ -176,6 +182,15 @@ namespace Engine {
             VertexBuffer::bind(vertexBufferId);
             vertexAttributePointer(0, 2, GL_FLOAT, 8, 0);
             unbind();
+        }
+
+        void createGridVao(unsigned int& vao, unsigned int vertexBufferId) {
+            generate(vao);
+            bind(vao);
+            VertexBuffer::bind(vertexBufferId);
+            vertexAttributePointer(0, 3, GL_FLOAT, 3 * sizeof(float), 0);
+            unbind();
+
         }
 
     }
