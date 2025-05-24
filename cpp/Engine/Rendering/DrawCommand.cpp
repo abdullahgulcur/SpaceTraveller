@@ -25,20 +25,19 @@ namespace Engine{
             drawInstanced(totalIndices, indexElementType, instanceCount);
         }
 
-        // rename: drawQuadsInstanced
-        void drawBillboardsInstanced(unsigned int vao, unsigned int instanceCount){
+        void drawQuad(unsigned int vao){
+            glBindVertexArray(vao);
+            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        }
+
+        void drawQuadsInstanced(unsigned int vao, unsigned int instanceCount) {
             glBindVertexArray(vao);
             glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, instanceCount);
         }
 
-        void drawQuadsInstanced(unsigned int vao, unsigned int instanceCount, unsigned int instanceBuffer, unsigned int stride, void* bufferPtr){
+        void drawQuadsInstanced(unsigned int vao, unsigned int instanceCount, unsigned int instanceBuffer, unsigned int stride, void* bufferPtr) {
             VertexBuffer::bufferSubData(instanceBuffer, 0, instanceCount * stride, bufferPtr);
-            drawBillboardsInstanced(vao, instanceCount);
-        }
-
-        void drawQuad(unsigned int vao){
-            glBindVertexArray(vao);
-            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+            drawQuadsInstanced(vao, instanceCount);
         }
 
         void drawGrid(unsigned int vao, unsigned int vertexCount) {

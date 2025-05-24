@@ -2,27 +2,51 @@
 #include "TunnelEffectScene.h"
 #include "DrawCommand.h"
 #include "FrameBuffer.h"
+#include "Game.h"
+#include "ParticleSystem.h"
 
 namespace Game{
 
     void TunnelEffectScene::init(){
 
-        unsigned int billboardMeshVertexBuffer;
-        Engine::VertexBuffer::generateBillboardVertexBuffer(billboardMeshVertexBuffer);
-        Engine::VertexBuffer::generate(particleInstanceBuffer, 1024 * sizeof(Engine::ParticleSystem::ParticleData), nullptr);
-        Engine::Vao::createBillboardMeshVao_P_S(particleMeshVao, billboardMeshVertexBuffer, particleInstanceBuffer);
-        //Engine::Shader::createShaderParticlePS(shaderProgram);
-        cameraCtrl.init(camera);
-        Engine::ParticleSystem::start(particleSystem, Engine::Core::getInstance()->systemTimer.getTotalSeconds());
+    }
+
+    void TunnelEffectScene::start() {
+
+        Game* game = Game::getInstance();
+
+        Engine::ParticleSystem::start(game->particleSystem, Engine::Core::getInstance()->systemTimer.getTotalSeconds());
     }
 
     void TunnelEffectScene::update(float dt){
 
-        Engine::ParticleSystem::updateParticleTunnelEffect(particleSystem, dt);
+        Game* game = Game::getInstance();
+        Engine::Core* core = Engine::Core::getInstance();
+
+        Engine::Camera::Camera& camera = game->camera;
+
+        Engine::Camera::perspectiveProjection(camera.projection, 90.0f, core->appSurface.getAspectRatio(), 0.1f, 1000.0f);
+
+        Engine::ParticleSystem::updateParticle(game->particleSystem, dt);
+
         Engine::FrameBuffer::refreshScreen();
-        cameraCtrl.update(camera, dt);
-        Engine::Shader::updateUniforms(shaderProgram, camera.projection, camera.view);
-        Engine::DrawCommand::drawQuadsInstanced(particleMeshVao, particleSystem.particleCount, particleInstanceBuffer, 16, &particleSystem.gpuData[0]);
+
+        glm::vec3 camPos(0.f, 0.f, -10.f);
+        Engine::Camera::view(camera.view, camPos, glm::vec3(0.f, 1.f, 0.f));
+
+        glm::mat4 projectionView = camera.projection * camera.view;
+        glm::vec3 cameraRight;
+        glm::vec3 cameraUp;
+        Engine::Camera::getCameraRightAndUp(camera.view, cameraRight, cameraUp);
+
+        Engine::Shader::updateUniforms(game->shaderProgram, projectionView, cameraRight, cameraUp);
+
+        Engine::ParticleSystem::ParticleGPUData gpuData[256];
+        Engine::ParticleSystem::fillInstanceData(game->particleSystem, gpuData);
+
+        Engine::DrawCommand::drawQuadsInstanced(game->vaoParticle, game->particleSystem.particleCount, game->instanceBufferParticleDynamic, sizeof(Engine::ParticleSystem::ParticleGPUData), &gpuData[0]);
+
+
     }
 
 }

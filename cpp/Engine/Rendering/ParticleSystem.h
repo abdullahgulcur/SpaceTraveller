@@ -1,10 +1,7 @@
 #pragma once
 
 #include "glm.hpp"
-
 #include "Timer.h"
-#include "Vao.h"
-#include "VertexBuffer.h"
 
 namespace Engine{
 
@@ -29,61 +26,41 @@ namespace Engine{
             unsigned char rotation;
         };
 
-        //template <typename Size>
+        template <std::size_t N>
         struct ParticleSmoke {
-            float startTime[4096];
-            float lifeTime[4096];
+            float startTime[N];
+            float lifeTime[N];
 
-            float posX[4096];
-            float posY[4096];
-            float posZ[4096];
-            float scale[4096];
-            float rotation[4096];
-            glm::u8vec4 color[4096];
-
-            ParticleGPUData gpuData[4096];
+            float posX[N];
+            float posY[N];
+            float posZ[N];
+            float scale[N];
+            float rotation[N];
+            glm::u8vec4 color[N];
 
             unsigned int particleCount = 0;
             float particleStartTime;
             float particleLastTriggerTime;
         };
 
-        //struct ParticleTunnelEffect {
-        //    float startTime[1024];
-        //    float lifeTime[1024];
-
-        //    //float velocityOffset[1024];
-
-        //    float posX[1024];
-        //    float posY[1024];
-        //    float posZ[1024];
-        //    float scale[1024];
-
-        //    float gpuData[1024*4];
-
-        //    unsigned int particleCount = 0;
-        //    float particleStartTime;
-        //    float particleLastTriggerTime;
-        //    float force;
-        //    float velocity = 60.f;
-        //};
-
         template <typename T>
         void start(T& t, unsigned int time){
-            t.particleStartTime = time;//static_cast<float>(Core::getInstance()->systemTimer.getTotalSeconds());
+            t.particleCount = 0;
+            t.particleStartTime = time;
             t.particleLastTriggerTime = t.particleStartTime;
         }
 
+        template<std::size_t N>
+        void reorderParticle(ParticleSmoke<N>& p, float duration);
 
-        //bool shouldTrigger(float duration, float interval);
+        template<std::size_t N>
+        void updateParticle(ParticleSmoke<N>& p, float dt);
 
-        /*void reorderParticleTunnelEffect(ParticleTunnelEffect& p, float duration);
-        void updateParticleTunnelEffect(ParticleTunnelEffect& p, float dt);*/
+        template<std::size_t N>
+        void fillInstanceData(ParticleSmoke<N>& p, ParticleGPUData* data);
 
-        //void update_(float dt);
 
-        void reorderParticleSmoke(ParticleSmoke& p, float duration);
-        void updateParticleSmoke(ParticleSmoke& p, float dt);
+
 
         //--------------------------------------------------------
 
@@ -125,45 +102,6 @@ namespace Engine{
 
         //--------------------------------------------------------
 
-
-        //struct ParticleData {
-        //    glm::vec3 position; // common
-        //    float rotation;
-        //    glm::vec4 color;
-        //    float scale;
-        //    int padding[7];
-        //};
-
-        //class ParticleSystem{
-
-        //    struct ParticleSimulationData {
-        //        float startTime; // common
-        //        float lifeTime; // common
-        //        float angularVelocity;
-        //        int padding0;
-        //        glm::vec3 force;
-        //        int padding1;
-        //        glm::vec3 velocity;
-        //        int padding2[5];
-        //        // color0
-        //        // color1
-        //    };
-
-        //private:
-        //public:
-
-        //    ParticleData particleData[8192];
-        //    ParticleSimulationData particleSimulationData[8192];
-        //    unsigned int particleCount = 0;
-        //    float startTime;
-        //    float lastTriggerTime;
-
-        //    ParticleSystem();
-        //    ~ParticleSystem() {}
-        //    void update(float dt);
-        //    bool shouldTrigger(float duration, float interval);
-
-        //};
 
     }
 

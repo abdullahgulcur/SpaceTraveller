@@ -1,22 +1,15 @@
 #pragma once
 
-#include "Core.h"
-
-#include "glm.hpp"
+#include "OrbitCameraController.h"
 
 namespace Game {
 
     class UniverseScene {
     private:
 
-        float horizontalPos = 0;
-        float targetHorizontalPos = 0;
-
-
-        unsigned int galaxyMeshVao;
-        unsigned int galaxyInstanceBuffer;
-        Engine::Shader::SimpleShaderProgram shaderProgram;
-        unsigned int texture2D;
+        OrbitCameraController cameraCtrl;
+        unsigned int instanceBufferSolarSystems;
+        unsigned int vaoBillboardSolarSystems;
 
     public:
 
@@ -24,6 +17,9 @@ namespace Game {
         ~UniverseScene() {}
 
         void init();
+        void start();
         void update(float dt);
     };
 }
+
+//different scenes (state changes), shared data in same class

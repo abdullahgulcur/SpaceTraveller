@@ -13,21 +13,21 @@ set(win 0)
 set(android 1)
 set(platform ${win})
 
-#"Game/Scene/UniverseScene.cpp"
 #"Game/Scene/ObjectScene.cpp"
 #"Game/Scene/ParticleScene.cpp"
-#"Game/Scene/TunnelEffectScene.cpp"
+
 set(sourceFiles
 
         "main.cpp"
 
         "Game/Game.cpp"
+        "Game/Universe.cpp"
         "Game/CameraController.cpp"
         "Game/OrbitCameraController.cpp"
         "Game/Scene/NewParticleScene.cpp"
         "Game/Scene/PlanetScene.cpp"
-
-        
+        "Game/Scene/UniverseScene.cpp"
+        "Game/Scene/TunnelEffectScene.cpp"
 
         "Engine/Core/Core.cpp"
         "Engine/Core/Timer.cpp"
@@ -52,6 +52,8 @@ set(sourceFiles
         "Engine/Rendering/DrawCommand.cpp"
         "Engine/Rendering/FrameBuffer.cpp"
         "Engine/Rendering/Renderer.cpp"
+        "Engine/Rendering/Gizmo.cpp"
+        "Engine/Rendering/Entity.cpp"
 
         "Engine/Resource/MeshData.cpp"
 
@@ -94,6 +96,7 @@ set(includeDirectories
         Engine/Rendering
         Engine/Resource
         Engine/Math
+        Engine/Memory
 
         Game
         Game/Scene

@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "RandomValue.h"
+#include "gtc/constants.hpp"
+#include "gtc/random.hpp"
 
 namespace Engine{
 
@@ -42,6 +44,17 @@ namespace Engine{
             std::uniform_real_distribution<float> distZ(min.z, max.z);
 
             return glm::vec3(distX(gen), distY(gen), distZ(gen));
+        }
+
+        glm::vec3 randomPointInSphereShell(float innerRadius, float outerRadius) {
+            // 1. Get random direction on unit sphere
+            glm::vec3 dir = glm::sphericalRand(1.0f);  // Already normalized
+
+            // 2. Get random distance between inner and outer radius
+            float dist = std::cbrt(randomFloat(std::pow(innerRadius, 3.0f), std::pow(outerRadius, 3.0f)));
+
+            // 3. Scale direction
+            return dir * dist;
         }
 
     }

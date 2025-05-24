@@ -145,10 +145,11 @@ namespace Engine {
 
             generate(vao);
             bind(vao);
+
             VertexBuffer::bind(vertexBufferId);
             vertexAttributePointer(0, 2, GL_FLOAT, 8, 0);
-            VertexBuffer::bind(instanceBufferId); // do we really need that here?
-
+            
+            VertexBuffer::bind(instanceBufferId);
             vertexAttributeIntegerPointerInstanced(1, 1, GL_UNSIGNED_SHORT, sizeof(ParticleSystem::ParticleGPUData), 0);
             vertexAttributeIntegerPointerInstanced(2, 3, GL_SHORT, sizeof(ParticleSystem::ParticleGPUData), 2);
             vertexAttributeIntegerPointerInstanced(3, 3, GL_BYTE, sizeof(ParticleSystem::ParticleGPUData), 8);

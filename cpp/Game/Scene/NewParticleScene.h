@@ -5,22 +5,26 @@
 #include "ParticleSystem.h"
 #include "OrbitCameraController.h"
 #include "ShaderProgram.h"
+#include "Entity.h"
 
 namespace Game {
 
     class NewParticleScene {
     private:
 
-        Engine::ParticleSystem::ParticleSmoke particleSystem;
-        unsigned int particleMeshVao;
-        unsigned int particleInstanceBuffer;
-        Engine::Shader::ShaderParticle shaderProgram;
-        Engine::Camera::Camera camera;
+        Engine::ParticleSystem::ParticleSmoke<256> particleSystem;
+
+        //Engine::Entity::EntityParticle entityParticle;
+
+        //unsigned int particleMeshVao;
+        //unsigned int particleInstanceBuffer;
+        //Engine::Shader::ShaderParticle shaderProgram;
+        //Engine::Camera::Camera camera;
         OrbitCameraController cameraCtrl;
 
-        unsigned int gridVao;
+        /*unsigned int gridVao;
         Engine::Shader::ShaderGrid shaderProgramGrid;
-        unsigned int gridVertexCount;
+        unsigned int gridVertexCount;*/
 
     public:
 

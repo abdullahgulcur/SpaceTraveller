@@ -15,6 +15,4 @@
 #include <random>
 #include <cmath>
 
-#if PLATFORM == WIN
-#include <basetsd.h>
-#endif
+#include "StaticArray.h"
