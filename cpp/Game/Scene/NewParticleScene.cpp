@@ -34,7 +34,7 @@ namespace Game {
 
         Engine::Camera::perspectiveProjection(camera.projection, 90.0f, core->appSurface.getAspectRatio(), 0.1f, 1000.0f);
 
-        Engine::ParticleSystem::updateParticle(particleSystem, dt);
+        Engine::ParticleSystem::update(particleSystem, dt);
 
         Engine::FrameBuffer::refreshScreen();
         //cameraCtrl.update(camera, dt);

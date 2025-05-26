@@ -16,18 +16,22 @@ set(platform ${win})
 #"Game/Scene/ObjectScene.cpp"
 #"Game/Scene/ParticleScene.cpp"
 
+        #"Game/Scene/NewParticleScene.cpp"
+        #"Game/Scene/PlanetScene.cpp"
+        #"Game/Scene/TunnelEffectScene.cpp"
+        #"Game/CameraController.cpp"
+        
+
 set(sourceFiles
 
         "main.cpp"
 
         "Game/Game.cpp"
         "Game/Universe.cpp"
-        "Game/CameraController.cpp"
         "Game/OrbitCameraController.cpp"
-        "Game/Scene/NewParticleScene.cpp"
-        "Game/Scene/PlanetScene.cpp"
+
         "Game/Scene/UniverseScene.cpp"
-        "Game/Scene/TunnelEffectScene.cpp"
+
 
         "Engine/Core/Core.cpp"
         "Engine/Core/Timer.cpp"

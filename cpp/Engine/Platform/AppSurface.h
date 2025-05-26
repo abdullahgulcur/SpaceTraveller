@@ -24,8 +24,11 @@ namespace Engine {
 
         void init();
         void update();
+        float getAspectRatio();
+        bool aspectChanged();
         unsigned int getWidth();
         unsigned int getHeight();
-        float getAspectRatio();
+        void getSize(glm::u16vec2& size);
+        void getScreenSpaceCoordinate(glm::u16vec2& screenSpaceCoordinate, glm::vec2 normalizedCoordinate);
     };
 }

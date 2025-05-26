@@ -18,8 +18,8 @@ namespace Engine {
 		monitor = glfwGetPrimaryMonitor();
 		mode = glfwGetVideoMode(monitor);
 
-		GLFW_window = glfwCreateWindow(mode->width, mode->height, "Application", NULL, NULL); // windowed
-		//GLFW_window = glfwCreateWindow(mode->width, mode->height, "Application", monitor, NULL); // fullscreen
+		//GLFW_window = glfwCreateWindow(mode->width, mode->height, "Application", NULL, NULL); // windowed
+		GLFW_window = glfwCreateWindow(mode->width, mode->height, "Application", monitor, NULL); // fullscreen
 
 		glfwMaximizeWindow(GLFW_window);
 		glfwMakeContextCurrent(GLFW_window);

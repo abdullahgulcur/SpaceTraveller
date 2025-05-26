@@ -34,6 +34,7 @@ namespace Engine {
 
         const glm::ivec2& getPointerDelta() const;
         const glm::ivec2& getPointerPosition() const;
+        void getPointerPositionNormalized(glm::vec2& position);
 
 #if PLATFORM == WIN
         bool getButtonDown(InputCode inputCode);

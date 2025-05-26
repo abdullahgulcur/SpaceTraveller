@@ -20,12 +20,15 @@ namespace Engine {
 
     void Input::update(){
 
-#if PLATFORM == ANDROID
-        input.update();
-#elif PLATFORM == WIN
         input.update();
 
-#endif
+
+//#if PLATFORM == ANDROID
+//        input.update();
+//#elif PLATFORM == WIN
+//        input.update();
+//
+//#endif
 
     }
 
@@ -35,6 +38,14 @@ namespace Engine {
 
     const glm::ivec2& Input::getPointerPosition() const {
         return input.pointerPosition;
+    }
+
+    void Input::getPointerPositionNormalized(glm::vec2& position) {
+        glm::u16vec2 size;
+        Core::getInstance()->appSurface.getSize(size);
+        position.x = (input.pointerPosition.x / (float)size.x) * 2.0f - 1.0f;
+        //position.y = (input.pointerPosition.y / (float)size.y) * 2.0f - 1.0f;
+        position.y = 1.0f - (input.pointerPosition.y / (float)size.y) * 2.0f;
     }
 
 #if PLATFORM == WIN
@@ -50,8 +61,6 @@ namespace Engine {
     bool Input::getButtonUp(InputCode inputCode) {
         return input.getButtonUp(inputCode);
     }
-
-
 
 #endif
 

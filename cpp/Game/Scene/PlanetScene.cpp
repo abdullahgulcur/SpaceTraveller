@@ -29,7 +29,7 @@ namespace Game{
         cameraCtrl.SetTarget(glm::vec3(0.0f, 0.0f, 0.0f));
         cameraCtrl.SetDistance(3.0f);
 
-        Engine::Camera::perspectiveProjection(camera.projection, 90.0f, Engine::Core::getInstance()->appSurface.getAspectRatio(), 0.1f, 1000.0f);
+        //Engine::Camera::perspectiveProjection(camera.projection, 90.0f, Engine::Core::getInstance()->appSurface.getAspectRatio(), 0.1f, 1000.0f);
 
     }
 
@@ -37,7 +37,7 @@ namespace Game{
 
         Engine::Core* core = Engine::Core::getInstance();
 
-        Engine::Camera::perspectiveProjection(camera.projection, 90.0f, Engine::Core::getInstance()->appSurface.getAspectRatio(), 0.1f, 1000.0f);
+        //Engine::Camera::perspectiveProjection(camera.projection, 90.0f, Engine::Core::getInstance()->appSurface.getAspectRatio(), 0.1f, 1000.0f);
         
         float deltaX = 0.f;
         float deltaY = 0.f;
@@ -57,7 +57,7 @@ namespace Game{
         cameraCtrl.ProcessInput(deltaX * 0.01f, deltaY * 0.01f, 0.0f);
         cameraCtrl.Update(dt);
 
-        Engine::Camera::view(camera.view, cameraCtrl.m_position, cameraCtrl.m_up);
+        //Engine::Camera::view(camera.view, cameraCtrl.m_position, cameraCtrl.m_up);
         camera.position = cameraCtrl.m_position;// TODO
 
 

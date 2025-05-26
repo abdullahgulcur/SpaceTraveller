@@ -27,7 +27,7 @@ namespace Game{
 
         Engine::Camera::perspectiveProjection(camera.projection, 90.0f, core->appSurface.getAspectRatio(), 0.1f, 1000.0f);
 
-        Engine::ParticleSystem::updateParticle(game->particleSystem, dt);
+        Engine::ParticleSystem::update(game->particleSystem, dt, 1.f);
 
         Engine::FrameBuffer::refreshScreen();
 
@@ -42,7 +42,7 @@ namespace Game{
         Engine::Shader::updateUniforms(game->shaderProgram, projectionView, cameraRight, cameraUp);
 
         Engine::ParticleSystem::ParticleGPUData gpuData[256];
-        Engine::ParticleSystem::fillInstanceData(game->particleSystem, gpuData);
+        //Engine::ParticleSystem::fillInstanceData(game->particleSystem, gpuData);
 
         Engine::DrawCommand::drawQuadsInstanced(game->vaoParticle, game->particleSystem.particleCount, game->instanceBufferParticleDynamic, sizeof(Engine::ParticleSystem::ParticleGPUData), &gpuData[0]);
 

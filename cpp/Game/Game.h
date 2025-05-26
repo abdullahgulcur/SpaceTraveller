@@ -1,8 +1,10 @@
 #pragma once
 
 #include "Core.h"
-#include "PlanetScene.h"
-#include "NewParticleScene.h"
+#include "Camera.h"
+
+//#include "PlanetScene.h"
+//#include "NewParticleScene.h"
 #include "UniverseScene.h"
 
 #include "Universe.h"
@@ -12,7 +14,7 @@
 //#include "ObjectScene.h"
 //#include "ParticleScene.h"
 
-#include "TunnelEffectScene.h"
+//#include "TunnelEffectScene.h"
 
 namespace Game {
 
@@ -42,11 +44,12 @@ namespace Game {
 
     public:
 
-        TunnelEffectScene tunnelEffectScene;
+        //TunnelEffectScene tunnelEffectScene;
 
         Universe universe;
 
-        Engine::ParticleSystem::ParticleSmoke<256> particleSystem;
+        Engine::ParticleSystem::ParticleTunnel<1024> particleSystem;
+        Engine::ParticleSystem::ParticleSolarSystems<256> particleSolarSystems;
 
 
         Engine::Camera::Camera camera;

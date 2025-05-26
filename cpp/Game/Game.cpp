@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Game.h"
 #include "Vao.h"
+#include "VertexBuffer.h"
 
 namespace Game{
 
@@ -8,25 +9,28 @@ namespace Game{
 
     void Game::init(){
 
-        sceneType = SceneType::TUNNEL_EFFECT;
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+        sceneType = SceneType::UNIVERSE;
 
         Engine::VertexBuffer::generateBillboardVertexBuffer(vertexBufferBillboard);
-        Engine::VertexBuffer::generate(instanceBufferParticleDynamic, 4096, nullptr);
+
+        Engine::VertexBuffer::generate(instanceBufferParticleDynamic, 16384, nullptr);
 
         Engine::Vao::createParticleMeshVao(vaoParticle, vertexBufferBillboard, instanceBufferParticleDynamic);
         Engine::Shader::createShaderParticle(shaderProgram);
 
         universe.init();
-
+        Engine::Gizmo::init(grid);
         universeScene.init();
-        tunnelEffectScene.init();
 
         switch (sceneType) {
         case SceneType::UNIVERSE: {
             universeScene.start(); break;
         }
         case SceneType::TUNNEL_EFFECT: {
-            tunnelEffectScene.start(); break;
+            //tunnelEffectScene.start(); break;
         }
         case SceneType::SOLAR_SYSTEM: {
             
@@ -42,9 +46,8 @@ namespace Game{
         }
         }
 
-
-        Engine::Gizmo::init(grid);
-
+        Engine::Core* core = Engine::Core::getInstance();
+        Engine::Camera::init(camera, 90.0f, core->appSurface.getAspectRatio());
     }
 
     void Game::update(float dt){
@@ -54,7 +57,7 @@ namespace Game{
             universeScene.update(dt); break;
         }
         case SceneType::TUNNEL_EFFECT: {
-            tunnelEffectScene.update(dt); break;
+            //tunnelEffectScene.update(dt); break;
         }
         case SceneType::SOLAR_SYSTEM: {
             
@@ -70,10 +73,11 @@ namespace Game{
         }
         }
 
-        glm::mat4 projectionView = camera.projection * camera.view;
-        
-        Engine::Gizmo::update(grid, projectionView);
+        Engine::Gizmo::update(grid, camera.projectionView);
 
+        Engine::Core* core = Engine::Core::getInstance();
+        if (core->appSurface.aspectChanged())
+            Engine::Camera::setAspect(camera, core->appSurface.getAspectRatio());
     }
 
     Game* Game::getInstance() {

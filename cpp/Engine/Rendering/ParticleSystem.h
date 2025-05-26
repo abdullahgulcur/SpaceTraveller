@@ -43,24 +43,80 @@ namespace Engine{
             float particleLastTriggerTime;
         };
 
+        template <std::size_t N>
+        struct ParticleTunnel {
+            float startTime[N];
+            float lifeTime[N];
+
+            float posX[N];
+            float posY[N];
+            float posZ[N];
+            float scale[N];
+            glm::u8vec4 color[N];
+
+            unsigned int particleCount = 0;
+            float particleStartTime;
+            float particleLastTriggerTime;
+        };
+
+        template <std::size_t N>
+        struct ParticleSolarSystems {
+            //float startTime[N];
+            //float lifeTime[N];
+
+            float posX[N];
+            float posY[N];
+            float posZ[N];
+            float scale[N];
+            float rotation[N];
+            glm::u8vec4 color[N];
+
+            unsigned int particleCount = 0;
+            float particleStartTime;
+            float particleLastTriggerTime;
+        };
+
+        //---------- GENERAL ---------- 
+
         template <typename T>
-        void start(T& t, unsigned int time){
+        void start(T& t, float time){
             t.particleCount = 0;
             t.particleStartTime = time;
-            t.particleLastTriggerTime = t.particleStartTime;
+            t.particleLastTriggerTime = 0.f;
         }
 
-        template<std::size_t N>
-        void reorderParticle(ParticleSmoke<N>& p, float duration);
+        //---------- SMOKE ---------- 
 
         template<std::size_t N>
-        void updateParticle(ParticleSmoke<N>& p, float dt);
+        void reorder(ParticleSmoke<N>& p, float duration);
+
+        template<std::size_t N>
+        void update(ParticleSmoke<N>& p, float dt);
 
         template<std::size_t N>
         void fillInstanceData(ParticleSmoke<N>& p, ParticleGPUData* data);
 
+        //---------- TUNNEL ---------- 
 
+        template<std::size_t N>
+        void reorder(ParticleTunnel<N>& p, float duration);
 
+        template<std::size_t N>
+        void update(ParticleTunnel<N>& p, float dt, float f);
+
+        template<std::size_t N>
+        void fillInstanceData(ParticleTunnel<N>& p, ParticleGPUData* data, glm::mat4& inverseView);
+
+        //---------- SOLAR SYSTEMS ---------- 
+
+        template<std::size_t N>
+        void start(ParticleSolarSystems<N>& p, float time);
+
+        template<std::size_t N>
+        void update(ParticleSolarSystems<N>& p, float dt, float alpha);
+
+        template<std::size_t N>
+        void fillInstanceData(ParticleSolarSystems<N>& p, ParticleGPUData* data);
 
         //--------------------------------------------------------
 

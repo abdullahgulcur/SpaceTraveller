@@ -85,7 +85,11 @@ namespace Engine {
         if (this->width != width || this->height != height) {
             this->width = width;
             this->height = height;
+            aspectChanged = true;
+            return;
         }
+
+        aspectChanged = false;
     }
 
     void EglContext::swapBuffers() {

@@ -14,6 +14,7 @@ namespace Engine {
         EGLContext context;
         EGLint width;
         EGLint height;
+        bool aspectChanged = false;
 
         EglContext() {}
         ~EglContext() {}
