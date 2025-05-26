@@ -49,9 +49,15 @@ namespace Engine {
 			}
 		};
 
+		auto clickButton = [&](InputCode key) {
+
+			BitOperation::setBit(clickBuffer, int(key));
+		};
+
 		pressBuffer = 0;
 		upBuffer = 0;
 		downBuffer = 0;
+		clickBuffer = 0;
 
 		scrollDelta = 0.f;
 
@@ -59,11 +65,6 @@ namespace Engine {
 		GlfwInput::getCursorPos(newPointerPos);
 		pointerDelta = newPointerPos - pointerPosition;
 		pointerPosition = newPointerPos;
-
-		/*if (pointerDelta.x)
-			std::cout << pointerDelta.x << std::endl;*/
-
-		//std::cout << pointerDelta.x << std::endl;
 
 		//------------- Press ------------- 
 
@@ -135,8 +136,15 @@ namespace Engine {
 		if (getKeyRelease(GlfwInputCode::LShift))
 			releaseButton(InputCode::LShift);
 
-		//if (pointerDelta.x)
-		//	std::cout << pointerDelta.x << std::endl;
+		//------------- Click ------------- 
+
+		if (GlfwInput::getButtonPress(InputCode::Mouse_Left))
+			pointerPositionLastPress = pointerPosition;
+
+		if (GlfwInput::getButtonUp(InputCode::Mouse_Left)) {
+			if (glm::distance(glm::vec2(pointerPositionLastPress), glm::vec2(pointerPosition)) < 5.f)
+				clickButton(InputCode::Mouse_Left);
+		}
     }
 
 	bool GlfwInput::getButtonDown(InputCode inputCode) {
@@ -149,6 +157,10 @@ namespace Engine {
 
 	bool GlfwInput::getButtonUp(InputCode inputCode) {
 		return BitOperation::getBit(upBuffer, int(inputCode));
+	}
+
+	bool GlfwInput::getButtonClick(InputCode inputCode) {
+		return BitOperation::getBit(clickBuffer, int(inputCode));
 	}
 
 	void GlfwInput::setCursorPos(glm::i16vec2 cursorPos) {

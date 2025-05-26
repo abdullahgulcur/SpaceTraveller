@@ -54,17 +54,18 @@ namespace Game{
         float deltaY = 0.f;
         float scroll = 0.f;
 
-#if PLATFORM == WIN
+        if (core->input.getPointerDown()) {
+            deltaX = core->input.getPointerDelta().x;
+            deltaY = -core->input.getPointerDelta().y;
+        }
 
-        if (core->input.getButtonDown(Engine::InputCode::Mouse_Left)) {
-#endif
+        if (core->input.getPointerClick()) {
             for (int i = 0; i < game->particleSolarSystems.particleCount; i++) {
 
                 glm::vec4 particlePosition(game->particleSolarSystems.posX[i], game->particleSolarSystems.posY[i], game->particleSolarSystems.posZ[i], 1.f);
 
                 glm::vec4 clipSpace = camera.projectionView * particlePosition;
                 glm::vec3 ndc = glm::vec3(clipSpace) / clipSpace.w;
-
                 glm::vec2 screenSpaceCoordsNormalized = glm::vec2(ndc);
 
                 glm::u16vec2 screenSpaceCoords;
@@ -77,14 +78,9 @@ namespace Game{
                     return;
                 }
             }
-
-            deltaX = core->input.getPointerDelta().x;
-            deltaY = -core->input.getPointerDelta().y;
-#if PLATFORM == WIN
         }
-#endif
 
-        cameraCtrl.ProcessInput(deltaX * 0.01f, deltaY * 0.01f, 0.0f);
+        cameraCtrl.ProcessInput(deltaX * 0.005f, deltaY * 0.002f, 0.0f);
         cameraCtrl.Update(dt);
 
         Engine::Camera::lookAt(camera, cameraCtrl.m_position, glm::vec3(0.f), glm::vec3(0.f, 1.f, 0.f));

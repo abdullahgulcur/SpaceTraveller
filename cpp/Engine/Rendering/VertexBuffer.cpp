@@ -63,7 +63,7 @@ namespace Engine {
         void generateGridVertexBuffer(unsigned int& bufferId, unsigned int& gridVertexCount) {
 
             // Parameters
-            const int gridSize = 20; // grid lines from -gridSize to +gridSize
+            const int gridSize = 4; // grid lines from -gridSize to +gridSize
             std::vector<float> gridVertices;
 
             // Generate grid lines (XZ plane)

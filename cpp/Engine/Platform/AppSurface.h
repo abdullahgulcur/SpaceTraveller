@@ -1,5 +1,5 @@
 #pragma once
-
+#include "glm.hpp"
 #if PLATFORM == ANDROID
 #include "EglContext.h"
 #elif PLATFORM == WIN

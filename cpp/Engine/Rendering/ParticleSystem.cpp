@@ -16,9 +16,9 @@ namespace Engine{
         template void update<1024>(ParticleTunnel<1024>&, float, float);
         template void fillInstanceData<1024>(ParticleTunnel<1024>&, ParticleGPUData*, glm::mat4&);
 
-        template void start<256>(ParticleSolarSystems<256>&, float);
-        template void update<256>(ParticleSolarSystems<256>&, float, float);
-        template void fillInstanceData<256>(ParticleSolarSystems<256>&, ParticleGPUData*);
+        template void start<128>(ParticleSolarSystems<128>&, float);
+        template void update<128>(ParticleSolarSystems<128>&, float, float);
+        template void fillInstanceData<128>(ParticleSolarSystems<128>&, ParticleGPUData*);
 
         bool shouldTrigger(float& lastTriggerTime, float duration, float interval){
             float elapsed = duration - lastTriggerTime;
@@ -146,7 +146,7 @@ namespace Engine{
                 p.startTime[index] = duration;
                 p.lifeTime[index] = 1.f;
 
-                p.scale[index] = Random::randomFloat(0.02, 0.05);
+                p.scale[index] = Random::randomFloat(0.05f, 0.1f);
 
                 //float angle = Random::randomFloat(0.f, 2.f * 3.14159265359f);
                 //float radius = sqrt(Random::randomFloat(0.f, 1.f)) * 5.f; // Uniform distribution
@@ -209,7 +209,7 @@ namespace Engine{
                 p.posY[i] = position.y;
                 p.posZ[i] = position.z;
 
-                p.scale[i] = Random::randomFloat(1.f, 2.f);
+                p.scale[i] = Random::randomFloat(2.f, 3.f);
 
                 p.rotation[i] = 0.f;
                 p.color[i] = glm::u8vec4(255, 255, 255, 255);//glm::u8vec4(Random::random(0, 255), Random::random(0, 255), Random::random(0, 255), 255);

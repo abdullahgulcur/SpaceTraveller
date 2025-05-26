@@ -49,7 +49,7 @@ namespace Game {
         Universe universe;
 
         Engine::ParticleSystem::ParticleTunnel<1024> particleSystem;
-        Engine::ParticleSystem::ParticleSolarSystems<256> particleSolarSystems;
+        Engine::ParticleSystem::ParticleSolarSystems<128> particleSolarSystems;
 
 
         Engine::Camera::Camera camera;

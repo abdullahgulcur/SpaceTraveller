@@ -39,6 +39,8 @@ namespace Engine {
 
     public:
 
+        glm::i16vec2 pointerPositionLastPress;
+
         glm::i16vec2 pointerPosition;
         glm::i16vec2 pointerDelta;
 
@@ -49,6 +51,7 @@ namespace Engine {
         unsigned int upBuffer;
         unsigned int upLockBuffer;
         unsigned int downBuffer;
+        unsigned int clickBuffer;
 
         GlfwInput(){}
         ~GlfwInput(){}
@@ -57,6 +60,7 @@ namespace Engine {
         bool getButtonDown(InputCode inputCode);
         bool getButtonPress(InputCode inputCode);
         bool getButtonUp(InputCode inputCode);
+        bool getButtonClick(InputCode inputCode);
         void setCursorPos(glm::i16vec2 cursorPos);
         void getCursorPos(glm::i16vec2& cursorPos);
         void setCursorVisible(bool visible);

@@ -1,10 +1,16 @@
 #include "pch.h"
 #include "AndroidInput.h"
+#include "BitOperation.h"
 
 namespace Engine {
 
     void AndroidInput::init() {
 
+        for(int i = 0; i < 8; i++){
+            pointerPositionLastPress[i] = glm::i16vec2(0);
+            pointerPosition[i] = glm::i16vec2(0);
+            pointerDelta[i] = glm::i16vec2(0);
+        }
     }
 
     void AndroidInput::update() {
@@ -18,6 +24,39 @@ namespace Engine {
     }
 
     void AndroidInput::handleMotionEvents(android_input_buffer* inputBuffer){
+
+        auto pressScreen = [&](int index) {
+
+            BitOperation::setBit(downBuffer, index);
+            BitOperation::clearBit(upLockBuffer, index);
+
+            if (!BitOperation::getBit(pressLockBuffer, index)) {
+                BitOperation::setBit(pressBuffer, index);
+                BitOperation::setBit(pressLockBuffer, index);
+            }
+
+        };
+
+        auto releaseScreen = [&](int index) {
+
+            BitOperation::clearBit(downBuffer, index);
+            BitOperation::clearBit(pressLockBuffer, index);
+
+            if (!BitOperation::getBit(upLockBuffer, index)) {
+                BitOperation::setBit(upBuffer, index);
+                BitOperation::setBit(upLockBuffer, index);
+            }
+        };
+
+        auto clickScreen = [&](int index) {
+
+            BitOperation::setBit(clickBuffer, index);
+        };
+
+        pressBuffer = 0;
+        upBuffer = 0;
+        //downBuffer = 0;
+        clickBuffer = 0;
 
         // handle motion events (motionEventsCounts can be 0).
         for (auto i = 0; i < inputBuffer->motionEventsCount; i++) {
@@ -39,8 +78,8 @@ namespace Engine {
                 case AMOTION_EVENT_ACTION_DOWN:
                 case AMOTION_EVENT_ACTION_POINTER_DOWN:{
 
-                    pointerPosition = glm::ivec2(x,y);
-
+                    pointerPosition[pointer.id] = glm::ivec2(x,y);
+                    pressScreen(pointer.id);
                     //aout << "(" << pointer.id << ", " << x << ", " << y << ") "
                     //<< "Pointer Down";
                     break;
@@ -52,8 +91,9 @@ namespace Engine {
                 case AMOTION_EVENT_ACTION_UP:
                 case AMOTION_EVENT_ACTION_POINTER_UP:
 
-                    pointerPosition = glm::ivec2(x,y);
-                    pointerDelta = glm::ivec2(0);
+                    pointerPosition[pointer.id] = glm::ivec2(x,y);
+                    pointerDelta[pointer.id] = glm::ivec2(0);
+                    releaseScreen(pointer.id);
                     //aout << "(" << pointer.id << ", " << x << ", " << y << ") "
                     //<< "Pointer Up";
                     break;
@@ -68,8 +108,8 @@ namespace Engine {
                         y = GameActivityPointerAxes_getY(&pointer);
 
                         glm::i16vec2 newPosition = glm::ivec2(x,y);
-                        pointerDelta = newPosition - pointerPosition;
-                        pointerPosition = newPosition;
+                        pointerDelta[pointer.id] = newPosition - pointerPosition[pointer.id];
+                        pointerPosition[pointer.id] = newPosition;
 
                         //aout << "(" << pointer.id << ", " << x << ", " << y << ")";
 
@@ -85,6 +125,19 @@ namespace Engine {
         }
         // clear the motion input count in this buffer for main thread to re-use.
         android_app_clear_motion_events(inputBuffer);
+
+
+        //------------- Click ------------- 
+
+        for(int i = 0; i < 8; i++){
+            if (AndroidInput::getScreenPress(i))
+                pointerPositionLastPress[i] = pointerPosition[i];
+
+            if (AndroidInput::getScreenUp(i)) {
+                if (glm::distance(glm::vec2(pointerPositionLastPress[i]), glm::vec2(pointerPosition[i])) < 50.f)
+                    clickScreen(i);
+            }
+        }
     }
 
     void AndroidInput::handleKeyEvents(android_input_buffer* inputBuffer){
@@ -112,5 +165,22 @@ namespace Engine {
         // clear the key input count too.
         android_app_clear_key_events(inputBuffer);
     }
+
+    bool AndroidInput::getScreenDown(unsigned int index) {
+        return BitOperation::getBit(downBuffer, index);
+    }
+
+    bool AndroidInput::getScreenPress(unsigned int index) {
+        return BitOperation::getBit(pressBuffer, index);
+    }
+
+    bool AndroidInput::getScreenUp(unsigned int index) {
+        return BitOperation::getBit(upBuffer, index);
+    }
+
+    bool AndroidInput::getScreenClick(unsigned int index) {
+        return BitOperation::getBit(clickBuffer, index);
+    }
+
 
 }

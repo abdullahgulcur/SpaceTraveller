@@ -20,13 +20,6 @@ namespace Engine {
 
     public:
 
-        glm::ivec2 pointerPosition;
-        glm::ivec2 pointerDelta;
-
-#if PLATFORM == WIN
-
-#endif
-
         Input(){}
         ~Input(){}
         void init();
@@ -36,12 +29,21 @@ namespace Engine {
         const glm::ivec2& getPointerPosition() const;
         void getPointerPositionNormalized(glm::vec2& position);
 
+        bool getPointerDown();
+        bool getPointerPress();
+        bool getPointerUp();
+        bool getPointerClick();
+
 #if PLATFORM == WIN
         bool getButtonDown(InputCode inputCode);
         bool getButtonPress(InputCode inputCode);
         bool getButtonUp(InputCode inputCode);
-
+        bool getButtonClick(InputCode inputCode);
+#elif PLATFORM == ANDROID
+        bool getScreenDown(unsigned int index);
+        bool getScreenPress(unsigned int index);
+        bool getScreenUp(unsigned int index);
+        bool getScreenClick(unsigned int index);
 #endif
-
     };
 }
