@@ -35,5 +35,13 @@ namespace Engine {
         public:
             bool shouldTrigger(float interval);
         };
+
+        class StopWatch {
+        private:
+            float startTime;
+        public:
+            void start();
+            float getDuration();
+        };
     }
 }

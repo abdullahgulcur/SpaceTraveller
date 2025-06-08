@@ -58,6 +58,16 @@ namespace Engine{
             }
             return false;
         }
+
+        //---------------------------------------------
+
+        void StopWatch::start() {
+            startTime = static_cast<float>(Engine::Core::getInstance()->systemTimer.getTotalSeconds());
+        }
+
+        float StopWatch::getDuration() {
+            return static_cast<float>(Engine::Core::getInstance()->systemTimer.getTotalSeconds()) - startTime;
+        }
     }
 
 }

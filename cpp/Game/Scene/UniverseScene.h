@@ -1,24 +1,50 @@
 #pragma once
 
 #include "OrbitCameraController.h"
+#include "CameraController.h"
+#include "TranslateCameraController.h"
+#include "Timer.h"
 
 namespace Game {
 
     enum class StateMovement {
-        IDLE = 0,
+        UNIVERSE = 0,
         ACCELERATING = 1,
-        MOVING = 2
+        MOVING = 2,
+        SLOWING = 3,
+        SOLAR_SYSTEM = 4,
+        CAMERA_ORIENT = 5
+    };
+
+    enum class StateCameraMovement {
+        IDLE = 0,
+        MOVE = 1,
     };
 
     class UniverseScene {
     private:
 
-        StateMovement stateMovement;
+        //glm::vec3 previousCameraPosition;
+        //float getCameraSpeed(float dt);
 
-        float accStartTime;
-        float accPeriod = 1.5f;
+        //StateMovement stateMovement;
 
-        OrbitCameraController cameraCtrl;
+        //float stopwatchStartTime;
+        //float accPeriod = 1.5f;
+        //float movePeriod = 1.5f;
+        //float cameraOrientPeriod = 1.f;
+
+        //glm::vec3 cameraPosition;
+        //glm::vec3 targetCameraPosition;
+
+        CameraController cameraCtrl;
+        TranslateCameraController translateCameraCtrl;
+
+        StateCameraMovement stateCameraMovement;
+
+        //Engine::Timer::StopWatch stopWatch;
+
+        //OrbitCameraController cameraCtrl;
         /*unsigned int instanceBufferSolarSystems;
         unsigned int vaoBillboardSolarSystems;*/
 
@@ -31,9 +57,15 @@ namespace Game {
         void start();
         void update(float dt);
 
-        void stateIdle(float dt);
+        void stateUniverse(float dt);
         void stateAccelerating(float dt);
         void stateMoving(float dt);
+        void stateSlowing(float dt);
+        void stateSolarSystem(float dt);
+        void cameraOrient(float dt);
+
+        //void startStopWatch();
+        //float getDuration();
     };
 }
 

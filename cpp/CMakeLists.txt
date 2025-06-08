@@ -29,6 +29,8 @@ set(sourceFiles
         "Game/Game.cpp"
         "Game/Universe.cpp"
         "Game/OrbitCameraController.cpp"
+        "Game/TranslateCameraController.cpp"
+        "Game/CameraController.cpp"
 
         "Game/Scene/UniverseScene.cpp"
 

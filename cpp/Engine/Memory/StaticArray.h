@@ -50,9 +50,13 @@ public:
         return m_data[m_size - 1];
     }
 
-    void push(T& element) {
+    void push(T element) {
         m_data[m_size++] = element;
     }
+
+    //void push(T& element) {
+    //    m_data[m_size++] = element;
+    //}
 
     void pop() {
         m_size--;

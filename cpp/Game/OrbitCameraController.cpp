@@ -46,7 +46,7 @@ namespace Game{
         m_distance = smoothDamp(m_distance, m_targetDistance, m_distanceVelocity, smoothTime, deltaTime);
 
         // Clamp pitch
-        const float pitchLimit = glm::radians(89.0f);
+        const float pitchLimit = glm::radians(80.0f);
         m_pitch = glm::clamp(m_pitch, -pitchLimit, pitchLimit);
 
         // Calculate position

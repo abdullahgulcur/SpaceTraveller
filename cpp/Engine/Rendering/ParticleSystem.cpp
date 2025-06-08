@@ -166,6 +166,7 @@ namespace Engine{
 
                 float d = duration - p.startTime[i];
                 p.posZ[i] += (f * 50 + 1.f) * dt;
+                p.color[i].a = f * 255;
 //                p.rotation[i] += dt;
                 //p.color[i].a = (1 - glm::smoothstep(0.7f, 1.0f, d / p.lifeTime[i])) * 255;
             }
