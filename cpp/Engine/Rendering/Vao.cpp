@@ -159,6 +159,26 @@ namespace Engine {
             unbind();
         }
 
+        void createParticleMeshSolarSystemVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId) {
+
+            generate(vao);
+            bind(vao);
+
+            VertexBuffer::bind(vertexBufferId);
+            vertexAttributePointer(0, 2, GL_FLOAT, 8, 0);
+
+            VertexBuffer::bind(instanceBufferId);
+
+            unsigned int temp = sizeof(ParticleSystem::ParticleGPUDataSolarSystem);
+
+            vertexAttributeIntegerPointerInstanced(1, 3, GL_SHORT, sizeof(ParticleSystem::ParticleGPUDataSolarSystem), 0);
+            vertexAttributeIntegerPointerInstanced(2, 1, GL_UNSIGNED_BYTE, sizeof(ParticleSystem::ParticleGPUDataSolarSystem), 6);
+            vertexAttributeIntegerPointerInstanced(3, 1, GL_UNSIGNED_BYTE, sizeof(ParticleSystem::ParticleGPUDataSolarSystem), 7);
+
+            unbind();
+        }
+
+
         void createGalaxyMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId){
             generate(vao);
             bind(vao);

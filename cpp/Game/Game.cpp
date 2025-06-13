@@ -18,8 +18,18 @@ namespace Game{
 
         Engine::VertexBuffer::generate(instanceBufferParticleDynamic, 16384, nullptr);
 
-        Engine::Vao::createParticleMeshVao(vaoParticle, vertexBufferBillboard, instanceBufferParticleDynamic);
-        Engine::Shader::createShaderParticle(shaderProgram);
+        //Engine::Vao::createParticleMeshVao(vaoParticle, vertexBufferBillboard, instanceBufferParticleDynamic);
+        Engine::Vao::createParticleMeshSolarSystemVao(vaoParticleSolarSystem, vertexBufferBillboard, instanceBufferParticleDynamic);
+        //Engine::Shader::createShaderParticle(shaderProgram);
+
+        Engine::Shader::createShaderSun(shaderSun);
+        Engine::Shader::createShaderParticleSolarSystem(shaderParticleSolarSystem);
+
+        Engine::MeshData::generateQuadSphereVertexBuffer(sphereMeshData);
+        Engine::Vao::createLitMeshTexturedVao(vaoSphereMesh, sphereMeshData.vertexBuffer, sphereMeshData.indexBuffer.bufferId);
+        Engine::Shader::createShaderPlanet(planetShader);
+        Engine::Texture::createTexture2D(perlinTextureId, "texture/noise/perlinnoise.jpg");
+        Engine::Texture::createTexture2D(macroTextureId, "texture/noise/macrovariation.jpg");
 
         universe.init();
         Engine::Gizmo::init(grid);

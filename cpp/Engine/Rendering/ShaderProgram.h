@@ -44,6 +44,15 @@ namespace Engine {
             unsigned int loc_Tex;
         };
 
+        struct ShaderParticleSolarSystem {
+            unsigned int programId;
+            unsigned int loc_ProjectionView;
+            unsigned int loc_CameraRight;
+            unsigned int loc_CameraUp;
+            unsigned int loc_Tex;
+            unsigned int loc_AspectRatio;
+        };
+
         struct PlanetShader {
             unsigned int programId;
             unsigned int loc_ProjectionView;
@@ -65,13 +74,21 @@ namespace Engine {
             // tiling etc.
         };
 
+        struct ShaderSun {
+            unsigned int programId;
+            unsigned int loc_ProjectionView;
+            unsigned int loc_Model;
+        };
+
         void createShaderGrid(ShaderGrid& program);
         void createShaderParticle(ShaderParticle& program);
         void createShaderParticle(ShaderParticleTextured& program);
+        void createShaderParticleSolarSystem(ShaderParticleSolarSystem& shader);
         void createShaderGalaxy(unsigned int& program);
         void createShaderPhong(ShaderPhongTextured& program);
         void createShaderPhong(ShaderPhong& program);
         void createShaderPlanet(PlanetShader& shader);
+        void createShaderSun(ShaderSun& shader);
         void createShaderPlanet(PlanetShader& shader, const char* vert, const char* frag);
 
         void createShaderProgram(unsigned int& shaderProgram, const char* vertexPath, const char* fragmentPath);
@@ -102,6 +119,15 @@ namespace Engine {
             uniform(program.loc_ProjectionView, projectionView);
             uniform(program.loc_CameraRight, cameraRight);
             uniform(program.loc_CameraUp, cameraUp);
+        }
+
+        template <typename T>
+        void updateUniformsParticleFixedSize(T& program, glm::mat4& projectionView, glm::vec3& cameraRight, glm::vec3& cameraUp, float aspectRatio) {
+            bind(program.programId);
+            uniform(program.loc_ProjectionView, projectionView);
+            uniform(program.loc_CameraRight, cameraRight);
+            uniform(program.loc_CameraUp, cameraUp);
+            uniform(program.loc_AspectRatio, aspectRatio);
         }
 
         template <typename T>

@@ -34,7 +34,7 @@ namespace Engine{
             float zFar;
         };
 
-        void init(Camera& camera, float fovY, float aspect, float zNear = 0.1f, float zFar = 1000.f);
+        void init(Camera& camera, float fovY, float aspect, float zNear = 0.1f, float zFar = 100000.f);
         void perspectiveProjection(Camera& camera);
         void lookAt(Camera& camera, glm::vec3 center, glm::vec3 up); // = glm::vec3(0.f, 1.f, 0.f)
         void lookAt(Camera& camera, glm::vec3 cameraPosition, glm::vec3 center, glm::vec3 up); //  = glm::vec3(0.f,1.f,0.f)

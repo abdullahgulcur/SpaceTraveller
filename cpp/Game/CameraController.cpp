@@ -26,6 +26,12 @@ namespace Game{
         targetTransform.yaw += delta;
     }
 
+    void CameraController::setTransform(Engine::Camera::CameraTransform& transform) {
+        currentTransform = transform;
+        targetTransform = transform;
+    }
+
+
     void CameraController::init(Engine::Camera::CameraTransform transform) {
         currentTransform = transform;
         targetTransform = transform;

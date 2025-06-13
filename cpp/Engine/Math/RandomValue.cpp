@@ -57,5 +57,17 @@ namespace Engine{
             return dir * dist;
         }
 
+        glm::vec3 randomPointInCircleShell(float innerRadius, float outerRadius) {
+            // 1. Get random direction on unit sphere
+            glm::vec2 dir = glm::circularRand(1.0f);  // Already normalized
+
+            // 2. Get random distance between inner and outer radius
+            float dist = std::cbrt(randomFloat(std::pow(innerRadius, 3.0f), std::pow(outerRadius, 3.0f)));
+
+            // 3. Scale direction
+            return glm::vec3(dir.x * dist, 0.f, dir.y * dist);
+
+        }
+
     }
 }

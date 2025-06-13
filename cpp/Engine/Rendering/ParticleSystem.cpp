@@ -4,7 +4,7 @@
 #include "VertexBuffer.h"
 #include "DrawCommand.h"
 #include "RandomValue.h"
-#include "Algebra.h"
+//#include "Algebra.h"
 
 namespace Engine{
 
@@ -16,9 +16,13 @@ namespace Engine{
         template void update<1024>(ParticleTunnel<1024>&, float, float);
         template void fillInstanceData<1024>(ParticleTunnel<1024>&, ParticleGPUData*, glm::mat4&);
 
-        template void start<128>(ParticleSolarSystems<128>&, float);
+        template void start<128>(ParticleSolarSystems<128>&);
         template void update<128>(ParticleSolarSystems<128>&, float, float);
         template void fillInstanceData<128>(ParticleSolarSystems<128>&, ParticleGPUData*);
+
+        template void start<256>(ParticleSolarSystem<256>&, glm::i16vec3*);
+        template void update<256>(ParticleSolarSystem<256>&, float);
+        template void fillInstanceData<256>(ParticleSolarSystem<256>&, ParticleGPUDataSolarSystem*);
 
         bool shouldTrigger(float& lastTriggerTime, float duration, float interval){
             float elapsed = duration - lastTriggerTime;
@@ -197,10 +201,10 @@ namespace Engine{
         //---------- SOLAR SYSTEMS ---------- 
 
         template<std::size_t N>
-        void start(ParticleSolarSystems<N>& p, float time) { // take positions as parameter
+        void start(ParticleSolarSystems<N>& p) { // take positions as parameter
 
             p.particleCount = N;
-            p.particleStartTime = time;
+            p.particleStartTime = Engine::Core::getInstance()->systemTimer.getTotalSeconds();
             p.particleLastTriggerTime = p.particleStartTime;
 
             for (int i = 0; i < N; i++) {
@@ -247,6 +251,48 @@ namespace Engine{
                 pData.rotation = uint8_t((p.rotation[i] / (2.0f * 3.14159265359f)) * 255.0f);
                 pData.color = p.color[i];
 
+                data[i] = pData;
+            }
+        }
+
+        //---------- SOLAR SYSTEM ---------- 
+
+        template<std::size_t N>
+        void start(ParticleSolarSystem<N>& p, glm::i16vec3* positions) {
+
+            p.particleCount = N;
+
+            for (int i = 0; i < N; i++) {
+                glm::i16vec3 position = positions[i];
+                p.posX[i] = position.x;
+                p.posY[i] = position.y;
+                p.posZ[i] = position.z;
+                p.rotation[i] = 0;// unsigned char((Random::randomFloat(0.f, 360.f) / (2.0f * 3.14159265359f)) * 255.0f);
+                p.alpha[i] = 255;
+                //p.color[i] = glm::u8vec4(255, 255, 255, 255);//glm::u8vec4(Random::random(0, 255), Random::random(0, 255), Random::random(0, 255), 255);
+            }
+
+        }
+
+        template<std::size_t N>
+        void update(ParticleSolarSystem<N>& p, float alpha) {
+
+            for (int i = 0; i < N; i++) {
+                unsigned char a = alpha * 255;
+                p.alpha[i] = a;
+            }
+        }
+
+        template<std::size_t N>
+        void fillInstanceData(ParticleSolarSystem<N>& p, ParticleGPUDataSolarSystem* data) {
+
+            for (int i = 0; i < p.particleCount; i++) {
+
+                ParticleGPUDataSolarSystem pData;
+                glm::i16vec3 position(p.posX[i], p.posY[i], p.posZ[i]);
+                pData.position = position;
+                pData.rotation = p.rotation[i];
+                pData.alpha = p.alpha[i];
                 data[i] = pData;
             }
         }

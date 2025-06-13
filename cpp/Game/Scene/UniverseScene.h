@@ -7,18 +7,27 @@
 
 namespace Game {
 
-    enum class StateMovement {
-        UNIVERSE = 0,
-        ACCELERATING = 1,
-        MOVING = 2,
-        SLOWING = 3,
-        SOLAR_SYSTEM = 4,
-        CAMERA_ORIENT = 5
-    };
-
     enum class StateCameraMovement {
         IDLE = 0,
         MOVE = 1,
+        MOVE_TARGET = 2
+    };
+
+    enum class StateRender {
+        UNIVERSE = 0,
+        SOLAR_SYSTEM = 1,
+    };
+
+    enum class StateMaster {
+        UNIVERSE_IDLE = 0,
+        UNIVERSE_MOVE = 1,
+        UNIVERSE_MOVE_TARGET = 2,
+        SOLAR_SYSTEM_IDLE = 3,
+        SOLAR_SYSTEM_MOVE = 4,
+        SOLAR_SYSTEM_MOVE_TARGET = 5,
+        ORBIT_IDLE = 6,
+        ORBIT_MOVE = 7,
+        ORBIT_MOVE_TARGET = 8
     };
 
     class UniverseScene {
@@ -27,26 +36,12 @@ namespace Game {
         //glm::vec3 previousCameraPosition;
         //float getCameraSpeed(float dt);
 
-        //StateMovement stateMovement;
-
-        //float stopwatchStartTime;
-        //float accPeriod = 1.5f;
-        //float movePeriod = 1.5f;
-        //float cameraOrientPeriod = 1.f;
-
-        //glm::vec3 cameraPosition;
-        //glm::vec3 targetCameraPosition;
-
         CameraController cameraCtrl;
         TranslateCameraController translateCameraCtrl;
 
-        StateCameraMovement stateCameraMovement;
+        StateMaster stateCameraMovement;
 
-        //Engine::Timer::StopWatch stopWatch;
-
-        //OrbitCameraController cameraCtrl;
-        /*unsigned int instanceBufferSolarSystems;
-        unsigned int vaoBillboardSolarSystems;*/
+        unsigned int currentSunIndex = -1;
 
     public:
 
@@ -57,16 +52,22 @@ namespace Game {
         void start();
         void update(float dt);
 
-        void stateUniverse(float dt);
-        void stateAccelerating(float dt);
-        void stateMoving(float dt);
-        void stateSlowing(float dt);
-        void stateSolarSystem(float dt);
-        void cameraOrient(float dt);
+        void stateUniverseIdle(float dt);
+        void stateUniverseMoveTarget(float dt);
+        void solarSystemIdle(float dt);
+        void stateSolarSystemMoveTarget(float dt);
+
+        glm::vec3 getArrivalPoint(glm::vec3& sunPosition);
+        void setCameraTransformQueue(glm::vec3& arrivalPoint, glm::vec3& lastLookAtPosition);
+        glm::vec2 getPointScreenSpacePosition(glm::mat4& projectionView, glm::vec3& position);
+        //void stateUniverse(float dt);
+        //void stateAccelerating(float dt);
+        //void stateMoving(float dt);
+        //void stateSlowing(float dt);
+        //void stateSolarSystem(float dt);
+        //void cameraOrient(float dt);
 
         //void startStopWatch();
         //float getDuration();
     };
 }
-
-//different scenes (state changes), shared data in same class

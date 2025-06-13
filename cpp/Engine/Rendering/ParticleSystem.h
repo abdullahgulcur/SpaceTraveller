@@ -18,6 +18,12 @@ namespace Engine{
             unsigned char scaleRotation;
         };
 
+        struct ParticleGPUDataSolarSystem {
+            glm::i16vec3 position;
+            unsigned char alpha;
+            unsigned char rotation;
+        };
+
         struct ParticleGPUData {
             unsigned short scale;
             glm::i16vec3 positionD;
@@ -76,6 +82,22 @@ namespace Engine{
             float particleLastTriggerTime;
         };
 
+        template <std::size_t N>
+        struct ParticleSolarSystem {
+            
+            unsigned short posX[N];
+            unsigned short posY[N];
+            unsigned short posZ[N];
+            unsigned char rotation[N];
+            unsigned char alpha[N];
+
+            unsigned int particleCount = 0;
+            bool anyUpdate;
+
+            //float particleStartTime;
+            //float particleLastTriggerTime;
+        };
+
         //---------- GENERAL ---------- 
 
         template <typename T>
@@ -110,13 +132,24 @@ namespace Engine{
         //---------- SOLAR SYSTEMS ---------- 
 
         template<std::size_t N>
-        void start(ParticleSolarSystems<N>& p, float time);
+        void start(ParticleSolarSystems<N>& p);
 
         template<std::size_t N>
         void update(ParticleSolarSystems<N>& p, float dt, float alpha);
 
         template<std::size_t N>
         void fillInstanceData(ParticleSolarSystems<N>& p, ParticleGPUData* data);
+
+        //---------- SOLAR SYSTEM ---------- 
+
+        template<std::size_t N>
+        void start(ParticleSolarSystem<N>& p, glm::i16vec3* positions);
+
+        template<std::size_t N>
+        void update(ParticleSolarSystem<N>& p, float alpha);
+
+        template<std::size_t N>
+        void fillInstanceData(ParticleSolarSystem<N>& p, ParticleGPUDataSolarSystem* data);
 
         //--------------------------------------------------------
 

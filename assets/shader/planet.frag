@@ -145,7 +145,7 @@ float getMacro(vec2 uv){
 
 void main()
 {
-    float ambient = 0.5;
+    float ambient = 0.1;
     vec3 normal = normalize(Normal);
 
 
@@ -254,7 +254,7 @@ void main()
 //
 
 
-    color = color * diffuse;
+    color = color * (diffuse + ambient);
     // HDR tonemapping
     color = color / (color + vec3(1.0));
     // gamma correct

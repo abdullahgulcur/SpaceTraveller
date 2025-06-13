@@ -19,8 +19,8 @@ namespace Game {
 
         Engine::Camera::CameraTransform currentTransform;
 
-        StaticArray<Engine::Camera::CameraTransform, 3> transformQueue;
-        StaticArray<float, 3> durationQueue;
+        StaticArray<Engine::Camera::CameraTransform, 4> transformQueue;
+        StaticArray<float, 4> durationQueue;
 
         Engine::Timer::StopWatch stopWatch;
         bool isUpdating = false;
@@ -32,6 +32,9 @@ namespace Game {
 
         void init();
         void update(float dt);
+
+        void push(Engine::Camera::CameraTransform& cameraTransform, float timeStamp);
+        void cleanQueue();
 
         glm::vec3 getPosition() const;
         glm::vec3 getForward() const;

@@ -19,6 +19,8 @@ namespace Game {
         void addTargetPitch(float delta);
         void addTargetYaw(float delta);
 
+        void setTransform(Engine::Camera::CameraTransform& transform);
+
         void init(Engine::Camera::CameraTransform transform);
         void update(float deltaTime);
 

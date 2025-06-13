@@ -53,7 +53,7 @@ namespace Engine {
         void createShaderParticle(ShaderParticleTextured& program) {
 
             std::string vertShader = "shader/particle/vert/particle.vert";
-            std::string fragShader = "shader/particle/frag/particle_texture.vert";
+            std::string fragShader = "shader/particle/frag/particle_texture.frag";
 
             createShaderProgram(program.programId, vertShader.c_str(), fragShader.c_str());
             bind(program.programId);
@@ -63,10 +63,33 @@ namespace Engine {
             getLocation(program.loc_Tex, program.programId, "tex");
         }
 
+        void createShaderParticleSolarSystem(ShaderParticleSolarSystem& shader) {
+
+            std::string vertShader = "shader/particle/vert/particle_solar_system.vert";
+            std::string fragShader = "shader/particle/frag/particle_base.frag";
+
+            createShaderProgram(shader.programId, vertShader.c_str(), fragShader.c_str());
+            bind(shader.programId);
+            getLocation(shader.loc_ProjectionView, shader.programId, "projectionView");
+            getLocation(shader.loc_CameraRight, shader.programId, "cameraRight");
+            getLocation(shader.loc_CameraUp, shader.programId, "cameraUp");
+            getLocation(shader.loc_AspectRatio, shader.programId, "aspectRatio");
+        }
+
         void createShaderPlanet(PlanetShader& shader) {
             createShaderPlanet(shader, "shader/lit_textured.vert", "shader/planet.frag");
         }
 
+        void createShaderSun(ShaderSun& shader) {
+
+            createShaderProgram(shader.programId, "shader/lit_textured.vert", "shader/sun.frag");
+            bind(shader.programId);
+
+            getLocation(shader.loc_ProjectionView, shader.programId, "projectionView");
+            getLocation(shader.loc_Model, shader.programId, "model");
+        }
+
+        
         void createShaderPlanet(PlanetShader& shader, const char* vert, const char* frag) {
             createShaderProgram(shader.programId, vert, frag);
             bind(shader.programId);

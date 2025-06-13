@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core.h"
+#include "MeshData.h"
 #include "Camera.h"
 
 //#include "PlanetScene.h"
@@ -44,22 +45,33 @@ namespace Game {
 
     public:
 
+        Engine::MeshData::MeshData sphereMeshData;
+        Engine::Shader::PlanetShader planetShader;
+        Engine::Shader::ShaderSun shaderSun;
+        unsigned int perlinTextureId;
+        unsigned int macroTextureId;
+        unsigned int vaoSphereMesh;
+
+
         //TunnelEffectScene tunnelEffectScene;
 
         Universe universe;
 
         Engine::ParticleSystem::ParticleTunnel<1024> particleSystem;
-        Engine::ParticleSystem::ParticleSolarSystems<128> particleSolarSystems;
+        Engine::ParticleSystem::ParticleSolarSystem<256> particleSolarSystems;
 
 
         Engine::Camera::Camera camera;
-        Engine::Shader::ShaderParticle shaderProgram;
+        //Engine::Shader::ShaderParticle shaderProgram;
+        Engine::Shader::ShaderParticleSolarSystem shaderParticleSolarSystem;
+
 
         unsigned int vertexBufferBillboard;
 
         unsigned int instanceBufferParticleDynamic;
 
-        unsigned int vaoParticle;
+        //unsigned int vaoParticle;
+        unsigned int vaoParticleSolarSystem;
 
         SceneType sceneType;
 

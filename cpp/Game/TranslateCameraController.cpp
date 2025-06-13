@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "TranslateCameraController.h""
 #include "gtc/matrix_transform.hpp"
+#include "Algebra.h"
 
 namespace Game{
 
@@ -14,7 +15,7 @@ namespace Game{
 		float duration = stopWatch.getDuration();
 
 		unsigned int sequence = -1;
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 3; i++) {
 			if (duration >= durationQueue[i] && duration < durationQueue[i + 1]) {
 				sequence = i;
 				break;
@@ -26,12 +27,23 @@ namespace Game{
 			return;
 		}
 
+		float power = 3.0f; // parameter
 		float alpha = (duration - durationQueue[sequence]) / (durationQueue[sequence + 1] - durationQueue[sequence]);
-		alpha = glm::pow(glm::smoothstep(0.f, 1.f, alpha), 1.5f);
+		alpha = Engine::Algebra::parametricSmooth(alpha, power);
 
 		currentTransform.position = glm::mix(transformQueue[sequence].position, transformQueue[sequence + 1].position, alpha);
 		currentTransform.pitch = glm::mix(transformQueue[sequence].pitch, transformQueue[sequence + 1].pitch, alpha);
 		currentTransform.yaw = glm::mix(transformQueue[sequence].yaw, transformQueue[sequence + 1].yaw, alpha);
+	}
+
+	void TranslateCameraController::push(Engine::Camera::CameraTransform& cameraTransform, float timeStamp) {
+		transformQueue.push(cameraTransform);
+		durationQueue.push(timeStamp);
+	}
+
+	void TranslateCameraController::cleanQueue() {
+		transformQueue.clean();
+		durationQueue.clean();
 	}
 
 	glm::vec3 TranslateCameraController::getPosition() const {

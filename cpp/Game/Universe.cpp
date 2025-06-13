@@ -7,12 +7,17 @@ namespace Game {
     void Universe::init() {
 
         for (int i = 0; i < solarSystemList.capacity(); i++) {
+            SolarSystem solarSystem(i, glm::i16vec3(Engine::Random::randomPointInSphereShell(1.f, 16000)));
+            solarSystemList.push(solarSystem);
 
-            SolarSystem ss;
-            ss.id = i;
-            ss.position = Engine::Random::randomPointInSphereShell(100.f, 200.f);
-            solarSystemList.push(ss);
+            int planetCount = Engine::Random::random(3, 8);
+            for (int j = 0; j < planetCount; j++) {
+                float offset = Engine::Random::randomFloat(0.5f, 1.f);
+                Planet planet(j, i, Engine::Random::randomPointInCircleShell(5.f * i - offset, 5.f * i + offset));
+                planetList.push(planet);
+            }
         }
+
 
         //std::vector<Engine::ParticleSystem::ParticleData> galaxyData;
 

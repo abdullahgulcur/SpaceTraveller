@@ -21,6 +21,7 @@ set(platform ${win})
         #"Game/Scene/TunnelEffectScene.cpp"
         #"Game/CameraController.cpp"
         
+#"Engine/Math/Algebra.cpp"
 
 set(sourceFiles
 
@@ -43,7 +44,6 @@ set(sourceFiles
         "Engine/Platform/AppSurface.cpp"
 
         "Engine/Math/RandomValue.cpp"
-        "Engine/Math/Algebra.cpp"
 
         "Engine/Rendering/Camera.cpp"
         "Engine/Rendering/IndexBuffer.cpp"
