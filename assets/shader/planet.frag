@@ -14,7 +14,7 @@ out vec4 FragColor;
 uniform sampler2D noiseTex0;
 uniform sampler2D noiseTex1;
 uniform vec3 cameraPosition;
-
+uniform vec3 lightDirection;
 
 const float PI = 3.14159265359;
 // ----------------------------------------------------------------------------
@@ -145,11 +145,11 @@ float getMacro(vec2 uv){
 
 void main()
 {
-    float ambient = 0.1;
+    float ambient = 0.0;
     vec3 normal = normalize(Normal);
 
 
-    vec3 lightDir = normalize(vec3(-1.0, 1.0, -1.0));
+    vec3 lightDir = -lightDirection;
     float diffuse = max(dot(normal, lightDir), 0.0);
 
     float albedoXY = getNoiseOctave(vec2(FragPos.x, FragPos.y));
@@ -173,7 +173,7 @@ void main()
 
     float seaAmount = 0.6;
     float continentalShelf = 0.1;
-    vec3 seaColor = vec3(0.3, 0.1, 0.5);
+    vec3 seaColor = vec3(0.0, 0.3, 0.7);
     float fresnel0 = fresnel(3.0, 0.25, 0.0);
     float fresnel1 = fresnelAtmosphre(15.0, 2.0, 0.75);
 

@@ -14,6 +14,14 @@ namespace Game {
             id(id), position(position) {}
     };
 
+    struct Sun {
+        unsigned short id = -1;
+        glm::i16vec3 position;
+        Sun() {}
+        Sun(unsigned short id, glm::i16vec3 position) :
+            id(id), position(position) {}
+    };
+
     struct Planet {
         glm::vec3 relativePosition;
         unsigned short id;
@@ -48,6 +56,5 @@ namespace Game {
         ~Universe() {}
 
         void init();
-        void fillGPUData(Engine::ParticleSystem::ParticleGPUData* gpuData);
     };
 }

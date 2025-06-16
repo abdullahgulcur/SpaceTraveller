@@ -43,6 +43,8 @@ namespace Engine{
             glViewport(0, 0, core->appSurface.getWidth(), core->appSurface.getHeight());
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glEnable(GL_DEPTH_TEST);
+
         }
     }
 }

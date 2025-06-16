@@ -58,7 +58,7 @@ void main() {
     vec2 ndcCenter = clipCenter.xy / clipCenter.w;
 
     // Determine a fixed quad size in NDC units (screen size)
-    float scale = 0.01;
+    float scale = 0.005;
     vec2 screenSize = vec2(scale, scale * aspectRatio); // tweak this (e.g. 0.05 NDC = ~100px on a 1080p screen)
     vec2 offset = aLocalPos * screenSize;
 

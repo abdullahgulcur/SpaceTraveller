@@ -10,7 +10,7 @@ namespace Game{
     void Game::init(){
 
         glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
         sceneType = SceneType::UNIVERSE;
 
@@ -57,7 +57,7 @@ namespace Game{
         }
 
         Engine::Core* core = Engine::Core::getInstance();
-        Engine::Camera::init(camera, 90.0f, core->appSurface.getAspectRatio());
+        Engine::Camera::init(camera, 45.0f, core->appSurface.getAspectRatio());
     }
 
     void Game::update(float dt){
@@ -83,7 +83,7 @@ namespace Game{
         }
         }
 
-        Engine::Gizmo::update(grid, camera.projectionView);
+        //Engine::Gizmo::update(grid, camera.projectionView);
 
         Engine::Core* core = Engine::Core::getInstance();
         if (core->appSurface.aspectChanged())

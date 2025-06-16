@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Universe.h"
 #include "OrbitCameraController.h"
 #include "CameraController.h"
 #include "TranslateCameraController.h"
@@ -36,12 +37,20 @@ namespace Game {
         //glm::vec3 previousCameraPosition;
         //float getCameraSpeed(float dt);
 
+        StaticArray<Planet, 16> currentPlanetList;
+        StaticArray<Satellite, 16> currentSatelliteList;
+        StaticArray<Planet, 16> previousPlanetList;
+        StaticArray<Satellite, 16> previousSatelliteList;
+        Sun currentSun;
+        Sun previousSun;
+
         CameraController cameraCtrl;
         TranslateCameraController translateCameraCtrl;
 
         StateMaster stateCameraMovement;
 
-        unsigned int currentSunIndex = -1;
+        //unsigned int currentSunIndex = -1;
+        //unsigned int previousSunIndex = -1;
 
     public:
 
@@ -56,10 +65,23 @@ namespace Game {
         void stateUniverseMoveTarget(float dt);
         void solarSystemIdle(float dt);
         void stateSolarSystemMoveTarget(float dt);
+        void stateOrbitIdle(float dt);
 
         glm::vec3 getArrivalPoint(glm::vec3& sunPosition);
+        glm::vec3 getArrivalPointPlanet(glm::vec3& planetPosition, glm::vec3& sunPosition);
         void setCameraTransformQueue(glm::vec3& arrivalPoint, glm::vec3& lastLookAtPosition);
         glm::vec2 getPointScreenSpacePosition(glm::mat4& projectionView, glm::vec3& position);
+        void setPlanetList(unsigned int solarSystemId);
+        void cleanPreviousSolarSystem();
+
+        void renderSolarSystem();
+        void renderStars();
+
+        bool solarSystemClick();
+        bool planetClick();
+
+        void translateCameraUpdate(float dt);
+
         //void stateUniverse(float dt);
         //void stateAccelerating(float dt);
         //void stateMoving(float dt);

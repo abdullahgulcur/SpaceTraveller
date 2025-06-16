@@ -64,6 +64,7 @@ namespace Engine {
             unsigned int loc_WaterColor;
             unsigned int loc_WaterContinentalShelf;
             unsigned int loc_WaterDepth;
+            unsigned int loc_LightDirection;
 
             unsigned int loc_Tex0;
             unsigned int loc_Tex1;
@@ -151,7 +152,7 @@ namespace Engine {
 
         template <typename T>
         void updateUniforms(T& program, glm::mat4& projectionView, glm::mat4& model, glm::vec3& cameraPosition,
-                            glm::vec3& waterColor, float waterScale, float waterTreshold, float waterPower, float waterContinentalShelf, float waterDepth,
+                            glm::vec3& waterColor, glm::vec3& lightDirection, float waterScale, float waterTreshold, float waterPower, float waterContinentalShelf, float waterDepth,
                             unsigned int tex0, unsigned int tex1) {
             updateUniforms(program, projectionView, model, cameraPosition);
             uniform(program.loc_WaterScale, waterScale);
@@ -160,6 +161,7 @@ namespace Engine {
             uniform(program.loc_WaterColor, waterColor);
             uniform(program.loc_WaterContinentalShelf, waterContinentalShelf);
             uniform(program.loc_WaterDepth, waterDepth);
+            uniform(program.loc_LightDirection, lightDirection);
             uniform(program.loc_Tex0, 0, tex0);
             uniform(program.loc_Tex1, 1, tex1);
         }
