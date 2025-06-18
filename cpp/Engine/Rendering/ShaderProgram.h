@@ -13,21 +13,21 @@ namespace Engine {
             unsigned int loc_ProjectionView;
         };
 
-        struct ShaderPhong {
-            unsigned int programId;
-            unsigned int loc_ProjectionView;
-            unsigned int loc_Model;
-            unsigned int loc_CameraPosition;
-        };
+        //struct ShaderPhong {
+        //    unsigned int programId;
+        //    unsigned int loc_ProjectionView;
+        //    unsigned int loc_Model;
+        //    unsigned int loc_CameraPosition;
+        //};
 
-        struct ShaderPhongTextured {
-            unsigned int programId;
-            unsigned int loc_View;
-            unsigned int loc_Projection;
-            unsigned int loc_Model;
-            unsigned int loc_CameraPosition;
-            unsigned int loc_Tex;
-        };
+        //struct ShaderPhongTextured {
+        //    unsigned int programId;
+        //    unsigned int loc_View;
+        //    unsigned int loc_Projection;
+        //    unsigned int loc_Model;
+        //    unsigned int loc_CameraPosition;
+        //    unsigned int loc_Tex;
+        //};
 
         struct ShaderParticle {
             unsigned int programId;
@@ -81,13 +81,22 @@ namespace Engine {
             unsigned int loc_Model;
         };
 
+        struct ShaderTerrain {
+            unsigned int programId;
+            unsigned int loc_ProjectionView;
+            unsigned int loc_CameraPosition;
+            unsigned int loc_BlockSize;
+        };
+
+        
         void createShaderGrid(ShaderGrid& program);
         void createShaderParticle(ShaderParticle& program);
         void createShaderParticle(ShaderParticleTextured& program);
         void createShaderParticleSolarSystem(ShaderParticleSolarSystem& shader);
+        void createShaderTerrain(ShaderTerrain& shader);
         void createShaderGalaxy(unsigned int& program);
-        void createShaderPhong(ShaderPhongTextured& program);
-        void createShaderPhong(ShaderPhong& program);
+        //void createShaderPhong(ShaderPhongTextured& program);
+        //void createShaderPhong(ShaderPhong& program);
         void createShaderPlanet(PlanetShader& shader);
         void createShaderSun(ShaderSun& shader);
         void createShaderPlanet(PlanetShader& shader, const char* vert, const char* frag);
@@ -171,6 +180,8 @@ namespace Engine {
             updateUniforms(program, projection, view, model, cameraPosition);
             uniform(program.loc_Tex, 0, tex);
         }
+
+        void updateUniforms(ShaderTerrain& program, glm::mat4& projectionView, glm::vec3& cameraPosition, unsigned int blockSize);
     }
 
 }

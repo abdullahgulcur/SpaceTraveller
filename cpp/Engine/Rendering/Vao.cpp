@@ -84,116 +84,51 @@ namespace Engine {
             unbind();
         }
 
-        void createMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int indexBufferId, bool textured) {
-            generate(vao);
-            bind(vao);
-            VertexBuffer::bind(vertexBufferId);
-            IndexBuffer::bind(indexBufferId);
-
-            unsigned int stride = 24;
-            if (textured) stride += 8;
-
-            vertexAttributePointer(0, 3, GL_FLOAT, stride, 0);
-            vertexAttributePointer(1, 3, GL_FLOAT, stride, 12);
-            if (textured)
-                vertexAttributePointer(2, 2, GL_FLOAT, stride, 24);
-
-            unbind();
-        }
-
-        // for position data
-        void createMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int indexBufferId, unsigned int instanceBufferId, bool textured){
-            generate(vao);
-            bind(vao);
-            VertexBuffer::bind(vertexBufferId);
-            IndexBuffer::bind(indexBufferId);
-
-            unsigned int stride = 24;
-            if(textured) stride += 8;
-
-            unsigned int indexCounter = 0;
-
-            vertexAttributePointer(0, 3, GL_FLOAT, stride, 0); indexCounter++;
-            vertexAttributePointer(1, 3, GL_FLOAT, stride, 12); indexCounter++;
-
-            if(textured){
-                vertexAttributePointer(indexCounter, 2, GL_FLOAT, stride, 24); indexCounter++;
-            }
-
-            VertexBuffer::bind(instanceBufferId);
-
-            vertexAttributePointerInstanced(indexCounter, 4, GL_FLOAT, 64, 0); indexCounter++;
-            vertexAttributePointerInstanced(indexCounter, 4, GL_FLOAT, 64, 16); indexCounter++;
-            vertexAttributePointerInstanced(indexCounter, 4, GL_FLOAT, 64, 32); indexCounter++;
-            vertexAttributePointerInstanced(indexCounter, 4, GL_FLOAT, 64, 48); indexCounter++;
-
-            unbind();
-        }
-
         void createBillboardMeshVao(unsigned int& vao, unsigned int vertexBufferId){
             generate(vao);
             bind(vao);
-
             VertexBuffer::bind(vertexBufferId);
-
             vertexAttributePointer(0, 2, GL_FLOAT, 8, 0);
-
             unbind();
         }
 
         void createParticleMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId) {
-
             generate(vao);
             bind(vao);
-
             VertexBuffer::bind(vertexBufferId);
             vertexAttributePointer(0, 2, GL_FLOAT, 8, 0);
-            
             VertexBuffer::bind(instanceBufferId);
             vertexAttributeIntegerPointerInstanced(1, 1, GL_UNSIGNED_SHORT, sizeof(ParticleSystem::ParticleGPUData), 0);
             vertexAttributeIntegerPointerInstanced(2, 3, GL_SHORT, sizeof(ParticleSystem::ParticleGPUData), 2);
             vertexAttributeIntegerPointerInstanced(3, 3, GL_BYTE, sizeof(ParticleSystem::ParticleGPUData), 8);
             vertexAttributePointerInstancedNormalized(4, 4, GL_UNSIGNED_BYTE, sizeof(ParticleSystem::ParticleGPUData), 11);
             vertexAttributeIntegerPointerInstanced(5, 1, GL_UNSIGNED_BYTE, sizeof(ParticleSystem::ParticleGPUData), 15);
-
             unbind();
         }
 
         void createParticleMeshSolarSystemVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId) {
-
             generate(vao);
             bind(vao);
-
             VertexBuffer::bind(vertexBufferId);
             vertexAttributePointer(0, 2, GL_FLOAT, 8, 0);
-
             VertexBuffer::bind(instanceBufferId);
-
-            unsigned int temp = sizeof(ParticleSystem::ParticleGPUDataSolarSystem);
-
             vertexAttributeIntegerPointerInstanced(1, 3, GL_SHORT, sizeof(ParticleSystem::ParticleGPUDataSolarSystem), 0);
             vertexAttributeIntegerPointerInstanced(2, 1, GL_UNSIGNED_BYTE, sizeof(ParticleSystem::ParticleGPUDataSolarSystem), 6);
             vertexAttributeIntegerPointerInstanced(3, 1, GL_UNSIGNED_BYTE, sizeof(ParticleSystem::ParticleGPUDataSolarSystem), 7);
-
             unbind();
         }
-
 
         void createGalaxyMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId){
             generate(vao);
             bind(vao);
-
             VertexBuffer::bind(vertexBufferId);
-
             vertexAttributePointer(0, 2, GL_FLOAT, 8, 0);
-
             VertexBuffer::bind(instanceBufferId);
             vertexAttributePointerInstanced(1, 4, GL_FLOAT, 80, 0);
             vertexAttributePointerInstanced(2, 4, GL_FLOAT, 80, 16);
             vertexAttributePointerInstanced(3, 4, GL_FLOAT, 80, 32);
             vertexAttributePointerInstanced(4, 4, GL_FLOAT, 80, 48);
             vertexAttributePointerInstanced(5, 4, GL_FLOAT, 80, 64);
-
             unbind();
         }
 
@@ -211,7 +146,18 @@ namespace Engine {
             VertexBuffer::bind(vertexBufferId);
             vertexAttributePointer(0, 3, GL_FLOAT, 3 * sizeof(float), 0);
             unbind();
+        }
 
+        void createTerrainMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int indexBufferId, unsigned int instanceBufferId) {
+            generate(vao);
+            bind(vao);
+            VertexBuffer::bind(vertexBufferId);
+            IndexBuffer::bind(indexBufferId);
+            vertexAttributeIntegerPointer(0, 2, GL_UNSIGNED_SHORT, sizeof(glm::u16vec2), 0);
+            VertexBuffer::bind(instanceBufferId);
+            vertexAttributeIntegerPointerInstanced(1, 2, GL_UNSIGNED_SHORT, 6, 0);
+            vertexAttributeIntegerPointerInstanced(2, 1, GL_UNSIGNED_BYTE, 6, sizeof(glm::u16vec2));
+            unbind();
         }
 
     }

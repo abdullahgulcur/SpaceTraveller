@@ -12,47 +12,43 @@ namespace Game{
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
-        sceneType = SceneType::UNIVERSE;
+        sceneType = SceneType::TERRAIN_TEST;
 
         Engine::VertexBuffer::generateBillboardVertexBuffer(vertexBufferBillboard);
 
         Engine::VertexBuffer::generate(instanceBufferParticleDynamic, 16384, nullptr);
+        Engine::VertexBuffer::generate(instanceBufferTerrain, 792, nullptr); // level [0,6] her biri 4 byte, 36 + 27 * 6
 
-        //Engine::Vao::createParticleMeshVao(vaoParticle, vertexBufferBillboard, instanceBufferParticleDynamic);
         Engine::Vao::createParticleMeshSolarSystemVao(vaoParticleSolarSystem, vertexBufferBillboard, instanceBufferParticleDynamic);
-        //Engine::Shader::createShaderParticle(shaderProgram);
 
         Engine::Shader::createShaderSun(shaderSun);
         Engine::Shader::createShaderParticleSolarSystem(shaderParticleSolarSystem);
 
-        Engine::MeshData::generateQuadSphereVertexBuffer(sphereMeshData);
+        Engine::MeshData::generateQuadSphereMeshTextured(sphereMeshData);
+        Engine::MeshData::generateTerrainBlockMesh(terrainBlockMeshData, 16);
+        Engine::MeshData::generateTerrainOuterDegenerateMesh(terrainOuterDegenerateMeshData, 16);
+        Engine::Vao::createTerrainMeshVao(vaoTerrainBlock, terrainBlockMeshData.vertexBuffer, terrainBlockMeshData.indexBuffer.bufferId, instanceBufferTerrain);
+        Engine::Vao::createTerrainMeshVao(vaoTerrainOuterDegenerate, terrainOuterDegenerateMeshData.vertexBuffer, terrainOuterDegenerateMeshData.indexBuffer.bufferId, instanceBufferTerrain);
+
         Engine::Vao::createLitMeshTexturedVao(vaoSphereMesh, sphereMeshData.vertexBuffer, sphereMeshData.indexBuffer.bufferId);
         Engine::Shader::createShaderPlanet(planetShader);
         Engine::Texture::createTexture2D(perlinTextureId, "texture/noise/perlinnoise.jpg");
         Engine::Texture::createTexture2D(macroTextureId, "texture/noise/macrovariation.jpg");
 
+        Engine::Shader::createShaderTerrain(shaderTerrain);
+
+
         universe.init();
         Engine::Gizmo::init(grid);
         universeScene.init();
+        terrainSceneTest.init();
 
         switch (sceneType) {
         case SceneType::UNIVERSE: {
             universeScene.start(); break;
         }
-        case SceneType::TUNNEL_EFFECT: {
-            //tunnelEffectScene.start(); break;
-        }
-        case SceneType::SOLAR_SYSTEM: {
-            
-            break;
-        }
-        case SceneType::PLANET_ATMOSPHERE: {
-            
-            break;
-        }
-        case SceneType::PLANET_SURFACE: {
-            
-            break;
+        case SceneType::TERRAIN_TEST: {
+            terrainSceneTest.start(); break;
         }
         }
 
@@ -66,24 +62,12 @@ namespace Game{
         case SceneType::UNIVERSE: {
             universeScene.update(dt); break;
         }
-        case SceneType::TUNNEL_EFFECT: {
-            //tunnelEffectScene.update(dt); break;
-        }
-        case SceneType::SOLAR_SYSTEM: {
-            
-            break;
-        }
-        case SceneType::PLANET_ATMOSPHERE: {
-            
-            break;
-        }
-        case SceneType::PLANET_SURFACE: {
-            
-            break;
+        case SceneType::TERRAIN_TEST: {
+            terrainSceneTest.update(dt); break;
         }
         }
 
-        //Engine::Gizmo::update(grid, camera.projectionView);
+        Engine::Gizmo::update(grid, camera.projectionView);
 
         Engine::Core* core = Engine::Core::getInstance();
         if (core->appSurface.aspectChanged())

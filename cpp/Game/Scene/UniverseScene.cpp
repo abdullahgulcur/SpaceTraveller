@@ -25,25 +25,25 @@ namespace Game{
         
         Engine::ParticleSystem::start(game->particleSolarSystems, solarSystemPositions);
         
-        stateCameraMovement = StateMaster::UNIVERSE_IDLE;
+        stateCameraMovement = StateCamera::UNIVERSE_IDLE;
     }
 
     void UniverseScene::update(float dt){
 
         switch (stateCameraMovement) {
-            case StateMaster::UNIVERSE_IDLE: {
+            case StateCamera::UNIVERSE_IDLE: {
                 UniverseScene::stateUniverseIdle(dt); break;
             }
-            case StateMaster::UNIVERSE_MOVE_TARGET: {
+            case StateCamera::UNIVERSE_MOVE_TARGET: {
                 UniverseScene::stateUniverseMoveTarget(dt); break;
             }
-            case StateMaster::SOLAR_SYSTEM_IDLE: {
+            case StateCamera::SOLAR_SYSTEM_IDLE: {
                 UniverseScene::solarSystemIdle(dt); break;
             }
-            case StateMaster::SOLAR_SYSTEM_MOVE_TARGET: {
+            case StateCamera::SOLAR_SYSTEM_MOVE_TARGET: {
                 UniverseScene::stateSolarSystemMoveTarget(dt); break;
             }
-            case StateMaster::ORBIT_IDLE: {
+            case StateCamera::ORBIT_IDLE: {
                 UniverseScene::stateOrbitIdle(dt); break;
             }
 
@@ -52,7 +52,10 @@ namespace Game{
         /* RENDER PART */
         Engine::FrameBuffer::refreshScreen();
         UniverseScene::renderStars();
+
+        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         UniverseScene::renderSolarSystem();
+        //glPolygonMode(GL_BACK, GL_FILL);
     }
 
     void UniverseScene::stateUniverseIdle(float dt) {
@@ -91,7 +94,7 @@ namespace Game{
 
         /* CAMERA UPDATE */
         if (!translateCameraCtrl.isUpdating) {
-            stateCameraMovement = StateMaster::SOLAR_SYSTEM_IDLE;
+            stateCameraMovement = StateCamera::SOLAR_SYSTEM_IDLE;
             cameraCtrl.setTransform(translateCameraCtrl.transformQueue.back());
             translateCameraCtrl.cleanQueue();
             UniverseScene::cleanPreviousSolarSystem();
@@ -150,7 +153,7 @@ namespace Game{
 
         /* CAMERA UPDATE */
         if (!translateCameraCtrl.isUpdating) {
-            stateCameraMovement = StateMaster::ORBIT_IDLE;
+            stateCameraMovement = StateCamera::ORBIT_IDLE;
             cameraCtrl.setTransform(translateCameraCtrl.transformQueue.back());
             translateCameraCtrl.cleanQueue();
             return;
@@ -263,11 +266,11 @@ namespace Game{
         Engine::Camera::CameraTransform transform = cameraCtrl.currentTransform;
         translateCameraCtrl.push(transform, 0.f);
         Engine::Camera::computePitchYawFromTarget(transform.position, arrivalPoint, transform.pitch, transform.yaw);
-        translateCameraCtrl.push(transform, 2.f);
+        translateCameraCtrl.push(transform, 0.33f);
         transform.position = arrivalPoint;
-        translateCameraCtrl.push(transform, 4.f);
+        translateCameraCtrl.push(transform, 0.66f);
         Engine::Camera::computePitchYawFromTarget(arrivalPoint, lastLookAtPosition, transform.pitch, transform.yaw);
-        translateCameraCtrl.push(transform, 6.f);
+        translateCameraCtrl.push(transform, 1.f);
     }
 
     glm::vec2 UniverseScene::getPointScreenSpacePosition(glm::mat4& projectionView, glm::vec3& position) {
@@ -323,7 +326,7 @@ namespace Game{
                     glm::vec3 arrivalPoint = UniverseScene::getArrivalPoint(sunPosition);
                     UniverseScene::setCameraTransformQueue(arrivalPoint, sunPosition);
                     translateCameraCtrl.init();
-                    stateCameraMovement = StateMaster::UNIVERSE_MOVE_TARGET;
+                    stateCameraMovement = StateCamera::UNIVERSE_MOVE_TARGET;
                     UniverseScene::setPlanetList(game->universe.solarSystemList[i].id);
                     return true;
                 }
@@ -350,7 +353,7 @@ namespace Game{
                     glm::vec3 arrivalPoint = UniverseScene::getArrivalPointPlanet(planetPosition, glm::vec3(currentSun.position));
                     UniverseScene::setCameraTransformQueue(arrivalPoint, planetPosition);
                     translateCameraCtrl.init();
-                    stateCameraMovement = StateMaster::SOLAR_SYSTEM_MOVE_TARGET;
+                    stateCameraMovement = StateCamera::SOLAR_SYSTEM_MOVE_TARGET;
                     return true;
                 }
             }

@@ -161,104 +161,7 @@ namespace Engine{
             IndexBuffer::generate(data.indexBuffer, indices);
         }
 
-        void generateQuadSphereVertexBuffer(MeshData& data) {
-
-
-            //struct Vertex
-            //{
-            //    glm::vec3 position;
-            //    glm::vec3 normal;
-            //};
-
-            //const float PI = 3.14159265359;
-            //int latitudeSegments = 32;
-            //int longitudeSegments = 64;
-            //std::vector<Vertex> outVertices;
-            //std::vector<uint32_t> outIndices;
-
-
-            //// Top vertex
-            //Vertex topVertex;
-            //topVertex.position = glm::vec3(0, 1, 0);
-            //topVertex.normal = glm::vec3(0, 1, 0);
-            //outVertices.push_back(topVertex);
-
-            //// Generate vertices
-            //for (int lat = 1; lat < latitudeSegments; ++lat)
-            //{
-            //    float v = float(lat) / latitudeSegments;
-            //    float theta = v * PI;
-
-            //    float sinTheta = std::sin(theta);
-            //    float cosTheta = std::cos(theta);
-
-            //    for (int lon = 0; lon <= longitudeSegments; ++lon)
-            //    {
-            //        float u = float(lon) / longitudeSegments;
-            //        float phi = u * PI * 2;
-
-            //        float sinPhi = std::sin(phi);
-            //        float cosPhi = std::cos(phi);
-
-            //        glm::vec3 pos;
-            //        pos.x = sinTheta * cosPhi;
-            //        pos.y = cosTheta;
-            //        pos.z = sinTheta * sinPhi;
-
-            //        Vertex vtx;
-            //        vtx.position = pos;
-            //        vtx.normal = glm::normalize(pos);
-
-            //        outVertices.push_back(vtx);
-            //    }
-            //}
-
-            //// Bottom vertex
-            //Vertex bottomVertex;
-            //bottomVertex.position = glm::vec3(0, -1, 0);
-            //bottomVertex.normal = glm::vec3(0, -1, 0);
-            //outVertices.push_back(bottomVertex);
-
-            //int topIndex = 0;
-            //int bottomIndex = int(outVertices.size()) - 1;
-
-            //// Top cap
-            //for (int lon = 0; lon < longitudeSegments; ++lon)
-            //{
-            //    outIndices.push_back(topIndex);
-            //    outIndices.push_back(1 + lon + 1);
-            //    outIndices.push_back(1 + lon);
-            //}
-
-            //// Middle
-            //for (int lat = 0; lat < latitudeSegments - 2; ++lat)
-            //{
-            //    for (int lon = 0; lon < longitudeSegments; ++lon)
-            //    {
-            //        int current = 1 + lat * (longitudeSegments + 1) + lon;
-            //        int next = current + longitudeSegments + 1;
-
-            //        outIndices.push_back(current);
-            //        outIndices.push_back(current + 1);
-            //        outIndices.push_back(next);
-
-            //        outIndices.push_back(current + 1);
-            //        outIndices.push_back(next + 1);
-            //        outIndices.push_back(next);
-            //    }
-            //}
-
-            //// Bottom cap
-            //int baseIndex = 1 + (latitudeSegments - 2) * (longitudeSegments + 1);
-            //for (int lon = 0; lon < longitudeSegments; ++lon)
-            //{
-            //    outIndices.push_back(bottomIndex);
-            //    outIndices.push_back(baseIndex + lon);
-            //    outIndices.push_back(baseIndex + lon + 1);
-            //}
-
-            //VertexBuffer::generate(data.vertexBuffer, sizeof(Vertex) * outVertices.size(), &outVertices[0]);
-            //IndexBuffer::generate(data.indexBuffer, outIndices);
+        void generateQuadSphereMeshTextured(MeshData& data) {
 
             struct Vertex
             {
@@ -268,13 +171,11 @@ namespace Engine{
             };
 
             const float PI = 3.14159265359;
-            int latitudeSegments = 32;
-            int longitudeSegments = 64;
             std::vector<Vertex> vertices;
             std::vector<uint32_t> indices;
             float radius = 1.0f;
-            int sectorCount = 36;
-            int stackCount = 18;
+            int sectorCount = 64;
+            int stackCount = 32;
 
             float sectorStep = 2 * PI / sectorCount;
             float stackStep = PI / stackCount;
@@ -324,7 +225,67 @@ namespace Engine{
             VertexBuffer::generate(data.vertexBuffer, sizeof(Vertex) * vertices.size(), &vertices[0]);
             IndexBuffer::generate(data.indexBuffer, indices);
         }
-    }
 
+
+        void generateTerrainBlockMesh(MeshData& data, unsigned int blockResolution) {
+
+            std::vector<glm::u16vec2> vertices;
+            std::vector<unsigned int> indices;
+
+            for (int i = 0; i <= blockResolution; i++)
+                for (int j = 0; j <= blockResolution; j++)
+                    vertices.push_back(glm::u16vec2(j, i));
+
+            for (int i = 0; i < blockResolution; i++) {
+                for (int j = 0; j < blockResolution; j++) {
+
+                    indices.push_back(j + i * (blockResolution + 1));
+                    indices.push_back(j + (i + 1) * (blockResolution + 1));
+                    indices.push_back(j + i * (blockResolution + 1) + 1);
+
+                    indices.push_back(j + i * (blockResolution + 1) + 1);
+                    indices.push_back(j + (i + 1) * (blockResolution + 1));
+                    indices.push_back(j + (i + 1) * (blockResolution + 1) + 1);
+                }
+            }
+
+            VertexBuffer::generate(data.vertexBuffer, sizeof(glm::u16vec2) * vertices.size(), &vertices[0]);
+            IndexBuffer::generate(data.indexBuffer, indices);
+        }
+
+        void generateTerrainOuterDegenerateMesh(MeshData& data, unsigned int blockResolution) {
+
+            std::vector<glm::u16vec2> vertices;
+            std::vector<unsigned int> indices;
+
+            for (int i = 0; i < blockResolution * 6; i++)
+                vertices.push_back(glm::u16vec2(i, 0));
+            for (int i = 0; i < blockResolution * 6; i++)
+                vertices.push_back(glm::u16vec2(blockResolution * 6, i));
+            for (int i = 0; i < blockResolution * 6; i++)
+                vertices.push_back(glm::u16vec2(blockResolution * 6 - i, blockResolution * 6));
+            for (int i = 0; i < blockResolution * 6; i++)
+                vertices.push_back(glm::u16vec2(0, blockResolution * 6 - i));
+
+            int triCount = blockResolution * 12;
+            for (int i = 0; i < triCount; i++) {
+                int index0 = i * 2;
+                int index1 = ((i + 1) % triCount) * 2;
+                int index2 = i * 2 + 1;
+
+                indices.push_back(index0);
+                indices.push_back(index1);
+                indices.push_back(index2);
+
+                indices.push_back(index0);
+                indices.push_back(index2);
+                indices.push_back(index1);
+            }
+
+            VertexBuffer::generate(data.vertexBuffer, sizeof(glm::u16vec2) * vertices.size(), &vertices[0]);
+            IndexBuffer::generate(data.indexBuffer, indices);
+        }
+
+    }
 
 }

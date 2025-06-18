@@ -8,29 +8,36 @@ namespace Engine {
 
     namespace Shader{
 
+        void updateUniforms(ShaderTerrain& program, glm::mat4& projectionView, glm::vec3& cameraPosition, unsigned int blockSize) {
+            bind(program.programId);
+            uniform(program.loc_ProjectionView, projectionView);
+            uniform(program.loc_CameraPosition, cameraPosition);
+            uniform(program.loc_BlockSize, blockSize);
+        }
+
         void createShaderGalaxy(unsigned int& program){
             createShaderProgram(program, "shader/quad.vert", "shader/galaxy.frag");
             bind(program);
             //setTextureLocation(program, 0, "tex");
         }
 
-        void createShaderPhong(ShaderPhongTextured& program) {
-            createShaderProgram(program.programId, "shader/lit_textured.vert", "shader/phong_textured.frag");
-            bind(program.programId);
-            getLocation(program.loc_View, program.programId, "view");
-            getLocation(program.loc_Projection, program.programId, "projection");
-            getLocation(program.loc_Model, program.programId, "model");
-            getLocation(program.loc_CameraPosition, program.programId, "cameraPosition");
-            getLocation(program.loc_Tex, program.programId, "tex");
-        }
+        //void createShaderPhong(ShaderPhongTextured& program) {
+        //    createShaderProgram(program.programId, "shader/lit_textured.vert", "shader/phong_textured.frag");
+        //    bind(program.programId);
+        //    getLocation(program.loc_View, program.programId, "view");
+        //    getLocation(program.loc_Projection, program.programId, "projection");
+        //    getLocation(program.loc_Model, program.programId, "model");
+        //    getLocation(program.loc_CameraPosition, program.programId, "cameraPosition");
+        //    getLocation(program.loc_Tex, program.programId, "tex");
+        //}
 
-        void createShaderPhong(ShaderPhong& program) {
-            createShaderProgram(program.programId, "shader/lit.vert", "shader/phong.frag");
-            bind(program.programId);
-            getLocation(program.loc_ProjectionView, program.programId, "projectionView");
-            getLocation(program.loc_Model, program.programId, "model");
-            getLocation(program.loc_CameraPosition, program.programId, "cameraPosition");
-        }
+        //void createShaderPhong(ShaderPhong& program) {
+        //    createShaderProgram(program.programId, "shader/lit.vert", "shader/phong.frag");
+        //    bind(program.programId);
+        //    getLocation(program.loc_ProjectionView, program.programId, "projectionView");
+        //    getLocation(program.loc_Model, program.programId, "model");
+        //    getLocation(program.loc_CameraPosition, program.programId, "cameraPosition");
+        //}
 
         void createShaderGrid(ShaderGrid& program) {
             createShaderProgram(program.programId, "shader/grid.vert", "shader/grid.frag");
@@ -74,6 +81,18 @@ namespace Engine {
             getLocation(shader.loc_CameraRight, shader.programId, "cameraRight");
             getLocation(shader.loc_CameraUp, shader.programId, "cameraUp");
             getLocation(shader.loc_AspectRatio, shader.programId, "aspectRatio");
+        }
+
+        void createShaderTerrain(ShaderTerrain& shader) {
+
+            std::string vertShader = "shader/terrain/terrain.vert";
+            std::string fragShader = "shader/terrain/terrain.frag";
+
+            createShaderProgram(shader.programId, vertShader.c_str(), fragShader.c_str());
+            bind(shader.programId);
+            getLocation(shader.loc_ProjectionView, shader.programId, "projectionView");
+            getLocation(shader.loc_CameraPosition, shader.programId, "cameraPosition");
+            getLocation(shader.loc_BlockSize, shader.programId, "blockSize");
         }
 
         void createShaderPlanet(PlanetShader& shader) {

@@ -4,27 +4,18 @@
 #include "MeshData.h"
 #include "Camera.h"
 
-//#include "PlanetScene.h"
-//#include "NewParticleScene.h"
 #include "UniverseScene.h"
+#include "TerrainSceneTest.h"
 
 #include "Universe.h"
 #include "ShaderProgram.h"
 #include "Gizmo.h"
 
-//#include "ObjectScene.h"
-//#include "ParticleScene.h"
-
-//#include "TunnelEffectScene.h"
-
 namespace Game {
 
     enum class SceneType {
         UNIVERSE = 0,
-        TUNNEL_EFFECT = 1,
-        SOLAR_SYSTEM = 2,
-        PLANET_ATMOSPHERE = 3,
-        PLANET_SURFACE = 4
+        TERRAIN_TEST = 1
     };
 
     class Game {
@@ -33,14 +24,8 @@ namespace Game {
         static Game* instance;
 
         UniverseScene universeScene;
-        //NewParticleScene scene;
-        //PlanetScene scene;
-
-        //ObjectScene scene;
-        //ParticleScene scene;
+        TerrainSceneTest terrainSceneTest;
         
-        
-
         Engine::Gizmo::Grid grid;
 
     public:
@@ -52,26 +37,25 @@ namespace Game {
         unsigned int macroTextureId;
         unsigned int vaoSphereMesh;
 
-
-        //TunnelEffectScene tunnelEffectScene;
-
         Universe universe;
 
         Engine::ParticleSystem::ParticleTunnel<1024> particleSystem;
-        Engine::ParticleSystem::ParticleSolarSystem<256> particleSolarSystems;
 
 
         Engine::Camera::Camera camera;
-        //Engine::Shader::ShaderParticle shaderProgram;
+
+        Engine::ParticleSystem::ParticleSolarSystem<256> particleSolarSystems;
         Engine::Shader::ShaderParticleSolarSystem shaderParticleSolarSystem;
-
-
         unsigned int vertexBufferBillboard;
-
         unsigned int instanceBufferParticleDynamic;
-
-        //unsigned int vaoParticle;
         unsigned int vaoParticleSolarSystem;
+
+        unsigned int instanceBufferTerrain;
+        unsigned int vaoTerrainBlock;
+        unsigned int vaoTerrainOuterDegenerate;
+        Engine::MeshData::MeshData terrainBlockMeshData;
+        Engine::MeshData::MeshData terrainOuterDegenerateMeshData;
+        Engine::Shader::ShaderTerrain shaderTerrain;
 
         SceneType sceneType;
 

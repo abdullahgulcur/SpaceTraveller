@@ -15,23 +15,9 @@ namespace Engine{
 
         void loadStaticMesh(MeshData& data, std::string path);
         void loadStaticMeshTextured(MeshData& data, std::string path);
-        void generateQuadSphereVertexBuffer(MeshData& data);
+        void generateQuadSphereMeshTextured(MeshData& data);
+        void generateTerrainBlockMesh(MeshData& data, unsigned int blockResolution);
+        void generateTerrainOuterDegenerateMesh(MeshData& data, unsigned int blockResolution);
 
     }
-
-//    class MeshData{
-//
-//    private:
-//    public:
-//
-//        VertexBuffer::VertexBuffer vertexBuffer;
-//        IndexBuffer::IndexBuffer indexBuffer;
-//
-//        MeshData(){}
-//        ~MeshData(){}
-//        void loadStaticMesh(std::string& path);
-//        void loadStaticMeshTextured(std::string& path);
-//        void loadSkinnedMesh(std::string& path);
-//        void loadSkinnedMeshTextured(std::string& path);
-//    };
 }

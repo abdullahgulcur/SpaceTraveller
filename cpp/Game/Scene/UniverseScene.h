@@ -8,18 +8,7 @@
 
 namespace Game {
 
-    enum class StateCameraMovement {
-        IDLE = 0,
-        MOVE = 1,
-        MOVE_TARGET = 2
-    };
-
-    enum class StateRender {
-        UNIVERSE = 0,
-        SOLAR_SYSTEM = 1,
-    };
-
-    enum class StateMaster {
+    enum class StateCamera {
         UNIVERSE_IDLE = 0,
         UNIVERSE_MOVE = 1,
         UNIVERSE_MOVE_TARGET = 2,
@@ -47,10 +36,7 @@ namespace Game {
         CameraController cameraCtrl;
         TranslateCameraController translateCameraCtrl;
 
-        StateMaster stateCameraMovement;
-
-        //unsigned int currentSunIndex = -1;
-        //unsigned int previousSunIndex = -1;
+        StateCamera stateCameraMovement;
 
     public:
 
@@ -81,15 +67,5 @@ namespace Game {
         bool planetClick();
 
         void translateCameraUpdate(float dt);
-
-        //void stateUniverse(float dt);
-        //void stateAccelerating(float dt);
-        //void stateMoving(float dt);
-        //void stateSlowing(float dt);
-        //void stateSolarSystem(float dt);
-        //void cameraOrient(float dt);
-
-        //void startStopWatch();
-        //float getDuration();
     };
 }

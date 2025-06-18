@@ -13,16 +13,6 @@ set(win 0)
 set(android 1)
 set(platform ${win})
 
-#"Game/Scene/ObjectScene.cpp"
-#"Game/Scene/ParticleScene.cpp"
-
-        #"Game/Scene/NewParticleScene.cpp"
-        #"Game/Scene/PlanetScene.cpp"
-        #"Game/Scene/TunnelEffectScene.cpp"
-        #"Game/CameraController.cpp"
-        
-#"Engine/Math/Algebra.cpp"
-
 set(sourceFiles
 
         "main.cpp"
@@ -34,11 +24,13 @@ set(sourceFiles
         "Game/CameraController.cpp"
 
         "Game/Scene/UniverseScene.cpp"
-
+        "Game/Scene/TerrainSceneTest.cpp"
 
         "Engine/Core/Core.cpp"
         "Engine/Core/Timer.cpp"
         "Engine/Core/pch.cpp"
+
+        "Engine/Modules/Terrain/TerrainGeometryManager.cpp"
 
         "Engine/Platform/Input.cpp"
         "Engine/Platform/AppSurface.cpp"
@@ -98,6 +90,8 @@ set(includeDirectories
         ThirdParty/tinyobjloader
 
         Engine/Core
+        Engine/Modules/Terrain
+        Engine/Modules/ParticleSystem
         Engine/Platform
         Engine/Rendering
         Engine/Resource
