@@ -11,6 +11,8 @@
 #include "ShaderProgram.h"
 #include "Gizmo.h"
 
+#include "TerrainGeometryManager.h"
+
 namespace Game {
 
     enum class SceneType {
@@ -58,6 +60,8 @@ namespace Game {
         Engine::Shader::ShaderTerrain shaderTerrain;
 
         SceneType sceneType;
+
+        Engine::TerrainGeometryManager terrainGeometryManager;
 
         Game() {}
         ~Game() {}

@@ -8,12 +8,12 @@
 
 
 layout (location = 0) in uvec2 posVert;
-layout (location = 1) in ivec2 posInstance;
+layout (location = 1) in uvec2 posInstance;
 layout (location = 2) in uint levelInstance;
 
-uniform int blockSize;
 uniform mat4 projectionView;
 uniform vec3 cameraPosition;
+uniform uint blockSize;
 
 out vec2 WorldPos2D;
 out vec3 WorldPos;

@@ -13,11 +13,12 @@ namespace Game{
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
         sceneType = SceneType::TERRAIN_TEST;
+        //sceneType = SceneType::UNIVERSE;
 
         Engine::VertexBuffer::generateBillboardVertexBuffer(vertexBufferBillboard);
 
         Engine::VertexBuffer::generate(instanceBufferParticleDynamic, 16384, nullptr);
-        Engine::VertexBuffer::generate(instanceBufferTerrain, 792, nullptr); // level [0,6] her biri 4 byte, 36 + 27 * 6
+        Engine::VertexBuffer::generate(instanceBufferTerrain, 1224, nullptr); // level [0,10] her biri 4 byte, 36 + 27 * 9
 
         Engine::Vao::createParticleMeshSolarSystemVao(vaoParticleSolarSystem, vertexBufferBillboard, instanceBufferParticleDynamic);
 
@@ -37,7 +38,6 @@ namespace Game{
 
         Engine::Shader::createShaderTerrain(shaderTerrain);
 
-
         universe.init();
         Engine::Gizmo::init(grid);
         universeScene.init();
@@ -54,9 +54,13 @@ namespace Game{
 
         Engine::Core* core = Engine::Core::getInstance();
         Engine::Camera::init(camera, 45.0f, core->appSurface.getAspectRatio());
+
+        terrainGeometryManager.init(1024, 16, camera.position);
     }
 
     void Game::update(float dt){
+
+        terrainGeometryManager.update(camera.position);
 
         switch (sceneType) {
         case SceneType::UNIVERSE: {
@@ -67,7 +71,7 @@ namespace Game{
         }
         }
 
-        Engine::Gizmo::update(grid, camera.projectionView);
+        //Engine::Gizmo::update(grid, camera.projectionView);
 
         Engine::Core* core = Engine::Core::getInstance();
         if (core->appSurface.aspectChanged())
