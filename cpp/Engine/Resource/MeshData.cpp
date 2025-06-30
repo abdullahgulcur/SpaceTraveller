@@ -4,19 +4,19 @@
 #include "glm.hpp"
 #include "AssetManager.h"
 
-namespace Engine{
+namespace Engine {
 
-    namespace MeshData{
+    namespace MeshData {
 
-        void loadStaticMesh(MeshData& data, std::string path){
+        void loadStaticMesh(MeshData& data, std::string path) {
 
-            struct Vertex{
+            struct Vertex {
                 glm::vec3 position;
                 glm::vec3 normal;
 
                 bool operator==(const Vertex& other) const {
                     return position[0] == other.position[0] && position[1] == other.position[1] && position[2] == other.position[2] &&
-                           normal[0] == other.normal[0] && normal[1] == other.normal[1] && normal[2] == other.normal[2];
+                        normal[0] == other.normal[0] && normal[1] == other.normal[1] && normal[2] == other.normal[2];
                 }
             };
 
@@ -82,15 +82,15 @@ namespace Engine{
 
         void loadStaticMeshTextured(MeshData& data, std::string path) {
 
-            struct Vertex{
+            struct Vertex {
                 glm::vec3 position;
                 glm::vec3 normal;
                 glm::vec2 uv;
 
                 bool operator==(const Vertex& other) const {
                     return position[0] == other.position[0] && position[1] == other.position[1] && position[2] == other.position[2] &&
-                           normal[0] == other.normal[0] && normal[1] == other.normal[1] && normal[2] == other.normal[2] &&
-                           uv[0] == other.uv[0] && uv[1] == other.uv[1];
+                        normal[0] == other.normal[0] && normal[1] == other.normal[1] && normal[2] == other.normal[2] &&
+                        uv[0] == other.uv[0] && uv[1] == other.uv[1];
                 }
             };
 
@@ -229,12 +229,12 @@ namespace Engine{
 
         void generateTerrainBlockMesh(MeshData& data, unsigned int blockResolution) {
 
-            std::vector<glm::u16vec2> vertices;
+            std::vector<glm::u8vec2> vertices;
             std::vector<unsigned int> indices;
 
             for (int i = 0; i <= blockResolution; i++)
                 for (int j = 0; j <= blockResolution; j++)
-                    vertices.push_back(glm::u16vec2(j, i));
+                    vertices.push_back(glm::u8vec2(j, i));
 
             for (int i = 0; i < blockResolution; i++) {
                 for (int j = 0; j < blockResolution; j++) {
@@ -249,23 +249,23 @@ namespace Engine{
                 }
             }
 
-            VertexBuffer::generate(data.vertexBuffer, sizeof(glm::u16vec2) * vertices.size(), &vertices[0]);
+            VertexBuffer::generate(data.vertexBuffer, sizeof(glm::u8vec2) * vertices.size(), &vertices[0]);
             IndexBuffer::generate(data.indexBuffer, indices);
         }
 
         void generateTerrainOuterDegenerateMesh(MeshData& data, unsigned int blockResolution) {
 
-            std::vector<glm::u16vec2> vertices;
+            std::vector<glm::u8vec2> vertices;
             std::vector<unsigned int> indices;
 
             for (int i = 0; i < blockResolution * 6; i++)
-                vertices.push_back(glm::u16vec2(i, 0));
+                vertices.push_back(glm::u8vec2(i, 0));
             for (int i = 0; i < blockResolution * 6; i++)
-                vertices.push_back(glm::u16vec2(blockResolution * 6, i));
+                vertices.push_back(glm::u8vec2(blockResolution * 6, i));
             for (int i = 0; i < blockResolution * 6; i++)
-                vertices.push_back(glm::u16vec2(blockResolution * 6 - i, blockResolution * 6));
+                vertices.push_back(glm::u8vec2(blockResolution * 6 - i, blockResolution * 6));
             for (int i = 0; i < blockResolution * 6; i++)
-                vertices.push_back(glm::u16vec2(0, blockResolution * 6 - i));
+                vertices.push_back(glm::u8vec2(0, blockResolution * 6 - i));
 
             int triCount = blockResolution * 12;
             for (int i = 0; i < triCount; i++) {
@@ -282,7 +282,7 @@ namespace Engine{
                 indices.push_back(index1);
             }
 
-            VertexBuffer::generate(data.vertexBuffer, sizeof(glm::u16vec2) * vertices.size(), &vertices[0]);
+            VertexBuffer::generate(data.vertexBuffer, sizeof(glm::u8vec2) * vertices.size(), &vertices[0]);
             IndexBuffer::generate(data.indexBuffer, indices);
         }
 

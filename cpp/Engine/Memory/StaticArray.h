@@ -90,3 +90,86 @@ private:
     T m_data[N];
     std::size_t m_size;
 };
+
+
+// Boolean Container
+
+template<std::size_t N>
+class StaticArray<bool, N> {
+public:
+    using size_type = std::size_t;
+
+private:
+    static constexpr size_type bits_per_block = 64;
+    static constexpr size_type block_count = (N + bits_per_block - 1) / bits_per_block;
+
+    uint64_t m_data[block_count]{};
+    size_type m_size = 0;
+
+public:
+    StaticArray() = default;
+
+    StaticArray(size_type size) {
+        for (int i = 0; i < size; i++)
+            set(i, false);
+        m_size = size;
+    }
+
+    StaticArray(size_type size, bool value) {
+        for (int i = 0; i < size; i++)
+            set(i, value);
+        m_size = size;
+    }
+
+    StaticArray(std::initializer_list<bool> init) {
+        for (bool value : init) {
+            push(value);
+        }
+    }
+
+    // Fast explicit access
+    bool get(size_type index) const {
+        return (m_data[index / bits_per_block] >> (index % bits_per_block)) & 1;
+    }
+
+    void set(size_type index, bool value) {
+        if (value)
+            m_data[index / bits_per_block] |= (1 << (index % bits_per_block));
+        else
+            m_data[index / bits_per_block] &= ~(1 << (index % bits_per_block));
+    }
+
+    bool front() const {
+        return get(0);
+    }
+
+    bool back() const {
+        return get(m_size - 1);
+    }
+
+    void push(bool value) {
+        if (value)
+            m_data[m_size / bits_per_block] |= (1 << (m_size % bits_per_block));
+        else
+            m_data[m_size / bits_per_block] &= ~(1 << (m_size % bits_per_block));
+        ++m_size;
+    }
+
+    void pop() {
+        if (m_size > 0)
+            --m_size;
+    }
+
+    void clean() {
+        std::fill(std::begin(m_data), std::end(m_data), 0);
+        m_size = 0;
+    }
+
+    void fill(bool value) {
+        std::fill(std::begin(m_data), std::end(m_data), value ? 0xFF : 0x00);
+    }
+
+    constexpr size_type size() const noexcept { return m_size; }
+    constexpr size_type capacity() const noexcept { return N; }
+    constexpr bool empty() const noexcept { return m_size == 0; }
+};

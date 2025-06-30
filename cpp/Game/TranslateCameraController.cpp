@@ -3,7 +3,7 @@
 #include "gtc/matrix_transform.hpp"
 #include "Algebra.h"
 
-namespace Game{
+namespace Game {
 
 	void TranslateCameraController::init() {
 		stopWatch.start();
@@ -32,8 +32,15 @@ namespace Game{
 		alpha = Engine::Algebra::parametricSmooth(alpha, power);
 
 		currentTransform.position = glm::mix(transformQueue[sequence].position, transformQueue[sequence + 1].position, alpha);
-		currentTransform.pitch = glm::mix(transformQueue[sequence].pitch, transformQueue[sequence + 1].pitch, alpha);
-		currentTransform.yaw = glm::mix(transformQueue[sequence].yaw, transformQueue[sequence + 1].yaw, alpha);
+		currentTransform.pitch = TranslateCameraController::lerpAngle(transformQueue[sequence].pitch, transformQueue[sequence + 1].pitch, alpha);// glm::mix(transformQueue[sequence].pitch, transformQueue[sequence + 1].pitch, alpha);
+		currentTransform.yaw = TranslateCameraController::lerpAngle(transformQueue[sequence].yaw, transformQueue[sequence + 1].yaw, alpha);
+	}
+
+	float TranslateCameraController::lerpAngle(float a, float b, float t) {
+		float diff = fmodf(b - a, 360.0f);
+		if (diff > 180.0f) diff -= 360.0f;
+		if (diff < -180.0f) diff += 360.0f;
+		return a + diff * t;
 	}
 
 	void TranslateCameraController::push(Engine::Camera::CameraTransform& cameraTransform, float timeStamp) {

@@ -7,9 +7,9 @@
 
 namespace Engine {
 
-    namespace Vao{
+    namespace Vao {
 
-        void generate(unsigned int& vao){
+        void generate(unsigned int& vao) {
             glGenVertexArrays(1, &vao);
         }
 
@@ -21,12 +21,12 @@ namespace Engine {
             glBindVertexArray(0);
         }
 
-        void deleteVao(unsigned int& vao){
+        void deleteVao(unsigned int& vao) {
             unbind();
             glDeleteVertexArrays(1, &vao);
         }
 
-        void enableVertexAttributeArray(unsigned int index){
+        void enableVertexAttributeArray(unsigned int index) {
             glEnableVertexAttribArray(index);
         }
 
@@ -69,7 +69,7 @@ namespace Engine {
             VertexBuffer::bind(vertexBufferId);
             IndexBuffer::bind(indexBufferId);
             vertexAttributePointer(0, 3, GL_FLOAT, 24, 0);
-            vertexAttributePointer(1, 3, GL_FLOAT, 24, 12);            
+            vertexAttributePointer(1, 3, GL_FLOAT, 24, 12);
             unbind();
         }
 
@@ -84,7 +84,7 @@ namespace Engine {
             unbind();
         }
 
-        void createBillboardMeshVao(unsigned int& vao, unsigned int vertexBufferId){
+        void createBillboardMeshVao(unsigned int& vao, unsigned int vertexBufferId) {
             generate(vao);
             bind(vao);
             VertexBuffer::bind(vertexBufferId);
@@ -118,7 +118,7 @@ namespace Engine {
             unbind();
         }
 
-        void createGalaxyMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId){
+        void createGalaxyMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId) {
             generate(vao);
             bind(vao);
             VertexBuffer::bind(vertexBufferId);
@@ -132,7 +132,7 @@ namespace Engine {
             unbind();
         }
 
-        void createQuadMeshVao(unsigned int& vao, unsigned int vertexBufferId){
+        void createQuadMeshVao(unsigned int& vao, unsigned int vertexBufferId) {
             generate(vao);
             bind(vao);
             VertexBuffer::bind(vertexBufferId);
@@ -153,10 +153,10 @@ namespace Engine {
             bind(vao);
             VertexBuffer::bind(vertexBufferId);
             IndexBuffer::bind(indexBufferId);
-            vertexAttributeIntegerPointer(0, 2, GL_UNSIGNED_SHORT, sizeof(glm::u16vec2), 0);
+            vertexAttributeIntegerPointer(0, 2, GL_UNSIGNED_BYTE, 2, 0);
             VertexBuffer::bind(instanceBufferId);
-            vertexAttributeIntegerPointerInstanced(1, 2, GL_UNSIGNED_SHORT, 6, 0);
-            vertexAttributeIntegerPointerInstanced(2, 1, GL_UNSIGNED_BYTE, 6, sizeof(glm::u16vec2));
+            vertexAttributeIntegerPointerInstanced(1, 2, GL_UNSIGNED_BYTE, 3, 0);
+            vertexAttributeIntegerPointerInstanced(2, 1, GL_UNSIGNED_BYTE, 3, 2);
             unbind();
         }
 

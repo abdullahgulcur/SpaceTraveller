@@ -4,56 +4,99 @@
 
 namespace Engine {
 
+	static constexpr int intLog2(int x) {
+		int result = 0;
+		while (x > 1) {
+			x >>= 1;
+			++result;
+		}
+		return result;
+	}
+
 	class TerrainGeometryManager {
 
 	private:
-		
+
 	public:
 
-		unsigned short terrainSize;
-		unsigned char blockSize;
+		static constexpr int terrainSize = 2048;
+		static constexpr int blockSize = 16;
+		static constexpr int blocksPerLevel = 36;
+		static constexpr int totalClipmapLevel = intLog2(terrainSize / blockSize) + 1;
+		static constexpr int totalBlocks = totalClipmapLevel * blocksPerLevel;
 
-		unsigned char totalClipmapLevel;
-		unsigned char startClipmapLevel;
+		int startClipmapLevel;
 
-		std::vector<glm::i16vec2> clipmapGridIndexList;
-		std::vector<glm::i16vec2> clipmapStartGridIndexList;
-
-		std::vector<glm::u16vec2> blockIndexList;
-		std::vector<glm::u8vec2> blockLocalIndexList;
-		std::vector<unsigned char> isInnerLists;
-		std::vector<unsigned char> outOfBorderList;
+		StaticArray<glm::ivec2, totalClipmapLevel> clipmapGridIndexList;
+		StaticArray<glm::ivec2, totalClipmapLevel> clipmapStartGridIndexList;
+		StaticArray<glm::ivec2, totalBlocks> blockIndexList;
+		StaticArray<unsigned char, totalBlocks> isInnerLists;
+		StaticArray<unsigned char, totalBlocks> outOfBorderList;
 
 		TerrainGeometryManager() {}
 		~TerrainGeometryManager() {}
 
-		void init(unsigned short terrainSize, unsigned short blockSize, glm::vec3& camPos);
+		void init(glm::vec3& camPos);
 		void update(glm::vec3& camPos);
 		void setOutOfBorderList(const unsigned char clipmapLevel);
 		void initBlockProperties(const glm::vec2 cameraPosition);
 		void calculateBlockPositionIndices(const unsigned char clipmapLevel, const glm::vec2 cameraPosition);
-		void getCurrentBlockProperties(unsigned char level, const glm::u16vec2 gridIndex, const glm::u16vec2 startGridIndex,
-			glm::u16vec2* currentBlockIndices, glm::u8vec2* currentBlockLocalIndices, unsigned char* currentIsInners);
+		void getCurrentBlockProperties(unsigned char level, const glm::ivec2 gridIndex, const glm::ivec2 startGridIndex,
+			glm::ivec2* currentBlockIndices, unsigned char* currentIsInners);
 		unsigned char getMinClipmapLevel(const glm::vec2 cameraPosition, float elevation);
-		glm::u16vec2 getGridIndex(const unsigned char level, const glm::vec2 camPos);
-		glm::u16vec2 getStartGridIndex(glm::u16vec2 const gridIndex);
-		void setClipmapStartGridIndex(const unsigned char clipmapLevel, const glm::i16vec2 index);
-		void setClipmapGridIndex(const unsigned char clipmapLevel, const glm::i16vec2 index);
-		glm::i16vec2& getClipmapStartGridIndex(const unsigned char clipmapLevel);
-		glm::i16vec2& getClipmapGridIndex(const unsigned char clipmapLevel);
-		void setBlockIndex(const unsigned char clipmapLevel, const unsigned char blockIndex, const glm::u16vec2 index);
-		glm::u16vec2& getBlockIndex(const unsigned char clipmapLevel, const unsigned char blockIndex);
-		void setIsInner(const unsigned char clipmapLevel, const unsigned char blockIndex, const unsigned char index);
-		unsigned char& getIsInner(const unsigned char clipmapLevel, const unsigned char blockIndex);
-		void setBlockLocalIndex(const unsigned char clipmapLevel, const unsigned char blockIndex, const glm::u8vec2 index);
-		glm::u8vec2& getBlockLocalIndex(const unsigned char clipmapLevel, const unsigned char blockIndex);
-		void setOutOfBorder(const unsigned char clipmapLevel, const unsigned char blockIndex, const unsigned char outOfBorder);
-		unsigned char& getOutOfBorder(const unsigned char clipmapLevel, const unsigned char blockIndex);
-		glm::vec2 worldSpaceToTerrainSpace(const glm::vec2 cameraPosition);
-		//glm::u16vec2 terrainSpaceToWorldSpace(const glm::u16vec2 blockPosition, const unsigned char level);
-		unsigned short getTerrainMinBlockIndex(const unsigned char level);
+		glm::ivec2 getGridIndex(const unsigned char level, const glm::vec2 camPos);
+		glm::ivec2 getStartGridIndex(glm::ivec2 const gridIndex);
+
+		inline void setClipmapStartGridIndex(const unsigned char clipmapLevel, const glm::ivec2 index) {
+			clipmapStartGridIndexList[clipmapLevel] = index;
+		}
+
+		inline void setClipmapGridIndex(const unsigned char clipmapLevel, const glm::ivec2 index) {
+			clipmapGridIndexList[clipmapLevel] = index;
+		}
+
+		inline glm::ivec2& getClipmapStartGridIndex(const unsigned char clipmapLevel) {
+			return clipmapStartGridIndexList[clipmapLevel];
+		}
+
+		inline glm::ivec2& getClipmapGridIndex(const unsigned char clipmapLevel) {
+			return clipmapGridIndexList[clipmapLevel];
+		}
+
+		inline void setBlockIndex(const unsigned char clipmapLevel, const unsigned char blockIndex, const glm::ivec2 index) {
+			blockIndexList[clipmapLevel * blocksPerLevel + blockIndex] = index;
+		}
+
+		inline glm::ivec2& getBlockIndex(const unsigned char clipmapLevel, const unsigned char blockIndex) {
+			return blockIndexList[clipmapLevel * blocksPerLevel + blockIndex];
+		}
+
+		inline void setIsInner(const unsigned char clipmapLevel, const unsigned char blockIndex, const unsigned char index) {
+			isInnerLists[clipmapLevel * blocksPerLevel + blockIndex] = index;
+		}
+
+		inline unsigned char& getIsInner(const unsigned char clipmapLevel, const unsigned char blockIndex) {
+			return isInnerLists[clipmapLevel * blocksPerLevel + blockIndex];
+		}
+
+		inline void setOutOfBorder(const unsigned char clipmapLevel, const unsigned char blockIndex, const unsigned char outOfBorder) {
+			outOfBorderList[clipmapLevel * blocksPerLevel + blockIndex] = outOfBorder;
+		}
+
+		inline unsigned char& getOutOfBorder(const unsigned char clipmapLevel, const unsigned char blockIndex) {
+			return outOfBorderList[clipmapLevel * blocksPerLevel + blockIndex];
+		}
+
+		inline glm::vec2 worldSpaceToTerrainSpace(const glm::vec2 cameraPosition) {
+			return cameraPosition + glm::vec2(32768);
+		}
+
+		inline int getTerrainMinBlockIndex(const unsigned char level) {
+			return 32768 / (blockSize << level);
+		}
+
 		unsigned short getTerrainMaxBlockIndex(const unsigned char level);
-		glm::u16vec2 getBlockIndexWorldSpace(const unsigned char clipmapLevel, const unsigned char blockIndex);
-		glm::i16vec2 getOuterDegenerateIndexWorldSpace(const unsigned char clipmapLevel);
+		glm::ivec2 getBlockIndexWorldSpace(const unsigned char clipmapLevel, const unsigned char blockIndex);
+		glm::ivec2 getOuterDegenerateIndexWorldSpace(const unsigned char clipmapLevel);
 	};
 }

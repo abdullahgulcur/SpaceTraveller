@@ -33,6 +33,7 @@ namespace Game {
         void init();
         void update(float dt);
 
+        float lerpAngle(float a, float b, float t);
         void push(Engine::Camera::CameraTransform& cameraTransform, float timeStamp);
         void cleanQueue();
 

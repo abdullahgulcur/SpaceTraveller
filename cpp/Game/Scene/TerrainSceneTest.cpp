@@ -7,18 +7,18 @@
 #include "Core.h"
 #include "VertexBuffer.h"
 
-namespace Game{
+namespace Game {
 
-    void TerrainSceneTest::init(){
+    void TerrainSceneTest::init() {
 
     }
 
     void TerrainSceneTest::start() {
 
-        cameraCtrl.init(Engine::Camera::CameraTransform(glm::vec3(100.f, 50.f, 100.f)));
+        cameraCtrl.init(Engine::Camera::CameraTransform(glm::vec3(1000.f, 50.f, 1000.f), -89.f, 0.f));
     }
 
-    void TerrainSceneTest::update(float dt){
+    void TerrainSceneTest::update(float dt) {
 
         Engine::Core* core = Engine::Core::getInstance();
         Game* game = Game::getInstance();
@@ -58,26 +58,26 @@ namespace Game{
 
 
         struct TerrainGPUData {
-            glm::u16vec2 position;
+            glm::u8vec2 position;
             unsigned char level;
             TerrainGPUData() {}
-            TerrainGPUData(glm::u16vec2 position, unsigned char level) : position(position), level(level) {}
+            TerrainGPUData(glm::u8vec2 position, unsigned char level) : position(position), level(level) {}
         };
         std::vector<TerrainGPUData> instanceArray;
 
         Engine::Shader::updateUniforms(game->shaderTerrain, camera.projectionView, camera.position, 16);
-        
+
         for (int i = game->terrainGeometryManager.startClipmapLevel; i < game->terrainGeometryManager.totalClipmapLevel; i++) {
             for (int j = 0; j < 36; j++) {
                 if ((!game->terrainGeometryManager.getIsInner(i, j) || i == game->terrainGeometryManager.startClipmapLevel) &&
                     !game->terrainGeometryManager.getOutOfBorder(i, j))
-                    instanceArray.push_back(TerrainGPUData(game->terrainGeometryManager.getBlockIndexWorldSpace(i, j), i));
+                    instanceArray.push_back(TerrainGPUData(glm::u8vec2(game->terrainGeometryManager.getBlockIndexWorldSpace(i, j)), i));
             }
         }
 
 
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        
+
         if (instanceArray.size()) {
             Engine::VertexBuffer::bufferSubData(game->instanceBufferTerrain, 0, instanceArray.size() * sizeof(TerrainGPUData), &instanceArray[0]);
             Engine::DrawCommand::drawInstanced(game->vaoTerrainBlock, game->terrainBlockMeshData.indexBuffer.totalIndices, game->terrainBlockMeshData.indexBuffer.indexElementType, instanceArray.size());

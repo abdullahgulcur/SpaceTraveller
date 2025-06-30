@@ -25,12 +25,14 @@ namespace Game {
 
         static Game* instance;
 
-        UniverseScene universeScene;
-        TerrainSceneTest terrainSceneTest;
-        
+
         Engine::Gizmo::Grid grid;
 
     public:
+
+
+        UniverseScene universeScene;
+        TerrainSceneTest terrainSceneTest;
 
         Engine::MeshData::MeshData sphereMeshData;
         Engine::Shader::PlanetShader planetShader;

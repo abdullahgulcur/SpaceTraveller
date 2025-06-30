@@ -4,6 +4,7 @@
 #include "OrbitCameraController.h"
 #include "CameraController.h"
 #include "TranslateCameraController.h"
+//#include "StraightMoveCameraController.h"
 #include "Timer.h"
 
 namespace Game {
@@ -32,9 +33,11 @@ namespace Game {
         StaticArray<Satellite, 16> previousSatelliteList;
         Sun currentSun;
         Sun previousSun;
+        Planet currentPlanet;
 
         CameraController cameraCtrl;
         TranslateCameraController translateCameraCtrl;
+        //StraightMoveCameraController straightMoveCameraController;
 
         StateCamera stateCameraMovement;
 
@@ -52,6 +55,7 @@ namespace Game {
         void solarSystemIdle(float dt);
         void stateSolarSystemMoveTarget(float dt);
         void stateOrbitIdle(float dt);
+        void stateOrbitMoveTarget(float dt);
 
         glm::vec3 getArrivalPoint(glm::vec3& sunPosition);
         glm::vec3 getArrivalPointPlanet(glm::vec3& planetPosition, glm::vec3& sunPosition);

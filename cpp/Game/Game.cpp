@@ -3,17 +3,17 @@
 #include "Vao.h"
 #include "VertexBuffer.h"
 
-namespace Game{
+namespace Game {
 
     Game* Game::instance;
 
-    void Game::init(){
+    void Game::init() {
 
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
-        sceneType = SceneType::TERRAIN_TEST;
-        //sceneType = SceneType::UNIVERSE;
+        //sceneType = SceneType::TERRAIN_TEST;
+        sceneType = SceneType::UNIVERSE;
 
         Engine::VertexBuffer::generateBillboardVertexBuffer(vertexBufferBillboard);
 
@@ -55,10 +55,10 @@ namespace Game{
         Engine::Core* core = Engine::Core::getInstance();
         Engine::Camera::init(camera, 45.0f, core->appSurface.getAspectRatio());
 
-        terrainGeometryManager.init(1024, 16, camera.position);
+        terrainGeometryManager.init(camera.position);
     }
 
-    void Game::update(float dt){
+    void Game::update(float dt) {
 
         terrainGeometryManager.update(camera.position);
 

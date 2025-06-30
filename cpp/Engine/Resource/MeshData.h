@@ -4,11 +4,11 @@
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 
-namespace Engine{
+namespace Engine {
 
-    namespace MeshData{
+    namespace MeshData {
 
-        struct MeshData{
+        struct MeshData {
             unsigned int vertexBuffer;
             IndexBuffer::IndexBuffer indexBuffer;
         };

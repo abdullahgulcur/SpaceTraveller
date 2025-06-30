@@ -6,9 +6,9 @@
 #include "Vao.h"
 #include "Core.h"
 
-namespace Game{
+namespace Game {
 
-    void UniverseScene::init(){
+    void UniverseScene::init() {
 
     }
 
@@ -22,31 +22,33 @@ namespace Game{
         glm::i16vec3 solarSystemPositions[256];
         for (int i = 0; i < game->universe.solarSystemList.size(); i++)
             solarSystemPositions[i] = game->universe.solarSystemList[i].position;
-        
+
         Engine::ParticleSystem::start(game->particleSolarSystems, solarSystemPositions);
-        
+
         stateCameraMovement = StateCamera::UNIVERSE_IDLE;
     }
 
-    void UniverseScene::update(float dt){
+    void UniverseScene::update(float dt) {
 
         switch (stateCameraMovement) {
-            case StateCamera::UNIVERSE_IDLE: {
-                UniverseScene::stateUniverseIdle(dt); break;
-            }
-            case StateCamera::UNIVERSE_MOVE_TARGET: {
-                UniverseScene::stateUniverseMoveTarget(dt); break;
-            }
-            case StateCamera::SOLAR_SYSTEM_IDLE: {
-                UniverseScene::solarSystemIdle(dt); break;
-            }
-            case StateCamera::SOLAR_SYSTEM_MOVE_TARGET: {
-                UniverseScene::stateSolarSystemMoveTarget(dt); break;
-            }
-            case StateCamera::ORBIT_IDLE: {
-                UniverseScene::stateOrbitIdle(dt); break;
-            }
-
+        case StateCamera::UNIVERSE_IDLE: {
+            UniverseScene::stateUniverseIdle(dt); break;
+        }
+        case StateCamera::UNIVERSE_MOVE_TARGET: {
+            UniverseScene::stateUniverseMoveTarget(dt); break;
+        }
+        case StateCamera::SOLAR_SYSTEM_IDLE: {
+            UniverseScene::solarSystemIdle(dt); break;
+        }
+        case StateCamera::SOLAR_SYSTEM_MOVE_TARGET: {
+            UniverseScene::stateSolarSystemMoveTarget(dt); break;
+        }
+        case StateCamera::ORBIT_IDLE: {
+            UniverseScene::stateOrbitIdle(dt); break;
+        }
+        case StateCamera::ORBIT_MOVE_TARGET: {
+            UniverseScene::stateOrbitMoveTarget(dt); break;
+        }
         }
 
         /* RENDER PART */
@@ -151,6 +153,7 @@ namespace Game{
         /* ENGINE CAMERA LOOK AT */
         Engine::Camera::lookAt(camera, translateCameraCtrl.getPosition(), translateCameraCtrl.getPosition() + translateCameraCtrl.getForward(), glm::vec3(0.f, 1.f, 0.f));
 
+
         /* CAMERA UPDATE */
         if (!translateCameraCtrl.isUpdating) {
             stateCameraMovement = StateCamera::ORBIT_IDLE;
@@ -158,7 +161,9 @@ namespace Game{
             translateCameraCtrl.cleanQueue();
             return;
         }
+
         translateCameraCtrl.update(dt);
+
     }
 
     void UniverseScene::stateOrbitIdle(float dt) {
@@ -185,6 +190,40 @@ namespace Game{
 
         if (UniverseScene::planetClick())
             return;
+
+        if (input.getButtonPress(Engine::InputCode::Space)) {
+            glm::vec3 arrivalPoint = currentPlanet.relativePosition + glm::vec3(currentSun.position);
+            UniverseScene::setCameraTransformQueue(arrivalPoint, arrivalPoint);
+            translateCameraCtrl.init();
+            stateCameraMovement = StateCamera::ORBIT_MOVE_TARGET;
+            return;
+        }
+    }
+
+    void UniverseScene::stateOrbitMoveTarget(float dt) {
+
+        /* LOCALS */
+        Engine::Core* core = Engine::Core::getInstance();
+        Game* game = Game::getInstance();
+        Engine::Camera::Camera& camera = game->camera;
+        Engine::ParticleSystem::ParticleSolarSystem<256>& particleSolarSystems = game->particleSolarSystems;
+        Engine::Input& input = core->input;
+        Engine::AppSurface& appSurface = core->appSurface;
+
+        /* PARTICLE SYSTEM UPDATE */
+        Engine::ParticleSystem::update(particleSolarSystems, 1.f);
+
+        /* ENGINE CAMERA LOOK AT */
+        Engine::Camera::lookAt(camera, translateCameraCtrl.getPosition(), translateCameraCtrl.getPosition() + translateCameraCtrl.getForward(), glm::vec3(0.f, 1.f, 0.f));
+
+        /* CAMERA UPDATE */
+        if (glm::distance(translateCameraCtrl.getPosition(), currentPlanet.relativePosition + glm::vec3(currentSun.position)) < 3.1f) {
+            game->sceneType = SceneType::TERRAIN_TEST;
+            translateCameraCtrl.cleanQueue();
+            game->terrainSceneTest.start();
+            return;
+        }
+        translateCameraCtrl.update(dt);
     }
 
     void UniverseScene::renderSolarSystem() {
@@ -193,20 +232,20 @@ namespace Game{
         Game* game = Game::getInstance();
         Engine::Camera::Camera& camera = game->camera;
 
-        if(currentSun.id != -1) {
+        if (currentSun.id != -1) {
             glm::vec3 sunPosition = glm::vec3(currentSun.position);
             glm::mat4 model = glm::translate(glm::mat4(1), sunPosition) * glm::scale(glm::mat4(1), glm::vec3(10.f));
             Engine::Shader::updateUniforms(game->shaderSun, camera.projectionView, model);
             Engine::DrawCommand::draw(game->vaoSphereMesh, game->sphereMeshData.indexBuffer.totalIndices, game->sphereMeshData.indexBuffer.indexElementType);
         }
-        
+
         if (previousSun.id != -1) {
             glm::vec3 sunPosition = glm::vec3(previousSun.position);
             glm::mat4 model = glm::translate(glm::mat4(1), sunPosition) * glm::scale(glm::mat4(1), glm::vec3(10.f));
             Engine::Shader::updateUniforms(game->shaderSun, camera.projectionView, model);
             Engine::DrawCommand::draw(game->vaoSphereMesh, game->sphereMeshData.indexBuffer.totalIndices, game->sphereMeshData.indexBuffer.indexElementType);
         }
-        
+
         for (int i = 0; i < currentPlanetList.size(); i++) {
             glm::vec3 waterColor(0.1f, 0.3f, 0.9f);
             glm::vec3 position = glm::vec3(currentSun.position) + currentPlanetList[i].relativePosition;
@@ -266,11 +305,11 @@ namespace Game{
         Engine::Camera::CameraTransform transform = cameraCtrl.currentTransform;
         translateCameraCtrl.push(transform, 0.f);
         Engine::Camera::computePitchYawFromTarget(transform.position, arrivalPoint, transform.pitch, transform.yaw);
-        translateCameraCtrl.push(transform, 0.33f);
-        transform.position = arrivalPoint;
-        translateCameraCtrl.push(transform, 0.66f);
-        Engine::Camera::computePitchYawFromTarget(arrivalPoint, lastLookAtPosition, transform.pitch, transform.yaw);
         translateCameraCtrl.push(transform, 1.f);
+        transform.position = arrivalPoint;
+        translateCameraCtrl.push(transform, 2.f);
+        Engine::Camera::computePitchYawFromTarget(arrivalPoint, lastLookAtPosition, transform.pitch, transform.yaw);
+        translateCameraCtrl.push(transform, 3.f);
     }
 
     glm::vec2 UniverseScene::getPointScreenSpacePosition(glm::mat4& projectionView, glm::vec3& position) {
@@ -288,6 +327,7 @@ namespace Game{
 
         previousSun = currentSun;
         currentSun = Sun(solarSystemId, game->universe.solarSystemList[solarSystemId].position);
+        currentPlanet.id = -1;
 
         previousPlanetList.clean();
 
@@ -354,6 +394,7 @@ namespace Game{
                     UniverseScene::setCameraTransformQueue(arrivalPoint, planetPosition);
                     translateCameraCtrl.init();
                     stateCameraMovement = StateCamera::SOLAR_SYSTEM_MOVE_TARGET;
+                    currentPlanet = currentPlanetList[i];
                     return true;
                 }
             }
