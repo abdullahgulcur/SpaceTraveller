@@ -128,6 +128,25 @@ namespace Engine {
             getLocation(shader.loc_Tex1, shader.programId, "noiseTex1");
         }
 
+        void updateUniforms(PlanetShader& shader, glm::mat4& projectionView, glm::mat4& model, glm::vec3& cameraPosition,
+            glm::vec3& waterColor, glm::vec3& lightDirection, float waterScale, float waterTreshold,
+            float waterPower, float waterContinentalShelf, float waterDepth, unsigned int tex0, unsigned int tex1) {
+
+            bind(shader.programId);
+            uniform(shader.loc_CameraPosition, cameraPosition);
+            uniform(shader.loc_ProjectionView, projectionView);
+            uniform(shader.loc_Model, model);
+            uniform(shader.loc_WaterScale, waterScale);
+            uniform(shader.loc_WaterTreshold, waterTreshold);
+            uniform(shader.loc_WaterPower, waterPower);
+            uniform(shader.loc_WaterColor, waterColor);
+            uniform(shader.loc_WaterContinentalShelf, waterContinentalShelf);
+            uniform(shader.loc_WaterDepth, waterDepth);
+            uniform(shader.loc_LightDirection, lightDirection);
+            uniform(shader.loc_Tex0, 0, tex0);
+            uniform(shader.loc_Tex1, 1, tex1);
+        }
+
         void createShaderProgram(unsigned int& shaderProgramId, const char* vertexPath, const char* fragmentPath){
 
             auto shaderCode = [](const char* path, std::string& shaderCode) {

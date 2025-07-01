@@ -35,8 +35,6 @@ namespace Engine {
         input.update();
 
         systemTimer.update();
-        appSurface.update();
-
     }
 
     Core* Core::getInstance() {

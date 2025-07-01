@@ -25,6 +25,7 @@ set(sourceFiles
 
         "Game/Scene/UniverseScene.cpp"
         "Game/Scene/TerrainSceneTest.cpp"
+        "Game/Scene/PlanetSceneTest.cpp"
 
         "Engine/Core/Core.cpp"
         "Engine/Core/Timer.cpp"
@@ -73,6 +74,12 @@ elseif (${platform} STREQUAL ${win})
             "Engine/Platform/Glfw/GlfwContext.cpp"
             "Engine/Platform/Glfw/GlfwInput.cpp"
             "Engine/Platform/Windows/WindowsAssetManager.cpp"
+            "ThirdParty/imgui/imgui.cpp"
+            "ThirdParty/imgui/imgui_draw.cpp"
+            "ThirdParty/imgui/imgui_impl_glfw.cpp"
+            "ThirdParty/imgui/imgui_impl_opengl3.cpp"
+            "ThirdParty/imgui/imgui_tables.cpp"
+            "ThirdParty/imgui/imgui_widgets.cpp"
     )
 endif()
 
@@ -110,6 +117,7 @@ elseif (${platform} STREQUAL ${win})
     list(APPEND includeDirectories
             ThirdParty/glew/include
             ThirdParty/glfw/include
+            ThirdParty/imgui
 
             Engine/Platform/Windows
             Engine/Platform/Glfw

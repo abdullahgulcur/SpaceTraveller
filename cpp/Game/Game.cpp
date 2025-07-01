@@ -13,7 +13,8 @@ namespace Game {
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
         //sceneType = SceneType::TERRAIN_TEST;
-        sceneType = SceneType::UNIVERSE;
+        //sceneType = SceneType::UNIVERSE;
+        sceneType = SceneType::PLANET_TEST;
 
         Engine::VertexBuffer::generateBillboardVertexBuffer(vertexBufferBillboard);
 
@@ -50,6 +51,9 @@ namespace Game {
         case SceneType::TERRAIN_TEST: {
             terrainSceneTest.start(); break;
         }
+        case SceneType::PLANET_TEST: {
+            planetSceneTest.start(); break;
+        }
         }
 
         Engine::Core* core = Engine::Core::getInstance();
@@ -68,6 +72,9 @@ namespace Game {
         }
         case SceneType::TERRAIN_TEST: {
             terrainSceneTest.update(dt); break;
+        }
+        case SceneType::PLANET_TEST: {
+            planetSceneTest.update(dt); break;
         }
         }
 

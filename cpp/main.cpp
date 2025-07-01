@@ -128,6 +128,8 @@ int main() {
 
         //Game code
         gameInstance->update(coreInstance->systemTimer.getDeltaSeconds());
+
+        coreInstance->appSurface.update();
     }
    
     return 0;

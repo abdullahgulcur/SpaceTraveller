@@ -101,6 +101,10 @@ namespace Engine {
         void createShaderSun(ShaderSun& shader);
         void createShaderPlanet(PlanetShader& shader, const char* vert, const char* frag);
 
+        void updateUniforms(PlanetShader& shader, glm::mat4& projectionView, glm::mat4& model, glm::vec3& cameraPosition,
+            glm::vec3& waterColor, glm::vec3& lightDirection, float waterScale, float waterTreshold,
+            float waterPower, float waterContinentalShelf, float waterDepth, unsigned int tex0, unsigned int tex1);
+
         void createShaderProgram(unsigned int& shaderProgram, const char* vertexPath, const char* fragmentPath);
         void deleteShaderProgram(unsigned int& shaderProgram);
         void bind(unsigned int shaderProgramId);
@@ -157,22 +161,6 @@ namespace Engine {
         void updateUniforms(T& program, glm::mat4& projectionView, glm::mat4& model, glm::vec3& cameraPosition, unsigned int tex) {
             updateUniforms(program, projectionView, model, cameraPosition);
             uniform(program.loc_Tex, 0, tex);
-        }
-
-        template <typename T>
-        void updateUniforms(T& program, glm::mat4& projectionView, glm::mat4& model, glm::vec3& cameraPosition,
-                            glm::vec3& waterColor, glm::vec3& lightDirection, float waterScale, float waterTreshold, float waterPower, float waterContinentalShelf, float waterDepth,
-                            unsigned int tex0, unsigned int tex1) {
-            updateUniforms(program, projectionView, model, cameraPosition);
-            uniform(program.loc_WaterScale, waterScale);
-            uniform(program.loc_WaterTreshold, waterTreshold);
-            uniform(program.loc_WaterPower, waterPower);
-            uniform(program.loc_WaterColor, waterColor);
-            uniform(program.loc_WaterContinentalShelf, waterContinentalShelf);
-            uniform(program.loc_WaterDepth, waterDepth);
-            uniform(program.loc_LightDirection, lightDirection);
-            uniform(program.loc_Tex0, 0, tex0);
-            uniform(program.loc_Tex1, 1, tex1);
         }
 
         template <typename T>

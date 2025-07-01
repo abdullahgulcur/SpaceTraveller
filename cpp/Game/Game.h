@@ -6,6 +6,7 @@
 
 #include "UniverseScene.h"
 #include "TerrainSceneTest.h"
+#include "PlanetSceneTest.h"
 
 #include "Universe.h"
 #include "ShaderProgram.h"
@@ -17,7 +18,8 @@ namespace Game {
 
     enum class SceneType {
         UNIVERSE = 0,
-        TERRAIN_TEST = 1
+        TERRAIN_TEST = 1,
+        PLANET_TEST = 2
     };
 
     class Game {
@@ -33,6 +35,7 @@ namespace Game {
 
         UniverseScene universeScene;
         TerrainSceneTest terrainSceneTest;
+        PlanetSceneTest planetSceneTest;
 
         Engine::MeshData::MeshData sphereMeshData;
         Engine::Shader::PlanetShader planetShader;
