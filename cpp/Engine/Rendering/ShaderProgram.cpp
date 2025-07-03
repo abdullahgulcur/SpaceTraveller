@@ -117,7 +117,7 @@ namespace Engine {
             getLocation(shader.loc_CameraPosition, shader.programId, "cameraPosition");
 
             getLocation(shader.loc_WaterScale, shader.programId, "waterScale");
-            getLocation(shader.loc_WaterTreshold, shader.programId, "waterTreshold");
+            getLocation(shader.loc_WaterTreshold, shader.programId, "amountSea");
             getLocation(shader.loc_WaterPower, shader.programId, "waterPower");
             getLocation(shader.loc_WaterColor, shader.programId, "waterColor");
             getLocation(shader.loc_LightDirection, shader.programId, "lightDirection");

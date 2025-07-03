@@ -40,6 +40,7 @@ namespace Game {
 
         ImGuiColorEditFlags base_flags = ImGuiColorEditFlags_None;
         ImGui::ColorEdit3("Water Color##1", (float*)&waterColor, base_flags);
+        ImGui::DragFloat("Amount Water", &amountSea, 0.01f, 0.f, 1.f);
 
         ImGui::End();
 
@@ -66,7 +67,7 @@ namespace Game {
 
         glm::mat4 model = glm::translate(glm::mat4(1), glm::vec3(0.f)) * glm::scale(glm::mat4(1.f), glm::vec3(3.f));
         glm::vec3 lightDirection = glm::normalize(glm::vec3(1,0,1));
-        Engine::Shader::updateUniforms(game->planetShader, camera.projectionView, model, camera.position, waterColor, lightDirection, 5.0f, 0.5f, 2.5f, 0.1f, 0.1f, game->perlinTextureId, game->macroTextureId);
+        Engine::Shader::updateUniforms(game->planetShader, camera.projectionView, model, camera.position, waterColor, lightDirection, 5.0f, amountSea, 2.5f, 0.1f, 0.1f, game->perlinTextureId, game->macroTextureId);
         Engine::DrawCommand::draw(game->vaoSphereMesh, game->sphereMeshData.indexBuffer.totalIndices, game->sphereMeshData.indexBuffer.indexElementType);
 
         //---------

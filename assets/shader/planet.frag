@@ -16,6 +16,7 @@ uniform sampler2D noiseTex1;
 uniform vec3 cameraPosition;
 uniform vec3 lightDirection;
 uniform vec3 waterColor;
+uniform float amountSea;
 
 float fresnel(float power, float scale, float bias){
     vec3 viewDir = normalize(cameraPosition - FragPos);
@@ -129,7 +130,7 @@ void main()
     float blendNoise = weights.x * blendNoiseYZ + weights.y * blendNoiseXZ + weights.z * blendNoiseXY;
     blendNoise = clamp(pow(blendNoise * 4.0, 2.5), 0.0, 1.0);
 
-    float seaAmount = 0.5;
+    float seaAmount = amountSea;
     float continentalShelf = 0.07;
     vec3 seaColor = vec3(0.0, 0.1, 0.9);
     float fresnel0 = fresnel(3.0, 0.25, 0.0);
