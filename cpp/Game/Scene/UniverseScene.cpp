@@ -251,7 +251,7 @@ namespace Game {
             glm::vec3 position = glm::vec3(currentSun.position) + currentPlanetList[i].relativePosition;
             glm::mat4 model = glm::translate(glm::mat4(1), position) * glm::scale(glm::mat4(1.f), glm::vec3(3.f));
             glm::vec3 lightDirection = glm::normalize(currentPlanetList[i].relativePosition);
-            Engine::Shader::updateUniforms(game->planetShader, camera.projectionView, model, camera.position, waterColor, lightDirection, 5.0f, 0.5f, 2.5f, 0.1f, 0.1f, game->perlinTextureId, game->macroTextureId);
+            //Engine::Shader::updateUniforms(game->planetShader, camera.projectionView, model, camera.position, waterColor, waterColor, lightDirection, 5.0f, 0.5f, 2.5f, 0.1f, 0.1f, game->perlinTextureId, game->macroTextureId);
             Engine::DrawCommand::draw(game->vaoSphereMesh, game->sphereMeshData.indexBuffer.totalIndices, game->sphereMeshData.indexBuffer.indexElementType);
         }
 
@@ -260,7 +260,7 @@ namespace Game {
             glm::vec3 position = glm::vec3(previousSun.position) + previousPlanetList[i].relativePosition;
             glm::mat4 model = glm::translate(glm::mat4(1), position) * glm::scale(glm::mat4(1.f), glm::vec3(3.f));
             glm::vec3 lightDirection = glm::normalize(previousPlanetList[i].relativePosition);
-            Engine::Shader::updateUniforms(game->planetShader, camera.projectionView, model, camera.position, waterColor, lightDirection, 5.0f, 0.5f, 2.5f, 0.1f, 0.1f, game->perlinTextureId, game->macroTextureId);
+            //Engine::Shader::updateUniforms(game->planetShader, camera.projectionView, model, camera.position, waterColor, waterColor, lightDirection, 5.0f, 0.5f, 2.5f, 0.1f, 0.1f, game->perlinTextureId, game->macroTextureId);
             Engine::DrawCommand::draw(game->vaoSphereMesh, game->sphereMeshData.indexBuffer.totalIndices, game->sphereMeshData.indexBuffer.indexElementType);
         }
     }

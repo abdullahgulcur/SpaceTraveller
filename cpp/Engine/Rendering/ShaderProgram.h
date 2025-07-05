@@ -8,6 +8,30 @@ namespace Engine {
 
     namespace Shader{
 
+        struct PlanetShaderData {
+            unsigned int programId;
+            glm::mat4 projectionView;
+            glm::mat4 model;
+            glm::vec3 cameraPosition;
+            glm::vec3 waterColor;
+            glm::vec3 continentalShelfColor;
+            glm::vec3 lightDirection;
+            glm::vec3 landColor0;
+            glm::vec3 landColor1;
+            float landColorOverlay;
+            float landColorPower;
+            float waterScale;
+            float waterTreshold;
+            float waterPower;
+            float waterContinentalShelf;
+            float waterDepth;
+            float surfaceTopologyScale;
+            float landColorBlendScale;
+            unsigned int tex0;
+            unsigned int tex1;
+            unsigned int texArray;
+        };
+
         struct ShaderGrid {
             unsigned int programId;
             unsigned int loc_ProjectionView;
@@ -62,12 +86,23 @@ namespace Engine {
             unsigned int loc_WaterTreshold;
             unsigned int loc_WaterPower;
             unsigned int loc_WaterColor;
+
+            unsigned int loc_LandColor0;
+            unsigned int loc_LandColor1;
+            unsigned int loc_LandColorOverlay;
+            unsigned int loc_LandColorPower;
+
+            unsigned int loc_ContinentalShelfColor;
             unsigned int loc_WaterContinentalShelf;
             unsigned int loc_WaterDepth;
             unsigned int loc_LightDirection;
 
+            unsigned int loc_SurfaceTopologyScale;
+            unsigned int loc_LandColorBlendScale;
+
             unsigned int loc_Tex0;
             unsigned int loc_Tex1;
+            unsigned int loc_TexArray;
 
             /*unsigned int loc_;
             unsigned int loc_;
@@ -101,9 +136,7 @@ namespace Engine {
         void createShaderSun(ShaderSun& shader);
         void createShaderPlanet(PlanetShader& shader, const char* vert, const char* frag);
 
-        void updateUniforms(PlanetShader& shader, glm::mat4& projectionView, glm::mat4& model, glm::vec3& cameraPosition,
-            glm::vec3& waterColor, glm::vec3& lightDirection, float waterScale, float waterTreshold,
-            float waterPower, float waterContinentalShelf, float waterDepth, unsigned int tex0, unsigned int tex1);
+        void updateUniforms(PlanetShader& shader, PlanetShaderData& planetShaderData);
 
         void createShaderProgram(unsigned int& shaderProgram, const char* vertexPath, const char* fragmentPath);
         void deleteShaderProgram(unsigned int& shaderProgram);
@@ -118,6 +151,7 @@ namespace Engine {
         void uniform(unsigned int location, unsigned int value);
         void uniform(unsigned int location, glm::uvec2& value);
         void uniform(unsigned int location, unsigned int slot, unsigned int textureId);
+        void uniformTextureArray(unsigned int location, unsigned int slot, unsigned int textureId);
         void setTextureLocation(unsigned int& shaderProgramId, unsigned int index, const char* uniformName);
         void getLocation(unsigned int& location, unsigned int shaderProgramId, const char* uniformName);
 

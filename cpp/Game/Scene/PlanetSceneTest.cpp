@@ -39,8 +39,16 @@ namespace Game {
         ImGui::Text("Parameters");
 
         ImGuiColorEditFlags base_flags = ImGuiColorEditFlags_None;
-        ImGui::ColorEdit3("Water Color##1", (float*)&waterColor, base_flags);
+        ImGui::ColorEdit3("Water Color", (float*)&waterColor, base_flags);
+        ImGui::ColorEdit3("Continental Shelf Color", (float*)&continentalShelfColor, base_flags);
         ImGui::DragFloat("Amount Water", &amountSea, 0.01f, 0.f, 1.f);
+        ImGui::DragFloat("Continental Shelf", &continentalShelf, 0.01f, 0.f, 1.f);
+        ImGui::ColorEdit3("Land Color 0", (float*)&landColor0, base_flags);
+        ImGui::ColorEdit3("Land Color 1", (float*)&landColor1, base_flags);
+        ImGui::DragFloat("Land Color Overlay", &landColorOverlay, 0.01f, 0.f, 10.f);
+        ImGui::DragFloat("Land Color Power", &landColorPower, 0.01f, 0.f, 10.f);
+        ImGui::DragFloat("Surface Topology Scale", &surfaceTopologyScale, 0.01f, 0.f, 3.f);
+        ImGui::DragFloat("Land Color Blend Scale", &landColorBlendScale, 0.01f, 0.f, 5.f);
 
         ImGui::End();
 
@@ -65,9 +73,26 @@ namespace Game {
 
         Engine::FrameBuffer::refreshScreen();
 
-        glm::mat4 model = glm::translate(glm::mat4(1), glm::vec3(0.f)) * glm::scale(glm::mat4(1.f), glm::vec3(3.f));
-        glm::vec3 lightDirection = glm::normalize(glm::vec3(1,0,1));
-        Engine::Shader::updateUniforms(game->planetShader, camera.projectionView, model, camera.position, waterColor, lightDirection, 5.0f, amountSea, 2.5f, 0.1f, 0.1f, game->perlinTextureId, game->macroTextureId);
+        Engine::Shader::PlanetShaderData planetShaderData;
+        planetShaderData.cameraPosition = camera.position;
+        planetShaderData.projectionView = camera.projectionView;
+        planetShaderData.model = glm::translate(glm::mat4(1), glm::vec3(0.f)) * glm::scale(glm::mat4(1.f), glm::vec3(3.f));
+        planetShaderData.waterColor = waterColor;
+        planetShaderData.waterTreshold = amountSea;
+        planetShaderData.continentalShelfColor = continentalShelfColor;
+        planetShaderData.waterContinentalShelf = continentalShelf;
+        planetShaderData.lightDirection = glm::normalize(glm::vec3(1, 0, 1));
+        planetShaderData.landColor0 = landColor0;
+        planetShaderData.landColor1 = landColor1;
+        planetShaderData.landColorOverlay = landColorOverlay;
+        planetShaderData.landColorPower = landColorPower;
+        planetShaderData.surfaceTopologyScale = surfaceTopologyScale;
+        planetShaderData.landColorBlendScale = landColorBlendScale;
+        planetShaderData.tex0 = game->perlinTextureId;
+        planetShaderData.tex1 = game->macroTextureId;
+        planetShaderData.texArray = game->noiseTextureArrayId;
+
+        Engine::Shader::updateUniforms(game->planetShader, planetShaderData);
         Engine::DrawCommand::draw(game->vaoSphereMesh, game->sphereMeshData.indexBuffer.totalIndices, game->sphereMeshData.indexBuffer.indexElementType);
 
         //---------

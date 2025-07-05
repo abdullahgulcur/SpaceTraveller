@@ -39,6 +39,35 @@ namespace Engine{
             stbi_image_free(data);
         }
 
+        // TODO: refactor repetations
+        void createTextureArray2D(unsigned int& textureId, TextureArray2DConfig& config, std::vector<std::string>& path) {
+
+            for (int i = 0; i < path.size(); i++) {
+                std::vector<unsigned char> buffer;
+                AssetManager assetManager;
+                assetManager.readBytesFromAsset(path[i].c_str(), buffer);
+
+                int w, h, ch;
+                void* data = stbi_load_from_memory(&buffer[0], (int)buffer.size(), &w, &h, &ch, config.desiredChannels);
+
+                unsigned int internalFormats[4] = { GL_R8, GL_RG8, GL_RGB8, GL_RGBA8 };
+                unsigned int internalFormat = internalFormats[ch - 1];
+                unsigned int formats[4] = { GL_RED, GL_RG, GL_RGB, GL_RGBA };
+                unsigned int format = formats[ch - 1];
+
+                config.width = w;
+                config.height = h;
+                config.internalFormat = internalFormat;
+                config.format = format;
+                config.data.push_back(data);
+            }
+
+            createTextureArray2D(textureId, config);
+
+            for (int i = 0; i < path.size(); i++)
+                stbi_image_free(config.data[i]);
+        }
+
         void createTexture2D(unsigned int& textureId, Texture2DConfig& config){
             generateTex(textureId);
             bindTex2D(textureId);
@@ -55,8 +84,28 @@ namespace Engine{
             createTexture2D(textureId, config, path);
         }
 
+        void createTextureArray2D(unsigned int& textureId, std::vector<std::string>& pathList) {
+            TextureArray2DConfig config;
+            createTextureArray2D(textureId, config, pathList);
+        }
+
+        void createTextureArray2D(unsigned int& textureId, TextureArray2DConfig& config) {
+            generateTex(textureId);
+            bindTexArray2D(textureId);
+            texImage2DArray(config.internalFormat, config.format, config.width, config.height, config.data.size(), config.type);
+            texParams2DArray(config.wrap_s, config.wrap_t, config.minFilter, config.magFilter);
+            for (int i = 0; i < config.data.size(); i++) 
+                glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, config.width, config.height, 1, config.format, config.type, config.data[i]);
+            if (config.minFilter == GL_LINEAR_MIPMAP_LINEAR || config.minFilter == GL_NEAREST_MIPMAP_LINEAR || config.minFilter == GL_NEAREST_MIPMAP_NEAREST || config.minFilter == GL_LINEAR_MIPMAP_NEAREST)
+                mipmapTex2DArray();
+        }
+
         void texImage2D(unsigned int internalFormat, unsigned int format, unsigned int width, unsigned int height, unsigned int type, const void* data){
             glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, type, data);
+        }
+
+        void texImage2DArray(unsigned int internalFormat, unsigned int format, unsigned int width, unsigned int height, unsigned int layers, unsigned int type) {
+            glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, internalFormat, width, height, layers, 0, format, type, nullptr);
         }
 
         void texParams2D(unsigned int wrap_s, unsigned int wrap_t, unsigned int minFilter, unsigned int magFilter){
@@ -64,6 +113,13 @@ namespace Engine{
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_t);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
+        }
+
+        void texParams2DArray(unsigned int wrap_s, unsigned int wrap_t, unsigned int minFilter, unsigned int magFilter) {
+            glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, wrap_s);
+            glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, wrap_t);
+            glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, minFilter);
+            glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, magFilter);
         }
 
         void mipmapTex2D(unsigned int textureId){
@@ -75,8 +131,16 @@ namespace Engine{
             glGenerateMipmap(GL_TEXTURE_2D);
         }
 
+        void mipmapTex2DArray() {
+            glGenerateMipmap(GL_TEXTURE_2D_ARRAY);
+        }
+
         void bindTex2D(unsigned int textureId){
             glBindTexture(GL_TEXTURE_2D, textureId);
+        }
+
+        void bindTexArray2D(unsigned int textureId) {
+            glBindTexture(GL_TEXTURE_2D_ARRAY, textureId);
         }
 
         void generateTex(unsigned int& textureId){

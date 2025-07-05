@@ -42,6 +42,7 @@ namespace Game {
         Engine::Shader::ShaderSun shaderSun;
         unsigned int perlinTextureId;
         unsigned int macroTextureId;
+        unsigned int noiseTextureArrayId;
         unsigned int vaoSphereMesh;
 
         Universe universe;

@@ -120,31 +120,47 @@ namespace Engine {
             getLocation(shader.loc_WaterTreshold, shader.programId, "amountSea");
             getLocation(shader.loc_WaterPower, shader.programId, "waterPower");
             getLocation(shader.loc_WaterColor, shader.programId, "waterColor");
+            getLocation(shader.loc_LandColor0, shader.programId, "landColor0");
+            getLocation(shader.loc_LandColor1, shader.programId, "landColor1");
+            getLocation(shader.loc_LandColorOverlay, shader.programId, "landColorOverlay");
+            getLocation(shader.loc_LandColorPower, shader.programId, "landColorPower");
+
+            getLocation(shader.loc_ContinentalShelfColor, shader.programId, "continentalShelfColor");
             getLocation(shader.loc_LightDirection, shader.programId, "lightDirection");
             getLocation(shader.loc_WaterContinentalShelf, shader.programId, "waterContinentalShelf");
             getLocation(shader.loc_WaterDepth, shader.programId, "waterDepth");
+            getLocation(shader.loc_SurfaceTopologyScale, shader.programId, "surfaceTopologyScale");
+            getLocation(shader.loc_LandColorBlendScale, shader.programId, "landColorBlendScale");
+
 
             getLocation(shader.loc_Tex0, shader.programId, "noiseTex0");
             getLocation(shader.loc_Tex1, shader.programId, "noiseTex1");
+            getLocation(shader.loc_TexArray, shader.programId, "texArray");
         }
 
-        void updateUniforms(PlanetShader& shader, glm::mat4& projectionView, glm::mat4& model, glm::vec3& cameraPosition,
-            glm::vec3& waterColor, glm::vec3& lightDirection, float waterScale, float waterTreshold,
-            float waterPower, float waterContinentalShelf, float waterDepth, unsigned int tex0, unsigned int tex1) {
+        void updateUniforms(PlanetShader& shader, PlanetShaderData& planetShaderData) {
 
             bind(shader.programId);
-            uniform(shader.loc_CameraPosition, cameraPosition);
-            uniform(shader.loc_ProjectionView, projectionView);
-            uniform(shader.loc_Model, model);
-            uniform(shader.loc_WaterScale, waterScale);
-            uniform(shader.loc_WaterTreshold, waterTreshold);
-            uniform(shader.loc_WaterPower, waterPower);
-            uniform(shader.loc_WaterColor, waterColor);
-            uniform(shader.loc_WaterContinentalShelf, waterContinentalShelf);
-            uniform(shader.loc_WaterDepth, waterDepth);
-            uniform(shader.loc_LightDirection, lightDirection);
-            uniform(shader.loc_Tex0, 0, tex0);
-            uniform(shader.loc_Tex1, 1, tex1);
+            uniform(shader.loc_CameraPosition, planetShaderData.cameraPosition);
+            uniform(shader.loc_ProjectionView, planetShaderData.projectionView);
+            uniform(shader.loc_Model, planetShaderData.model);
+            uniform(shader.loc_WaterScale, planetShaderData.waterScale);
+            uniform(shader.loc_WaterTreshold, planetShaderData.waterTreshold);
+            uniform(shader.loc_WaterPower, planetShaderData.waterPower);
+            uniform(shader.loc_WaterColor, planetShaderData.waterColor);
+            uniform(shader.loc_ContinentalShelfColor, planetShaderData.continentalShelfColor);
+            uniform(shader.loc_WaterContinentalShelf, planetShaderData.waterContinentalShelf);
+            uniform(shader.loc_WaterDepth, planetShaderData.waterDepth);
+            uniform(shader.loc_LightDirection, planetShaderData.lightDirection);
+            uniform(shader.loc_Tex0, 0, planetShaderData.tex0);
+            uniform(shader.loc_Tex1, 1, planetShaderData.tex1);
+            uniformTextureArray(shader.loc_TexArray, 2, planetShaderData.texArray);
+            uniform(shader.loc_LandColor0, planetShaderData.landColor0);
+            uniform(shader.loc_LandColor1, planetShaderData.landColor1);
+            uniform(shader.loc_LandColorOverlay, planetShaderData.landColorOverlay);
+            uniform(shader.loc_LandColorPower, planetShaderData.landColorPower);
+            uniform(shader.loc_SurfaceTopologyScale, planetShaderData.surfaceTopologyScale);
+            uniform(shader.loc_LandColorBlendScale, planetShaderData.landColorBlendScale);
         }
 
         void createShaderProgram(unsigned int& shaderProgramId, const char* vertexPath, const char* fragmentPath){
@@ -264,6 +280,12 @@ namespace Engine {
         void uniform(unsigned int location, unsigned int slot, unsigned int textureId) {
             glActiveTexture(GL_TEXTURE0 + slot);
             glBindTexture(GL_TEXTURE_2D, textureId);
+            glUniform1i(location, slot);
+        }
+
+        void uniformTextureArray(unsigned int location, unsigned int slot, unsigned int textureId) {
+            glActiveTexture(GL_TEXTURE0 + slot);
+            glBindTexture(GL_TEXTURE_2D_ARRAY, textureId);
             glUniform1i(location, slot);
         }
 

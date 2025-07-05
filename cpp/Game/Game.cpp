@@ -37,6 +37,9 @@ namespace Game {
         Engine::Texture::createTexture2D(perlinTextureId, "texture/noise/perlinnoise.jpg");
         Engine::Texture::createTexture2D(macroTextureId, "texture/noise/macrovariation.jpg");
 
+        std::vector<std::string> pathList = { "texture/noise/perlinnoise.jpg" , "texture/noise/macrovariation.jpg" };
+        Engine::Texture::createTextureArray2D(noiseTextureArrayId, pathList);
+
         Engine::Shader::createShaderTerrain(shaderTerrain);
 
         universe.init();
