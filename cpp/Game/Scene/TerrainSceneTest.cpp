@@ -32,6 +32,7 @@ namespace Game {
             cameraCtrl.addTargetYaw(deltaX);
         }
 
+#if PLATFORM == WIN
         if (input.getButtonDown(Engine::InputCode::W))
             cameraCtrl.targetTransform.position = cameraCtrl.getPosition() + cameraCtrl.getForward() * 30.f;
 
@@ -49,6 +50,7 @@ namespace Game {
 
         if (input.getButtonDown(Engine::InputCode::Q))
             cameraCtrl.targetTransform.position = cameraCtrl.getPosition() - cameraCtrl.getUp() * 30.f;
+#endif
 
         cameraCtrl.update(dt);
 
@@ -76,14 +78,14 @@ namespace Game {
         }
 
 
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
         if (instanceArray.size()) {
             Engine::VertexBuffer::bufferSubData(game->instanceBufferTerrain, 0, instanceArray.size() * sizeof(TerrainGPUData), &instanceArray[0]);
             Engine::DrawCommand::drawInstanced(game->vaoTerrainBlock, game->terrainBlockMeshData.indexBuffer.totalIndices, game->terrainBlockMeshData.indexBuffer.indexElementType, instanceArray.size());
         }
 
-        glPolygonMode(GL_BACK, GL_FILL);
+        //glPolygonMode(GL_BACK, GL_FILL);
 
     }
 

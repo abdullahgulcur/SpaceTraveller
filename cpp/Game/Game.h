@@ -6,7 +6,10 @@
 
 #include "UniverseScene.h"
 #include "TerrainSceneTest.h"
+
+#if PLATFORM == WIN
 #include "PlanetSceneTest.h"
+#endif
 
 #include "Universe.h"
 #include "ShaderProgram.h"
@@ -35,7 +38,10 @@ namespace Game {
 
         UniverseScene universeScene;
         TerrainSceneTest terrainSceneTest;
+
+#if PLATFORM == WIN
         PlanetSceneTest planetSceneTest;
+#endif
 
         Engine::MeshData::MeshData sphereMeshData;
         Engine::Shader::PlanetShader planetShader;

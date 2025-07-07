@@ -191,6 +191,7 @@ namespace Game {
         if (UniverseScene::planetClick())
             return;
 
+#if PLATFORM == WIN
         if (input.getButtonPress(Engine::InputCode::Space)) {
             glm::vec3 arrivalPoint = currentPlanet.relativePosition + glm::vec3(currentSun.position);
             UniverseScene::setCameraTransformQueue(arrivalPoint, arrivalPoint);
@@ -198,6 +199,8 @@ namespace Game {
             stateCameraMovement = StateCamera::ORBIT_MOVE_TARGET;
             return;
         }
+#endif
+
     }
 
     void UniverseScene::stateOrbitMoveTarget(float dt) {
@@ -247,20 +250,106 @@ namespace Game {
         }
 
         for (int i = 0; i < currentPlanetList.size(); i++) {
-            glm::vec3 waterColor(0.1f, 0.3f, 0.9f);
-            glm::vec3 position = glm::vec3(currentSun.position) + currentPlanetList[i].relativePosition;
+
+            Planet& planet = currentPlanetList[i];
+
+            glm::vec3 position = glm::vec3(currentSun.position) + planet.relativePosition;
             glm::mat4 model = glm::translate(glm::mat4(1), position) * glm::scale(glm::mat4(1.f), glm::vec3(3.f));
-            glm::vec3 lightDirection = glm::normalize(currentPlanetList[i].relativePosition);
-            //Engine::Shader::updateUniforms(game->planetShader, camera.projectionView, model, camera.position, waterColor, waterColor, lightDirection, 5.0f, 0.5f, 2.5f, 0.1f, 0.1f, game->perlinTextureId, game->macroTextureId);
+            glm::vec3 lightDirection = glm::normalize(planet.relativePosition);
+
+            Engine::Shader::PlanetShaderData planetShaderData;
+            planetShaderData.cameraPosition = camera.position;
+            planetShaderData.projectionView = camera.projectionView;
+            planetShaderData.model = model;
+            planetShaderData.waterColor = planet.waterColor;
+            planetShaderData.waterTreshold = planet.amountSea;
+            planetShaderData.continentalShelfColor = planet.continentalShelfColor;
+            planetShaderData.waterContinentalShelf = planet.continentalShelf;
+            planetShaderData.lightDirection = lightDirection;
+            planetShaderData.landColor0 = planet.landColor0;
+            planetShaderData.landColor1 = planet.landColor1;
+            planetShaderData.landColorOverlay = planet.landColorOverlay;
+            planetShaderData.landColorPower = planet.landColorPower;
+            planetShaderData.surfaceTopologyScale = planet.surfaceTopologyScale;
+            planetShaderData.landColorBlendScale = planet.landColorBlendScale;
+            planetShaderData.tex0 = game->perlinTextureId;
+            planetShaderData.tex1 = game->macroTextureId;
+            planetShaderData.texArray = game->noiseTextureArrayId;
+
+            planetShaderData.macroScale = planet.macroScale;
+            planetShaderData.cloudScale = planet.cloudScale;
+            planetShaderData.cloudPower = planet.cloudPower;
+            planetShaderData.cloudOverlay = planet.cloudOverlay;
+            planetShaderData.cloudOpacity = planet.cloudOpacity;
+            planetShaderData.cloudColor = planet.cloudColor;
+            planetShaderData.fresnelPowerClouds = planet.fresnelPowerClouds;
+            planetShaderData.fresnelScaleClouds = planet.fresnelScaleClouds;
+            planetShaderData.fresnelBiasClouds = planet.fresnelBiasClouds;
+            planetShaderData.fresnelPowerAtmosphere = planet.fresnelPowerAtmosphere;
+            planetShaderData.fresnelScaleAtmosphere = planet.fresnelScaleAtmosphere;
+            planetShaderData.fresnelBiasAtmosphere = planet.fresnelBiasAtmosphere;
+
+            planetShaderData.noiseOctaveTexIndex0 = float(planet.noiseOctaveTexIndex0);
+            planetShaderData.noiseOctaveTexIndex1 = float(planet.noiseOctaveTexIndex1);
+            planetShaderData.noiseOctaveTexIndex2 = float(planet.noiseOctaveTexIndex2);
+
+            Engine::Shader::updateUniforms(game->planetShader, planetShaderData);
+
             Engine::DrawCommand::draw(game->vaoSphereMesh, game->sphereMeshData.indexBuffer.totalIndices, game->sphereMeshData.indexBuffer.indexElementType);
         }
 
         for (int i = 0; i < previousPlanetList.size(); i++) {
-            glm::vec3 waterColor(0.1f, 0.3f, 0.9f);
+            /*glm::vec3 waterColor(0.1f, 0.3f, 0.9f);
             glm::vec3 position = glm::vec3(previousSun.position) + previousPlanetList[i].relativePosition;
             glm::mat4 model = glm::translate(glm::mat4(1), position) * glm::scale(glm::mat4(1.f), glm::vec3(3.f));
-            glm::vec3 lightDirection = glm::normalize(previousPlanetList[i].relativePosition);
+            glm::vec3 lightDirection = glm::normalize(previousPlanetList[i].relativePosition);*/
             //Engine::Shader::updateUniforms(game->planetShader, camera.projectionView, model, camera.position, waterColor, waterColor, lightDirection, 5.0f, 0.5f, 2.5f, 0.1f, 0.1f, game->perlinTextureId, game->macroTextureId);
+
+
+            Planet& planet = previousPlanetList[i];
+
+            glm::vec3 position = glm::vec3(previousSun.position) + planet.relativePosition;
+            glm::mat4 model = glm::translate(glm::mat4(1), position) * glm::scale(glm::mat4(1.f), glm::vec3(3.f));
+            glm::vec3 lightDirection = glm::normalize(planet.relativePosition);
+
+            Engine::Shader::PlanetShaderData planetShaderData;
+            planetShaderData.cameraPosition = camera.position;
+            planetShaderData.projectionView = camera.projectionView;
+            planetShaderData.model = model;
+            planetShaderData.waterColor = planet.waterColor;
+            planetShaderData.waterTreshold = planet.amountSea;
+            planetShaderData.continentalShelfColor = planet.continentalShelfColor;
+            planetShaderData.waterContinentalShelf = planet.continentalShelf;
+            planetShaderData.lightDirection = lightDirection;
+            planetShaderData.landColor0 = planet.landColor0;
+            planetShaderData.landColor1 = planet.landColor1;
+            planetShaderData.landColorOverlay = planet.landColorOverlay;
+            planetShaderData.landColorPower = planet.landColorPower;
+            planetShaderData.surfaceTopologyScale = planet.surfaceTopologyScale;
+            planetShaderData.landColorBlendScale = planet.landColorBlendScale;
+            planetShaderData.tex0 = game->perlinTextureId;
+            planetShaderData.tex1 = game->macroTextureId;
+            planetShaderData.texArray = game->noiseTextureArrayId;
+
+            planetShaderData.macroScale = planet.macroScale;
+            planetShaderData.cloudScale = planet.cloudScale;
+            planetShaderData.cloudPower = planet.cloudPower;
+            planetShaderData.cloudOverlay = planet.cloudOverlay;
+            planetShaderData.cloudOpacity = planet.cloudOpacity;
+            planetShaderData.cloudColor = planet.cloudColor;
+            planetShaderData.fresnelPowerClouds = planet.fresnelPowerClouds;
+            planetShaderData.fresnelScaleClouds = planet.fresnelScaleClouds;
+            planetShaderData.fresnelBiasClouds = planet.fresnelBiasClouds;
+            planetShaderData.fresnelPowerAtmosphere = planet.fresnelPowerAtmosphere;
+            planetShaderData.fresnelScaleAtmosphere = planet.fresnelScaleAtmosphere;
+            planetShaderData.fresnelBiasAtmosphere = planet.fresnelBiasAtmosphere;
+
+            planetShaderData.noiseOctaveTexIndex0 = float(planet.noiseOctaveTexIndex0);
+            planetShaderData.noiseOctaveTexIndex1 = float(planet.noiseOctaveTexIndex1);
+            planetShaderData.noiseOctaveTexIndex2 = float(planet.noiseOctaveTexIndex2);
+
+            Engine::Shader::updateUniforms(game->planetShader, planetShaderData);
+
             Engine::DrawCommand::draw(game->vaoSphereMesh, game->sphereMeshData.indexBuffer.totalIndices, game->sphereMeshData.indexBuffer.indexElementType);
         }
     }
@@ -390,7 +479,8 @@ namespace Game {
                 glm::vec2 screenSpacePlanetPosition = UniverseScene::getPointScreenSpacePosition(camera.projectionView, planetPosition);
 
                 if (glm::distance(screenSpacePlanetPosition, pointerPosition) < 100.f) {
-                    glm::vec3 arrivalPoint = UniverseScene::getArrivalPointPlanet(planetPosition, glm::vec3(currentSun.position));
+                    glm::vec3 curentSunPosition = glm::vec3(currentSun.position);
+                    glm::vec3 arrivalPoint = UniverseScene::getArrivalPointPlanet(planetPosition, curentSunPosition);
                     UniverseScene::setCameraTransformQueue(arrivalPoint, planetPosition);
                     translateCameraCtrl.init();
                     stateCameraMovement = StateCamera::SOLAR_SYSTEM_MOVE_TARGET;

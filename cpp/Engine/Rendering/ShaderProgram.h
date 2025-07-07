@@ -27,6 +27,24 @@ namespace Engine {
             float waterDepth;
             float surfaceTopologyScale;
             float landColorBlendScale;
+
+            float macroScale;
+            float cloudScale;
+            float cloudPower;
+            float cloudOverlay;
+            float cloudOpacity;
+            glm::vec3 cloudColor;
+            float fresnelPowerClouds;
+            float fresnelScaleClouds;
+            float fresnelBiasClouds;
+            float fresnelPowerAtmosphere;
+            float fresnelScaleAtmosphere;
+            float fresnelBiasAtmosphere;
+
+            float noiseOctaveTexIndex0;
+            float noiseOctaveTexIndex1;
+            float noiseOctaveTexIndex2;
+
             unsigned int tex0;
             unsigned int tex1;
             unsigned int texArray;
@@ -104,10 +122,24 @@ namespace Engine {
             unsigned int loc_Tex1;
             unsigned int loc_TexArray;
 
-            /*unsigned int loc_;
-            unsigned int loc_;
-            unsigned int loc_;*/
-            // tiling etc.
+
+            unsigned int loc_MacroScale;
+            unsigned int loc_CloudScale;
+            unsigned int loc_CloudPower;
+            unsigned int loc_CloudOverlay;
+            unsigned int loc_CloudOpacity;
+            unsigned int loc_CloudColor;
+            unsigned int loc_FresnelPowerClouds;
+            unsigned int loc_FresnelScaleClouds;
+            unsigned int loc_FresnelBiasClouds;
+            unsigned int loc_FresnelPowerAtmosphere;
+            unsigned int loc_FresnelScaleAtmosphere;
+            unsigned int loc_FresnelBiasAtmosphere;
+
+            unsigned int loc_NoiseOctaveTexIndex0;
+            unsigned int loc_NoiseOctaveTexIndex1;
+            unsigned int loc_NoiseOctaveTexIndex2;
+
         };
 
         struct ShaderSun {

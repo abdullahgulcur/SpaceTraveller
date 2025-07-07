@@ -25,7 +25,6 @@ set(sourceFiles
 
         "Game/Scene/UniverseScene.cpp"
         "Game/Scene/TerrainSceneTest.cpp"
-        "Game/Scene/PlanetSceneTest.cpp"
 
         "Engine/Core/Core.cpp"
         "Engine/Core/Timer.cpp"
@@ -71,6 +70,7 @@ if(${platform} STREQUAL ${android})
 elseif (${platform} STREQUAL ${win})
 
     list(APPEND sourceFiles
+            "Game/Scene/PlanetSceneTest.cpp"
             "Engine/Platform/Glfw/GlfwContext.cpp"
             "Engine/Platform/Glfw/GlfwInput.cpp"
             "Engine/Platform/Windows/WindowsAssetManager.cpp"

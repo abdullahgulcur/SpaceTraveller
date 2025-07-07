@@ -105,6 +105,8 @@ void android_main(struct android_app *pApp) {
             Game::Game* gameInstance = Game::Game::getInstance();
             instance->update();
             gameInstance->update(instance->systemTimer.getDeltaSeconds());
+
+            instance->appSurface.update();
         }
     } while (!pApp->destroyRequested);
 }

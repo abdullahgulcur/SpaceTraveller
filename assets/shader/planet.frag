@@ -1,5 +1,7 @@
 #ifdef ANDROID
 precision mediump float;
+precision mediump sampler2D;
+precision mediump sampler2DArray;
 #endif
 
 #ifdef WIN
@@ -27,19 +29,29 @@ uniform float landColorPower;
 uniform float surfaceTopologyScale;
 uniform float landColorBlendScale;
 
-// macro scale
-// noise texture selection
-// cloud (scale, power, overlay, color)
+uniform float macroScale;
+uniform float cloudScale;
+uniform float cloudPower;
+uniform float cloudOverlay;
+uniform float cloudOpacity;
+uniform vec3 cloudColor;
+uniform float fresnelPowerClouds;
+uniform float fresnelScaleClouds;
+uniform float fresnelBiasClouds;
+uniform float fresnelPowerAtmosphere;
+uniform float fresnelScaleAtmosphere;
+uniform float fresnelBiasAtmosphere;
+
+uniform float noiseOctaveTexIndex0;
+uniform float noiseOctaveTexIndex1;
+uniform float noiseOctaveTexIndex2;
+
+// TODO: noise texture selection
 
 float fresnel(float power, float scale, float bias){
     vec3 viewDir = normalize(cameraPosition - FragPos);
-    return bias + scale * pow(1.0 - max(dot(viewDir, normalize(Normal)), 0.0), power);
-}
-
-float fresnelAtmosphre(float power, float scale, float bias){
-    vec3 viewDir = normalize(cameraPosition - FragPos);
     float viewAngle = 1.0 - dot(viewDir, normalize(Normal));
-    return smoothstep(0.75, 0.95, viewAngle);
+    return smoothstep(power, bias, viewAngle) * scale;
 }
 
 float getSeaBlend(float albedo, float seaAmount){
@@ -51,35 +63,35 @@ float getContinentalShelfBlend(float albedo, float seaAmount, float continentalS
     return smoothstep(continentalShelf, seaAmount, albedo);
 }
 
-float getMacro(vec2 uv){
-    float scale = 3.0; // make it parameter
-    float albedo0 = texture(noiseTex1, vec2(uv.x, uv.y) * scale * 1.6).r;
-    float albedo1 = texture(noiseTex1, vec2(uv.x, uv.y) * scale * 0.2).r * 0.5;
-    float albedo2 = texture(noiseTex1, vec2(uv.x, uv.y) * scale * 0.05).r * 0.25;
-
-    //albedo2 = mix(0.5, 1.0, albedo2);
-
-    //float albedo = albedo0 * albedo1 * albedo2;
-    float albedo = (albedo0 + albedo1 + albedo2) * (1.0 / 1.75);
-    albedo = pow(albedo, 1.5);
-    //float albedo = albedo2;
-    //float albedo = (albedo1 + albedo2) * 0.5;
-
-    //float albedo = albedo0 * albedo1 * albedo2;
-
-    return clamp(mix(0.0, 1.0, albedo), 0.0, 1.0);
-}
-
 vec3 getWeight(vec3 normal){
     vec3 weight = abs(normal);
     weight /= weight.x + weight.y + weight.z;
     return weight;
 }
 
+float getCloudOctave(vec2 uv){
+    float offset = 5.0; // make it parameter
+    float noise = texture(texArray, vec3(vec2(uv.x, uv.y) * cloudScale + vec2(offset) * 1.0, 1.0)).r;
+    noise *= texture(texArray, vec3(vec2(uv.x, uv.y) * cloudScale * 0.25 + vec2(offset) * 16.0, 1.0)).r;
+    noise *= texture(texArray, vec3(vec2(uv.x, uv.y) * cloudScale * 0.05 + vec2(offset) * 256.0, 1.0)).r;
+    return noise;
+}
+
+float getCloudBlend(vec3 weight){
+    float noise = getCloudOctave(vec2(FragPos.y, FragPos.z)) * weight.x;
+    noise += getCloudOctave(vec2(FragPos.x, FragPos.z)) * weight.y;
+    noise += getCloudOctave(vec2(FragPos.x, FragPos.y)) * weight.z;
+    return clamp(pow(noise * cloudOverlay * amountSea, cloudPower), 0.0, 1.0) * cloudOpacity;
+}
+
+float getCloudBorderBlend(float cloud){
+    return step(0.01, cloud) * step(cloud, 0.03);
+}
+
 float getNoiseOctave(vec2 uv){
-    float noise = texture(texArray, vec3(vec2(uv.x, uv.y) * surfaceTopologyScale, 1.0)).r;
-    noise += texture(texArray, vec3(vec2(uv.x, uv.y) * surfaceTopologyScale * 0.2, 0.0)).r;
-    noise += texture(texArray, vec3(vec2(uv.x, uv.y) * surfaceTopologyScale * 0.05, 1.0)).r;
+    float noise = texture(texArray, vec3(vec2(uv.x, uv.y) * surfaceTopologyScale, noiseOctaveTexIndex0)).r;
+    noise += texture(texArray, vec3(vec2(uv.x, uv.y) * surfaceTopologyScale * 0.2, noiseOctaveTexIndex1)).r;
+    noise += texture(texArray, vec3(vec2(uv.x, uv.y) * surfaceTopologyScale * 0.05, noiseOctaveTexIndex2)).r;
     return noise * 0.33;
 }
 
@@ -108,13 +120,23 @@ float getLandColorBlend(vec3 weight){
     return clamp(pow(noise * landColorOverlay, landColorPower), 0.0, 1.0);
 }
 
+// TODO: review it
+float getMacro(vec2 uv){
+    float scale = macroScale;
+    float albedo0 = texture(noiseTex1, vec2(uv.x, uv.y) * scale * 1.6).r;
+    float albedo1 = texture(noiseTex1, vec2(uv.x, uv.y) * scale * 0.2).r * 0.5;
+    float albedo2 = texture(noiseTex1, vec2(uv.x, uv.y) * scale * 0.05).r * 0.25;
+
+    float albedo = (albedo0 + albedo1 + albedo2) * (1.0 / 1.75);
+    albedo = pow(albedo, 1.5);
+
+    return clamp(mix(0.0, 1.0, albedo), 0.0, 1.0);
+}
+
 float getMacro(vec3 weight){
-
-    float macroXY = getMacro(vec2(FragPos.x, FragPos.y));
-    float macroXZ = getMacro(vec2(FragPos.x, FragPos.z));
-    float macroYZ = getMacro(vec2(FragPos.y, FragPos.z));
-
-    float macro = weight.x * macroYZ + weight.y * macroXZ + weight.z * macroXY;
+    float macro = getMacro(vec2(FragPos.y, FragPos.z)) * weight.x;
+    macro += getMacro(vec2(FragPos.x, FragPos.z)) * weight.y;
+    macro += getMacro(vec2(FragPos.x, FragPos.y)) * weight.z;
     return macro;
 }
 
@@ -134,11 +156,16 @@ void main()
     float seaBlend = getSeaBlend(height, amountSea);
     vec3 albedo = mix(landColor * macro, wColor, seaBlend);
 
-    float fresnel0 = fresnel(3.0, 0.25, 0.0);
-    float fresnel1 = fresnelAtmosphre(15.0, 2.0, 0.75);
-    vec3 color = mix(albedo, vec3(1.0), fresnel0);
-    color = mix(color, vec3(0.0, 0.0, 0.95), fresnel1);
+    float cloudBlend = getCloudBlend(weight);
+    float cloudBorder = getCloudBorderBlend(cloudBlend);
 
+    albedo = mix(albedo, vec3(1.0), cloudBlend);
+//    albedo *= (1.0 - cloudBorder);
+
+    float fresnelClouds = fresnel(fresnelPowerClouds, fresnelScaleClouds, fresnelBiasClouds) * amountSea;
+    float fresnelAtmosphre = fresnel(fresnelPowerAtmosphere, fresnelScaleAtmosphere, fresnelBiasAtmosphere) * clamp(amountSea * 1.5, 0.0, 1.0);
+    vec3 color = mix(albedo, vec3(1.0), fresnelClouds);
+    color = mix(color, waterColor, fresnelAtmosphre);
 
     // lighting
     float ambient = 0.0;

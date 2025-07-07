@@ -132,10 +132,27 @@ namespace Engine {
             getLocation(shader.loc_SurfaceTopologyScale, shader.programId, "surfaceTopologyScale");
             getLocation(shader.loc_LandColorBlendScale, shader.programId, "landColorBlendScale");
 
-
             getLocation(shader.loc_Tex0, shader.programId, "noiseTex0");
             getLocation(shader.loc_Tex1, shader.programId, "noiseTex1");
             getLocation(shader.loc_TexArray, shader.programId, "texArray");
+
+            getLocation(shader.loc_MacroScale, shader.programId, "macroScale");
+            getLocation(shader.loc_CloudScale, shader.programId, "cloudScale");
+            getLocation(shader.loc_CloudPower, shader.programId, "cloudPower");
+            getLocation(shader.loc_CloudOverlay, shader.programId, "cloudOverlay");
+            getLocation(shader.loc_CloudOpacity, shader.programId, "cloudOpacity");
+            getLocation(shader.loc_CloudColor, shader.programId, "cloudColor");
+            getLocation(shader.loc_FresnelPowerClouds, shader.programId, "fresnelPowerClouds");
+            getLocation(shader.loc_FresnelScaleClouds, shader.programId, "fresnelScaleClouds");
+            getLocation(shader.loc_FresnelBiasClouds, shader.programId, "fresnelBiasClouds");
+            getLocation(shader.loc_FresnelPowerAtmosphere, shader.programId, "fresnelPowerAtmosphere");
+            getLocation(shader.loc_FresnelScaleAtmosphere, shader.programId, "fresnelScaleAtmosphere");
+            getLocation(shader.loc_FresnelBiasAtmosphere, shader.programId, "fresnelBiasAtmosphere");
+
+            getLocation(shader.loc_NoiseOctaveTexIndex0, shader.programId, "noiseOctaveTexIndex0");
+            getLocation(shader.loc_NoiseOctaveTexIndex1, shader.programId, "noiseOctaveTexIndex1");
+            getLocation(shader.loc_NoiseOctaveTexIndex2, shader.programId, "noiseOctaveTexIndex2");
+
         }
 
         void updateUniforms(PlanetShader& shader, PlanetShaderData& planetShaderData) {
@@ -161,6 +178,24 @@ namespace Engine {
             uniform(shader.loc_LandColorPower, planetShaderData.landColorPower);
             uniform(shader.loc_SurfaceTopologyScale, planetShaderData.surfaceTopologyScale);
             uniform(shader.loc_LandColorBlendScale, planetShaderData.landColorBlendScale);
+
+            uniform(shader.loc_MacroScale, planetShaderData.macroScale);
+            uniform(shader.loc_CloudScale, planetShaderData.cloudScale);
+            uniform(shader.loc_CloudPower, planetShaderData.cloudPower);
+            uniform(shader.loc_CloudOverlay, planetShaderData.cloudOverlay);
+            uniform(shader.loc_CloudOpacity, planetShaderData.cloudOpacity);
+            uniform(shader.loc_CloudColor, planetShaderData.cloudColor);
+            uniform(shader.loc_FresnelPowerClouds, planetShaderData.fresnelPowerClouds);
+            uniform(shader.loc_FresnelScaleClouds, planetShaderData.fresnelScaleClouds);
+            uniform(shader.loc_FresnelBiasClouds, planetShaderData.fresnelBiasClouds);
+            uniform(shader.loc_FresnelPowerAtmosphere, planetShaderData.fresnelPowerAtmosphere);
+            uniform(shader.loc_FresnelScaleAtmosphere, planetShaderData.fresnelScaleAtmosphere);
+            uniform(shader.loc_FresnelBiasAtmosphere, planetShaderData.fresnelBiasAtmosphere);
+
+            uniform(shader.loc_NoiseOctaveTexIndex0, planetShaderData.noiseOctaveTexIndex0);
+            uniform(shader.loc_NoiseOctaveTexIndex1, planetShaderData.noiseOctaveTexIndex1);
+            uniform(shader.loc_NoiseOctaveTexIndex2, planetShaderData.noiseOctaveTexIndex2);
+
         }
 
         void createShaderProgram(unsigned int& shaderProgramId, const char* vertexPath, const char* fragmentPath){
