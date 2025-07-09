@@ -9,9 +9,9 @@ namespace Engine {
 
     public:
 
-        glm::i16vec2 pointerPositionLastPress[8];
-        glm::i16vec2 pointerPosition[8];
-        glm::i16vec2 pointerDelta[8];
+        glm::ivec2 pointerPositionLastPress[8];
+        glm::ivec2 pointerPosition[8];
+        glm::ivec2 pointerDelta[8];
 
         unsigned int pressBuffer;
         unsigned int pressLockBuffer;

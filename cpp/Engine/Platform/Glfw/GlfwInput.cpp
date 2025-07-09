@@ -61,9 +61,16 @@ namespace Engine {
 
 		scrollDelta = 0.f;
 
-		glm::i16vec2 newPointerPos;
+		glm::ivec2 newPointerPos;
 		GlfwInput::getCursorPos(newPointerPos);
+
+
+
 		pointerDelta = newPointerPos - pointerPosition;
+
+		//std::cout << "pointer delta x: " << pointerDelta.x << std::endl;
+
+
 		pointerPosition = newPointerPos;
 
 		//------------- Press ------------- 
@@ -163,14 +170,14 @@ namespace Engine {
 		return BitOperation::getBit(clickBuffer, int(inputCode));
 	}
 
-	void GlfwInput::setCursorPos(glm::i16vec2 cursorPos) {
+	void GlfwInput::setCursorPos(glm::ivec2 cursorPos) {
 		glfwSetCursorPos(GLFW_window, cursorPos.x, cursorPos.y);
 	}
 
-	void GlfwInput::getCursorPos(glm::i16vec2& cursorPos) {
+	void GlfwInput::getCursorPos(glm::ivec2& cursorPos) {
 		double xPos, yPos;
 		glfwGetCursorPos(GLFW_window, &xPos, &yPos);
-		cursorPos = glm::i16vec2(xPos, yPos);
+		cursorPos = glm::ivec2(xPos, yPos);
 	}
 
 	void GlfwInput::setCursorVisible(bool visible) {

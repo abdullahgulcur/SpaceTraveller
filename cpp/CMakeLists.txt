@@ -39,19 +39,14 @@ set(sourceFiles
 
         "Engine/Rendering/Camera.cpp"
         "Engine/Rendering/IndexBuffer.cpp"
-        "Engine/Rendering/SceneRenderer.cpp"
         "Engine/Rendering/ShaderProgram.cpp"
-        "Engine/Rendering/StaticMesh.cpp"
         "Engine/Rendering/Texture2D.cpp"
         "Engine/Rendering/Vao.cpp"
         "Engine/Rendering/VertexBuffer.cpp"
         "Engine/Rendering/ParticleSystem.cpp"
-        "Engine/Rendering/Particle.cpp"
         "Engine/Rendering/DrawCommand.cpp"
         "Engine/Rendering/FrameBuffer.cpp"
-        "Engine/Rendering/Renderer.cpp"
         "Engine/Rendering/Gizmo.cpp"
-        "Engine/Rendering/Entity.cpp"
 
         "Engine/Resource/MeshData.cpp"
 

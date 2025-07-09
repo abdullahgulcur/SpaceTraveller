@@ -147,6 +147,9 @@ namespace Game {
         Engine::Input& input = core->input;
         Engine::AppSurface& appSurface = core->appSurface;
 
+        /* CAMERA UPDATE */
+        translateCameraCtrl.update(dt);
+
         /* PARTICLE SYSTEM UPDATE */
         Engine::ParticleSystem::update(particleSolarSystems, 1.f);
 
@@ -161,9 +164,6 @@ namespace Game {
             translateCameraCtrl.cleanQueue();
             return;
         }
-
-        translateCameraCtrl.update(dt);
-
     }
 
     void UniverseScene::stateOrbitIdle(float dt) {
@@ -192,7 +192,7 @@ namespace Game {
             return;
 
 #if PLATFORM == WIN
-        if (input.getButtonPress(Engine::InputCode::Space)) {
+        if (input.getButtonPress(Engine::InputCode::Space)) { 
             glm::vec3 arrivalPoint = currentPlanet.relativePosition + glm::vec3(currentSun.position);
             UniverseScene::setCameraTransformQueue(arrivalPoint, arrivalPoint);
             translateCameraCtrl.init();
@@ -216,6 +216,9 @@ namespace Game {
         /* PARTICLE SYSTEM UPDATE */
         Engine::ParticleSystem::update(particleSolarSystems, 1.f);
 
+        /* CAMERA UPDATE */
+        translateCameraCtrl.update(dt);
+
         /* ENGINE CAMERA LOOK AT */
         Engine::Camera::lookAt(camera, translateCameraCtrl.getPosition(), translateCameraCtrl.getPosition() + translateCameraCtrl.getForward(), glm::vec3(0.f, 1.f, 0.f));
 
@@ -226,7 +229,6 @@ namespace Game {
             game->terrainSceneTest.start();
             return;
         }
-        translateCameraCtrl.update(dt);
     }
 
     void UniverseScene::renderSolarSystem() {
@@ -451,7 +453,7 @@ namespace Game {
                 glm::vec3 sunPosition = glm::vec3(game->universe.solarSystemList[i].position);
                 glm::vec2 screenSpaceSunPosition = UniverseScene::getPointScreenSpacePosition(camera.projectionView, sunPosition);
 
-                if (glm::distance(screenSpaceSunPosition, pointerPosition) < 10.f) {
+                if (glm::distance(screenSpaceSunPosition, pointerPosition) < 30.f) {
                     glm::vec3 arrivalPoint = UniverseScene::getArrivalPoint(sunPosition);
                     UniverseScene::setCameraTransformQueue(arrivalPoint, sunPosition);
                     translateCameraCtrl.init();

@@ -7,13 +7,15 @@ namespace Engine {
     void AndroidInput::init() {
 
         for(int i = 0; i < 8; i++){
-            pointerPositionLastPress[i] = glm::i16vec2(0);
-            pointerPosition[i] = glm::i16vec2(0);
-            pointerDelta[i] = glm::i16vec2(0);
+            pointerPositionLastPress[i] = glm::ivec2(0);
+            pointerPosition[i] = glm::ivec2(0);
+            pointerDelta[i] = glm::ivec2(0);
         }
     }
 
     void AndroidInput::update() {
+
+        clickBuffer = 0;
 
         auto *inputBuffer = android_app_swap_input_buffers(AndroidApplication::application);
         if (!inputBuffer)
@@ -56,7 +58,6 @@ namespace Engine {
         pressBuffer = 0;
         upBuffer = 0;
         //downBuffer = 0;
-        clickBuffer = 0;
 
         // handle motion events (motionEventsCounts can be 0).
         for (auto i = 0; i < inputBuffer->motionEventsCount; i++) {
@@ -107,7 +108,7 @@ namespace Engine {
                         x = GameActivityPointerAxes_getX(&pointer);
                         y = GameActivityPointerAxes_getY(&pointer);
 
-                        glm::i16vec2 newPosition = glm::ivec2(x,y);
+                        glm::ivec2 newPosition = glm::ivec2(x,y);
                         pointerDelta[pointer.id] = newPosition - pointerPosition[pointer.id];
                         pointerPosition[pointer.id] = newPosition;
 

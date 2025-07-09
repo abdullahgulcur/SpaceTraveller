@@ -13,8 +13,8 @@ namespace Game {
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
 //        sceneType = SceneType::TERRAIN_TEST;
-        sceneType = SceneType::UNIVERSE;
-        //sceneType = SceneType::PLANET_TEST;
+        //sceneType = SceneType::UNIVERSE;
+        sceneType = SceneType::PLANET_TEST;
 
         Engine::VertexBuffer::generateBillboardVertexBuffer(vertexBufferBillboard);
 
@@ -34,10 +34,10 @@ namespace Game {
 
         Engine::Vao::createLitMeshTexturedVao(vaoSphereMesh, sphereMeshData.vertexBuffer, sphereMeshData.indexBuffer.bufferId);
         Engine::Shader::createShaderPlanet(planetShader);
-        Engine::Texture::createTexture2D(perlinTextureId, "texture/noise/perlinnoise.jpg");
-        Engine::Texture::createTexture2D(macroTextureId, "texture/noise/macrovariation.jpg");
+        Engine::Texture::createTexture2D(perlinTextureId, "texture/noise/perlin.jpg");
+        Engine::Texture::createTexture2D(macroTextureId, "texture/noise/macro.jpg");
 
-        std::vector<std::string> pathList = { "texture/noise/perlinnoise.jpg" , "texture/noise/macrovariation.jpg" };
+        std::vector<std::string> pathList = { "texture/noise/perlin.jpg" , "texture/noise/macro.jpg" };
         Engine::Texture::createTextureArray2D(noiseTextureArrayId, pathList);
 
         Engine::Shader::createShaderTerrain(shaderTerrain);

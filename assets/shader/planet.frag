@@ -1,5 +1,5 @@
 #ifdef ANDROID
-precision mediump float;
+precision highp float;
 precision mediump sampler2D;
 precision mediump sampler2DArray;
 #endif
@@ -126,7 +126,7 @@ float getMacro(vec2 uv){
     float albedo0 = texture(noiseTex1, vec2(uv.x, uv.y) * scale * 1.6).r;
     float albedo1 = texture(noiseTex1, vec2(uv.x, uv.y) * scale * 0.2).r * 0.5;
     float albedo2 = texture(noiseTex1, vec2(uv.x, uv.y) * scale * 0.05).r * 0.25;
-
+//    float albedo = (albedo0 + albedo1) * (1.0 / 1.75);
     float albedo = (albedo0 + albedo1 + albedo2) * (1.0 / 1.75);
     albedo = pow(albedo, 1.5);
 
@@ -144,20 +144,19 @@ void main()
 {
     vec3 normal = normalize(Normal);
     vec3 weight = getWeight(normal);
-    float height = getNoise(weight);
-    float macro = getMacro(weight);
+    float height = getNoise(weight); // attention
+    float macro = getMacro(weight); // attention
 
     float continentalShelfBlend = getContinentalShelfBlend(height, amountSea, waterContinentalShelf);
     vec3 wColor = mix(waterColor, continentalShelfColor, continentalShelfBlend);
 
-    float blendNoise = getLandColorBlend(weight);
+    float blendNoise = getLandColorBlend(weight); // attention
     vec3 landColor = mix(landColor0, landColor1, blendNoise);
 
     float seaBlend = getSeaBlend(height, amountSea);
     vec3 albedo = mix(landColor * macro, wColor, seaBlend);
 
-    float cloudBlend = getCloudBlend(weight);
-    float cloudBorder = getCloudBorderBlend(cloudBlend);
+    float cloudBlend = getCloudBlend(weight); // attention
 
     albedo = mix(albedo, vec3(1.0), cloudBlend);
 //    albedo *= (1.0 - cloudBorder);
@@ -176,5 +175,8 @@ void main()
     // gamma correct
     color = pow(color, vec3(1.0/2.2));
     // out
+
+//    float col = height * macro * cloudBlend * blendNoise;
+//    col = clamp(col + 0.5, 0.0, 1.0);
     FragColor = vec4(vec3(color), 1.0);
 }

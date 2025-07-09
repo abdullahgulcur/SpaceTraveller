@@ -2,12 +2,15 @@
 #include "TranslateCameraController.h""
 #include "gtc/matrix_transform.hpp"
 #include "Algebra.h"
+#include "Game.h"
 
 namespace Game {
 
 	void TranslateCameraController::init() {
 		stopWatch.start();
 		isUpdating = true;
+
+		//TranslateCameraController::update(0.f);
 	}
 
 	void TranslateCameraController::update(float dt) {

@@ -39,10 +39,10 @@ namespace Engine {
 
     public:
 
-        glm::i16vec2 pointerPositionLastPress;
+        glm::ivec2 pointerPositionLastPress;
 
-        glm::i16vec2 pointerPosition;
-        glm::i16vec2 pointerDelta;
+        glm::ivec2 pointerPosition;
+        glm::ivec2 pointerDelta;
 
         float scrollDelta = 0.f;
 
@@ -61,8 +61,8 @@ namespace Engine {
         bool getButtonPress(InputCode inputCode);
         bool getButtonUp(InputCode inputCode);
         bool getButtonClick(InputCode inputCode);
-        void setCursorPos(glm::i16vec2 cursorPos);
-        void getCursorPos(glm::i16vec2& cursorPos);
+        void setCursorPos(glm::ivec2 cursorPos);
+        void getCursorPos(glm::ivec2& cursorPos);
         void setCursorVisible(bool visible);
 
     };

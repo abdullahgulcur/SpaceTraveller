@@ -24,7 +24,7 @@ namespace Game {
                 planet.surfaceTopologyScale = Engine::Random::randomFloat(0.f, 3.f);
                 planet.landColorBlendScale = Engine::Random::randomFloat(0.1f, 5.f);
                 planet.macroScale = Engine::Random::randomFloat(0.5f, 5.f);
-                planet.cloudScale = Engine::Random::randomFloat(0.15f, 0.4f);
+                planet.cloudScale = Engine::Random::randomFloat(1.f, 2.f);
                 planet.cloudPower = Engine::Random::randomFloat(7.f, 20.f);
                 planet.cloudOverlay = Engine::Random::randomFloat(0.f, 4.f);
                 planet.fresnelPowerClouds = Engine::Random::randomFloat(0.f, 0.15f);

@@ -58,7 +58,7 @@ namespace Game {
 
         ImGui::ColorEdit3("Cloud Color", (float*)&cloudColor, base_flags);
         ImGui::DragFloat("Macro Scale", &macroScale, 0.01f, 0.5f, 5.f);
-        ImGui::DragFloat("Cloud Scale", &cloudScale, 0.01f, 0.15f, 0.4f);
+        ImGui::DragFloat("Cloud Scale", &cloudScale, 0.01f, 1.f, 2.f);
         ImGui::DragFloat("Cloud Power", &cloudPower, 0.1f, 7.0f, 20.f);
         ImGui::DragFloat("Cloud Overlay", &cloudOverlay, 0.01f, 0.f, 4.0f);
         ImGui::DragFloat("Cloud Opacity", &cloudOpacity, 0.01f, 0.f, 1.f);
@@ -73,11 +73,11 @@ namespace Game {
             /*waterColor = Engine::Random::randomVec3(glm::vec3(0.f), glm::vec3(1.f));
             continentalShelfColor = Engine::Random::randomVec3(glm::vec3(0.f), glm::vec3(1.f));*/
 
-            //landColor0 = Engine::Random::randomVec3(glm::vec3(0.f), glm::vec3(1.f));
-            //landColor1 = Engine::Random::randomVec3(glm::vec3(0.f), glm::vec3(1.f));
+            landColor0 = Engine::Random::randomVec3(glm::vec3(0.f), glm::vec3(1.f));
+            landColor1 = Engine::Random::randomVec3(glm::vec3(0.f), glm::vec3(1.f));
 
-            landColor0 = glm::vec3(0.6, 0.25, 0.1);
-            landColor1 = glm::vec3(0.4, 0.2, 0.1);
+            /*landColor0 = glm::vec3(0.6, 0.25, 0.1);
+            landColor1 = glm::vec3(0.4, 0.2, 0.1);*/
 
             amountSea = Engine::Random::randomFloat(0.f, 1.f);
             continentalShelf = Engine::Random::randomFloat(0.f, 0.1f);
@@ -86,7 +86,7 @@ namespace Game {
             surfaceTopologyScale = Engine::Random::randomFloat(0.f, 3.f);
             landColorBlendScale = Engine::Random::randomFloat(0.1f, 5.f);
             macroScale = Engine::Random::randomFloat(0.5f, 5.f);
-            cloudScale = Engine::Random::randomFloat(0.15f, 0.4f);
+            cloudScale = Engine::Random::randomFloat(1.f, 2.f);
             cloudPower = Engine::Random::randomFloat(7.f, 20.f);
             cloudOverlay = Engine::Random::randomFloat(0.f, 4.f);
             //cloudOpacity = Engine::Random::randomFloat(0.f, 1.f);
