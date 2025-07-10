@@ -74,9 +74,9 @@ namespace Engine {
 	//	cursorPos = glm::u16vec2(xPos, yPos);
 	//}
 
-	void GlfwContext::getScreenSize(glm::u16vec2& screenSize) {
+	void GlfwContext::getScreenSize(glm::ivec2& screenSize) {
 
-		screenSize = glm::u16vec2(mode->width, mode->height);
+		screenSize = glm::ivec2(mode->width, mode->height);
 	}
 
 	//void GlfwContext::setCursorVisible(bool visible) {

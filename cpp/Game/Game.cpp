@@ -13,15 +13,17 @@ namespace Game {
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
 //        sceneType = SceneType::TERRAIN_TEST;
-        //sceneType = SceneType::UNIVERSE;
-        sceneType = SceneType::PLANET_TEST;
+        sceneType = SceneType::UNIVERSE;
+        //sceneType = SceneType::PLANET_TEST;
 
         Engine::VertexBuffer::generateBillboardVertexBuffer(vertexBufferBillboard);
+        Engine::VertexBuffer::generateQuadVertexBuffer(vertexBufferQuad);
 
         Engine::VertexBuffer::generate(instanceBufferParticleDynamic, 16384, nullptr);
         Engine::VertexBuffer::generate(instanceBufferTerrain, 1224, nullptr); // level [0,10] her biri 4 byte, 36 + 27 * 9
 
         Engine::Vao::createParticleMeshSolarSystemVao(vaoParticleSolarSystem, vertexBufferBillboard, instanceBufferParticleDynamic);
+        Engine::Vao::createQuadMeshVao(quadVAO, vertexBufferQuad);
 
         Engine::Shader::createShaderSun(shaderSun);
         Engine::Shader::createShaderParticleSolarSystem(shaderParticleSolarSystem);
@@ -65,6 +67,12 @@ namespace Game {
 
         Engine::Core* core = Engine::Core::getInstance();
         Engine::Camera::init(camera, 45.0f, core->appSurface.getAspectRatio());
+
+        glm::ivec2 screenSize;
+        core->appSurface.getSize(screenSize);
+
+        sceneFrame.init(screenSize);
+
 
         terrainGeometryManager.init(camera.position);
     }

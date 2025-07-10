@@ -11,6 +11,7 @@
 #include "PlanetSceneTest.h"
 #endif
 
+#include "SceneFrame.h"
 #include "Universe.h"
 #include "ShaderProgram.h"
 #include "Gizmo.h"
@@ -38,6 +39,7 @@ namespace Game {
 
         UniverseScene universeScene;
         TerrainSceneTest terrainSceneTest;
+        SceneFrame sceneFrame;
 
 #if PLATFORM == WIN
         PlanetSceneTest planetSceneTest;
@@ -61,6 +63,7 @@ namespace Game {
         Engine::ParticleSystem::ParticleSolarSystem<256> particleSolarSystems;
         Engine::Shader::ShaderParticleSolarSystem shaderParticleSolarSystem;
         unsigned int vertexBufferBillboard;
+        unsigned int vertexBufferQuad;
         unsigned int instanceBufferParticleDynamic;
         unsigned int vaoParticleSolarSystem;
 
@@ -70,6 +73,8 @@ namespace Game {
         Engine::MeshData::MeshData terrainBlockMeshData;
         Engine::MeshData::MeshData terrainOuterDegenerateMeshData;
         Engine::Shader::ShaderTerrain shaderTerrain;
+
+        unsigned int quadVAO;
 
         SceneType sceneType;
 

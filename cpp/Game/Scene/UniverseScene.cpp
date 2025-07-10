@@ -52,12 +52,14 @@ namespace Game {
         }
 
         /* RENDER PART */
-        Engine::FrameBuffer::refreshScreen();
-        UniverseScene::renderStars();
+        Game* game = Game::getInstance();
 
-        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        game->sceneFrame.activate();
+
+        UniverseScene::renderStars();
         UniverseScene::renderSolarSystem();
-        //glPolygonMode(GL_BACK, GL_FILL);
+
+        game->sceneFrame.postProcess();
     }
 
     void UniverseScene::stateUniverseIdle(float dt) {
@@ -408,7 +410,7 @@ namespace Game {
         glm::vec4 clipSpace = projectionView * glm::vec4(position, 1.f);
         glm::vec3 ndc = glm::vec3(clipSpace) / clipSpace.w;
         glm::vec2 screenSpaceCoordsNormalized = glm::vec2(ndc);
-        glm::u16vec2 screenSpaceCoords;
+        glm::ivec2 screenSpaceCoords;
         Engine::Core::getInstance()->appSurface.getScreenSpaceCoordinate(screenSpaceCoords, screenSpaceCoordsNormalized);
         return glm::vec2(screenSpaceCoords);
     }

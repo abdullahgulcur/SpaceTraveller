@@ -155,12 +155,18 @@ namespace Engine {
             unsigned int loc_BlockSize;
         };
 
+        struct ShaderFXAA {
+            unsigned int programId;
+            unsigned int loc_Tex;
+            unsigned int loc_ScreenSize;
+        };
         
         void createShaderGrid(ShaderGrid& program);
         void createShaderParticle(ShaderParticle& program);
         void createShaderParticle(ShaderParticleTextured& program);
         void createShaderParticleSolarSystem(ShaderParticleSolarSystem& shader);
         void createShaderTerrain(ShaderTerrain& shader);
+        void createShaderFXAA(ShaderFXAA& shader);
         void createShaderGalaxy(unsigned int& program);
         //void createShaderPhong(ShaderPhongTextured& program);
         //void createShaderPhong(ShaderPhong& program);
@@ -236,6 +242,9 @@ namespace Engine {
         }
 
         void updateUniforms(ShaderTerrain& program, glm::mat4& projectionView, glm::vec3& cameraPosition, unsigned int blockSize);
+
+        void updateUniforms(ShaderFXAA& program, unsigned int tex, glm::ivec2 screenSize);
+
     }
 
 }

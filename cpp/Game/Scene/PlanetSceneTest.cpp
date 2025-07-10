@@ -122,7 +122,7 @@ namespace Game {
 
         Engine::Camera::lookAt(camera, cameraCtrl.m_position, glm::vec3(0.f), glm::vec3(0.f, 1.f, 0.f));
 
-        Engine::FrameBuffer::refreshScreen();
+        game->sceneFrame.activate();
 
         Engine::Shader::PlanetShaderData planetShaderData;
         planetShaderData.cameraPosition = camera.position;
@@ -162,6 +162,8 @@ namespace Game {
 
         Engine::Shader::updateUniforms(game->planetShader, planetShaderData);
         Engine::DrawCommand::draw(game->vaoSphereMesh, game->sphereMeshData.indexBuffer.totalIndices, game->sphereMeshData.indexBuffer.indexElementType);
+
+        game->sceneFrame.postProcess();
 
         //---------
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

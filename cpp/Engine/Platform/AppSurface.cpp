@@ -53,12 +53,12 @@ namespace Engine {
 #endif
     }
 
-    void AppSurface::getSize(glm::u16vec2& size) {
-        size = glm::u16vec2(AppSurface::getWidth(), AppSurface::getHeight());
+    void AppSurface::getSize(glm::ivec2& size) {
+        size = glm::ivec2(AppSurface::getWidth(), AppSurface::getHeight());
     }
 
-    void AppSurface::getScreenSpaceCoordinate(glm::u16vec2& screenSpaceCoordinate, glm::vec2 normalizedCoordinate) {
-        glm::u16vec2 size;
+    void AppSurface::getScreenSpaceCoordinate(glm::ivec2& screenSpaceCoordinate, glm::vec2 normalizedCoordinate) {
+        glm::ivec2 size;
         AppSurface::getSize(size);
 
         screenSpaceCoordinate.x = (normalizedCoordinate.x + 1.0f) * 0.5f * size.x;

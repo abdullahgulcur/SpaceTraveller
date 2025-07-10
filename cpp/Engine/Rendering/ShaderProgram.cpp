@@ -15,6 +15,13 @@ namespace Engine {
             uniform(program.loc_BlockSize, blockSize);
         }
 
+        void updateUniforms(ShaderFXAA& program, unsigned int tex, glm::ivec2 screenSize) {
+            bind(program.programId);
+            uniform(program.loc_Tex, 0, tex);
+            uniform(program.loc_ScreenSize, screenSize);
+        }
+
+
         void createShaderGalaxy(unsigned int& program){
             createShaderProgram(program, "shader/quad.vert", "shader/galaxy.frag");
             bind(program);
@@ -93,6 +100,17 @@ namespace Engine {
             getLocation(shader.loc_ProjectionView, shader.programId, "projectionView");
             getLocation(shader.loc_CameraPosition, shader.programId, "cameraPosition");
             getLocation(shader.loc_BlockSize, shader.programId, "blockSize");
+        }
+
+        void createShaderFXAA(ShaderFXAA& shader) {
+
+            std::string vertShader = "shader/quad.vert";
+            std::string fragShader = "shader/postprocess/fxaa.frag";
+
+            createShaderProgram(shader.programId, vertShader.c_str(), fragShader.c_str());
+            bind(shader.programId);
+            getLocation(shader.loc_Tex, shader.programId, "tex");
+            getLocation(shader.loc_ScreenSize, shader.programId, "screenSize");
         }
 
         void createShaderPlanet(PlanetShader& shader) {

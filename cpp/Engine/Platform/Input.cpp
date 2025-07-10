@@ -42,13 +42,13 @@ namespace Engine {
     void Input::getPointerPositionNormalized(glm::vec2& position) {
 
 #if PLATFORM == ANDROID
-        glm::u16vec2 size;
+        glm::ivec2 size;
         Core::getInstance()->appSurface.getSize(size);
         position.x = (input.pointerPosition[0].x / (float)size.x) * 2.0f - 1.0f;
         //position.y = (input.pointerPosition.y / (float)size.y) * 2.0f - 1.0f;
         position.y = 1.0f - (input.pointerPosition[0].y / (float)size.y) * 2.0f;
 #elif PLATFORM == WIN
-        glm::u16vec2 size;
+        glm::ivec2 size;
         Core::getInstance()->appSurface.getSize(size);
         position.x = (input.pointerPosition.x / (float)size.x) * 2.0f - 1.0f;
         //position.y = (input.pointerPosition.y / (float)size.y) * 2.0f - 1.0f;

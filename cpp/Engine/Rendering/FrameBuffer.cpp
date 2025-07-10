@@ -25,6 +25,14 @@ namespace Engine{
             setFrameBufferTexture(attachment, textureId);
         }
 
+
+        void generateRBO(unsigned int& RBO, glm::ivec2 size) {
+            glGenRenderbuffers(1, &RBO);
+            glBindRenderbuffer(GL_RENDERBUFFER, RBO);
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, size.x, size.y);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, RBO);
+        }
+
         void deleteFbo(unsigned int& fbo){
             unbindFbo();
             glDeleteFramebuffers(1, &fbo);

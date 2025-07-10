@@ -1,6 +1,3 @@
-# For more information about using CMake with Android Studio, read the
-# documentation: https://d.android.com/studio/projects/add-native-code.html
-
 cmake_minimum_required(VERSION 3.20)
 
 project("space")
@@ -16,12 +13,13 @@ set(platform ${win})
 set(sourceFiles
 
         "main.cpp"
-
+        
         "Game/Game.cpp"
         "Game/Universe.cpp"
         "Game/OrbitCameraController.cpp"
         "Game/TranslateCameraController.cpp"
         "Game/CameraController.cpp"
+        "Game/SceneFrame.cpp"
 
         "Game/Scene/UniverseScene.cpp"
         "Game/Scene/TerrainSceneTest.cpp"

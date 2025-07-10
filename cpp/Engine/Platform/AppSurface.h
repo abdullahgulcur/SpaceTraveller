@@ -28,7 +28,7 @@ namespace Engine {
         bool aspectChanged();
         unsigned int getWidth();
         unsigned int getHeight();
-        void getSize(glm::u16vec2& size);
-        void getScreenSpaceCoordinate(glm::u16vec2& screenSpaceCoordinate, glm::vec2 normalizedCoordinate);
+        void getSize(glm::ivec2& size);
+        void getScreenSpaceCoordinate(glm::ivec2& screenSpaceCoordinate, glm::vec2 normalizedCoordinate);
     };
 }

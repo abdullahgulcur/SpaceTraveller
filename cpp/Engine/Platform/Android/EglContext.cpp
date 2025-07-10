@@ -69,9 +69,8 @@ namespace Engine {
         this->surface = surface;
         this->context = context;
 
-        // make width and height invalid so it gets updated the first frame in @a updateRenderArea()
-        this->width = -1;
-        this->height = -1;
+        eglQuerySurface(display, surface, EGL_WIDTH, &this->width);
+        eglQuerySurface(display, surface, EGL_HEIGHT, &this->height);
     }
 
     void EglContext::updateRenderArea() {
