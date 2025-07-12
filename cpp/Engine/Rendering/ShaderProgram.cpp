@@ -150,8 +150,6 @@ namespace Engine {
             getLocation(shader.loc_SurfaceTopologyScale, shader.programId, "surfaceTopologyScale");
             getLocation(shader.loc_LandColorBlendScale, shader.programId, "landColorBlendScale");
 
-            getLocation(shader.loc_Tex0, shader.programId, "noiseTex0");
-            getLocation(shader.loc_Tex1, shader.programId, "noiseTex1");
             getLocation(shader.loc_TexArray, shader.programId, "texArray");
 
             getLocation(shader.loc_MacroScale, shader.programId, "macroScale");
@@ -169,7 +167,6 @@ namespace Engine {
 
             getLocation(shader.loc_NoiseOctaveTexIndex0, shader.programId, "noiseOctaveTexIndex0");
             getLocation(shader.loc_NoiseOctaveTexIndex1, shader.programId, "noiseOctaveTexIndex1");
-            getLocation(shader.loc_NoiseOctaveTexIndex2, shader.programId, "noiseOctaveTexIndex2");
 
         }
 
@@ -187,9 +184,7 @@ namespace Engine {
             uniform(shader.loc_WaterContinentalShelf, planetShaderData.waterContinentalShelf);
             uniform(shader.loc_WaterDepth, planetShaderData.waterDepth);
             uniform(shader.loc_LightDirection, planetShaderData.lightDirection);
-            uniform(shader.loc_Tex0, 0, planetShaderData.tex0);
-            uniform(shader.loc_Tex1, 1, planetShaderData.tex1);
-            uniformTextureArray(shader.loc_TexArray, 2, planetShaderData.texArray);
+            uniformTextureArray(shader.loc_TexArray, 0, planetShaderData.texArray);
             uniform(shader.loc_LandColor0, planetShaderData.landColor0);
             uniform(shader.loc_LandColor1, planetShaderData.landColor1);
             uniform(shader.loc_LandColorOverlay, planetShaderData.landColorOverlay);
@@ -212,7 +207,6 @@ namespace Engine {
 
             uniform(shader.loc_NoiseOctaveTexIndex0, planetShaderData.noiseOctaveTexIndex0);
             uniform(shader.loc_NoiseOctaveTexIndex1, planetShaderData.noiseOctaveTexIndex1);
-            uniform(shader.loc_NoiseOctaveTexIndex2, planetShaderData.noiseOctaveTexIndex2);
 
         }
 

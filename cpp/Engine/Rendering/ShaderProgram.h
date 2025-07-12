@@ -118,10 +118,7 @@ namespace Engine {
             unsigned int loc_SurfaceTopologyScale;
             unsigned int loc_LandColorBlendScale;
 
-            unsigned int loc_Tex0;
-            unsigned int loc_Tex1;
             unsigned int loc_TexArray;
-
 
             unsigned int loc_MacroScale;
             unsigned int loc_CloudScale;
@@ -138,7 +135,6 @@ namespace Engine {
 
             unsigned int loc_NoiseOctaveTexIndex0;
             unsigned int loc_NoiseOctaveTexIndex1;
-            unsigned int loc_NoiseOctaveTexIndex2;
 
         };
 

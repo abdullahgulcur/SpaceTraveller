@@ -1,11 +1,14 @@
 #pragma once
 
 #include "OrbitCameraController.h"
+#include "Universe.h"
 
 namespace Game {
 
     class PlanetSceneTest {
     private:
+
+        std::vector<PlanetColors> planetColors;
 
         glm::vec3 landColor0{ 32 / 255.f, 45 / 255.f, 18 / 255.f };
         glm::vec3 landColor1{ 93 / 255.f, 76 / 255.f, 31 / 255.f };
@@ -41,6 +44,7 @@ namespace Game {
         ~PlanetSceneTest() {}
 
         void init();
+        void parsePlanetColors(std::vector<PlanetColors>& planetColors, const std::vector<unsigned char>& buffer);
         void start();
         void update(float dt);
 

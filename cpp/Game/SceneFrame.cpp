@@ -34,9 +34,11 @@ namespace Game {
 
         Engine::FrameBuffer::generateRBO(RBO, size);
 
-        if (!Engine::FrameBuffer::frameBufferComplete()) {
-            int x = 5;
-        }
+        Engine::FrameBuffer::unbindFbo();
+
+        //if (!Engine::FrameBuffer::frameBufferComplete()) {
+        //    int x = 5;
+        //}
 
         Engine::Shader::createShaderFXAA(shaderFXAA);
 

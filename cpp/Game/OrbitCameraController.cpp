@@ -14,16 +14,16 @@ namespace Game{
 
     OrbitCameraController::OrbitCameraController()
         : m_target(0.0f, 0.0f, 0.0f),
-        m_distance(4.0f),
+        m_distance(3.0f),
         m_yaw(0.0f),
         m_pitch(0.0f),
         m_targetYaw(0.0f),
         m_targetPitch(0.0f),
-        m_targetDistance(4.0f),
+        m_targetDistance(3.0f),
         m_yawVelocity(0.0f),
         m_pitchVelocity(0.0f),
         m_distanceVelocity(0.0f),
-        m_position(0.0f, 0.0f, 4.0f),
+        m_position(0.0f, 0.0f, 3.0f),
         m_up(0.0f, 1.0f, 0.0f)
     {
     }

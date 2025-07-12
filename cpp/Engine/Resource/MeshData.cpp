@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "MeshData.h"
 #include "tiny_obj_loader.h"
 #include "glm.hpp"
@@ -170,60 +170,175 @@ namespace Engine {
                 glm::vec2 uv;
             };
 
-            const float PI = 3.14159265359;
-            std::vector<Vertex> vertices;
+            const float PI = 3.14159265358979323846f;
+            const float radius = 1.0f;
+            const int   sectorCount = 64;   // longitude divisions (around Y)
+            const int   stackCount = 32;   // latitude  divisions (between the poles)
+
+            const float sectorStep = 2.0f * PI / sectorCount;
+            const float stackStep = PI / stackCount;     // 0 … π   (north→south)
+
+            std::vector<Vertex>   vertices;
             std::vector<uint32_t> indices;
-            float radius = 1.0f;
-            int sectorCount = 64;
-            int stackCount = 32;
 
-            float sectorStep = 2 * PI / sectorCount;
-            float stackStep = PI / stackCount;
+            /*-------------------------------------------------
+             * 1.  Top pole (one vertex, v = 0)
+             *------------------------------------------------*/
+            vertices.push_back({
+                /*pos*/   {0.0f,  radius, 0.0f},
+                /*nrm*/   {0.0f,  1.0f,   0.0f},
+                /*uv */   {0.0f,  0.0f}
+                });
+            const uint32_t topIndex = 0;
 
-            for (int i = 0; i <= stackCount; ++i) {
-                float stackAngle = PI / 2 - i * stackStep; // from +pi/2 to -pi/2
-                float xy = radius * cosf(stackAngle);      // r * cos(u)
-                float z = radius * sinf(stackAngle);       // r * sin(u)
+            /*-------------------------------------------------
+             * 2.  Body (stacks 1 … stackCount‑1)          v: 0–1
+             *    θ = stackStep … (π-stackStep)
+             *------------------------------------------------*/
+            for (int i = 1; i < stackCount; ++i)                     // exclude poles
+            {
+                float theta = i * stackStep;                         // 0→π
+                float y = radius * cosf(theta);                 // pole axis (Y)
+                float r_xy = radius * sinf(theta);                 // radius of the ring
 
-                for (int j = 0; j <= sectorCount; ++j) {
-                    float sectorAngle = j * sectorStep;    // from 0 to 2pi
+                for (int j = 0; j <= sectorCount; ++j)               // <= to wrap seam
+                {
+                    float phi = j * sectorStep;                      // 0→2π
+                    float x = r_xy * cosf(phi);
+                    float z = r_xy * sinf(phi);
 
-                    float x = xy * cosf(sectorAngle);      // x = r * cos(u) * cos(v)
-                    float y = xy * sinf(sectorAngle);      // y = r * cos(u) * sin(v)
+                    glm::vec3 pos(x, y, -z);
+                    glm::vec3 nrm = glm::normalize(pos);
 
-                    glm::vec3 position(x, y, z);
+                    float u = static_cast<float>(j) / sectorCount;   // 0 … 1 across seam
+                    float v = static_cast<float>(i) / stackCount;    // 0 … 1 down sphere
 
-                    glm::vec3 normal = glm::normalize(position);
-                    glm::vec2 uv(
-                        (float)j / sectorCount,
-                        (float)i / stackCount
-                    );
-
-                    vertices.push_back({ position, normal, uv });
+                    vertices.push_back({ pos, nrm, {u, v} });
                 }
             }
 
-            // indices
-            for (int i = 0; i < stackCount; ++i) {
-                int k1 = i * (sectorCount + 1);     // beginning of current stack
-                int k2 = k1 + sectorCount + 1;      // beginning of next stack
+            /*-------------------------------------------------
+             * 3.  Bottom pole (one vertex, v = 1)
+             *------------------------------------------------*/
+            uint32_t bottomIndex = static_cast<uint32_t>(vertices.size());
+            vertices.push_back({
+                /*pos*/   {0.0f, -radius, 0.0f},
+                /*nrm*/   {0.0f, -1.0f,   0.0f},
+                /*uv */   {0.0f,  1.0f}
+                });
 
-                for (int j = 0; j < sectorCount; ++j, ++k1, ++k2) {
-                    if (i != 0) {
-                        indices.push_back(k1);
-                        indices.push_back(k2);
-                        indices.push_back(k1 + 1);
-                    }
-                    if (i != (stackCount - 1)) {
-                        indices.push_back(k1 + 1);
-                        indices.push_back(k2);
-                        indices.push_back(k2 + 1);
-                    }
+            /*-------------------------------------------------
+             * 4.  Indices
+             *------------------------------------------------*/
+
+             // helper: number of verts in one latitude ring (sectorCount+1)
+            const uint32_t ringVerts = sectorCount + 1;
+
+            // --- top cap ---
+            for (uint32_t j = 0; j < sectorCount; ++j)
+            {
+                uint32_t k1 = 1 + j;          // first ring starts at index 1
+                uint32_t k2 = 1 + j + 1;
+
+                indices.push_back(topIndex);
+                indices.push_back(k1);
+                indices.push_back(k2);
+            }
+
+            // --- body ---
+            for (int i = 0; i < stackCount - 2; ++i)     // rings between the caps
+            {
+                uint32_t k1 = 1 + i * ringVerts;
+                uint32_t k2 = k1 + ringVerts;
+
+                for (uint32_t j = 0; j < sectorCount; ++j, ++k1, ++k2)
+                {
+                    indices.push_back(k1);
+                    indices.push_back(k2);
+                    indices.push_back(k1 + 1);
+
+                    indices.push_back(k1 + 1);
+                    indices.push_back(k2);
+                    indices.push_back(k2 + 1);
                 }
             }
 
-            VertexBuffer::generate(data.vertexBuffer, sizeof(Vertex) * vertices.size(), &vertices[0]);
+            // --- bottom cap ---
+            uint32_t base = 1 + (stackCount - 2) * ringVerts;   // first index of last ring
+            for (uint32_t j = 0; j < sectorCount; ++j)
+            {
+                uint32_t k1 = base + j;
+                uint32_t k2 = base + j + 1;
+
+                indices.push_back(k1);
+                indices.push_back(bottomIndex);
+                indices.push_back(k2);
+            }
+
+            VertexBuffer::generate(data.vertexBuffer, vertices.size() * sizeof(Vertex), vertices.data());
             IndexBuffer::generate(data.indexBuffer, indices);
+
+            //struct Vertex
+            //{
+            //    glm::vec3 position;
+            //    glm::vec3 normal;
+            //    glm::vec2 uv;
+            //};
+
+            //const float PI = 3.14159265359;
+            //std::vector<Vertex> vertices;
+            //std::vector<uint32_t> indices;
+            //float radius = 1.0f;
+            //int sectorCount = 64;
+            //int stackCount = 32;
+
+            //float sectorStep = 2 * PI / sectorCount;
+            //float stackStep = PI / stackCount;
+
+            //for (int i = 0; i <= stackCount; ++i) {
+            //    float stackAngle = PI / 2 - i * stackStep; // from +pi/2 to -pi/2
+            //    float xy = radius * cosf(stackAngle);      // r * cos(u)
+            //    float z = radius * sinf(stackAngle);       // r * sin(u)
+
+            //    for (int j = 0; j <= sectorCount; ++j) {
+            //        float sectorAngle = j * sectorStep;    // from 0 to 2pi
+
+            //        float x = xy * cosf(sectorAngle);      // x = r * cos(u) * cos(v)
+            //        float y = xy * sinf(sectorAngle);      // y = r * cos(u) * sin(v)
+
+            //        glm::vec3 position(x, y, z);
+
+            //        glm::vec3 normal = glm::normalize(position);
+            //        glm::vec2 uv(
+            //            (float)j / sectorCount,
+            //            (float)i / stackCount
+            //        );
+
+            //        vertices.push_back({ position, normal, uv });
+            //    }
+            //}
+
+            //// indices
+            //for (int i = 0; i < stackCount; ++i) {
+            //    int k1 = i * (sectorCount + 1);     // beginning of current stack
+            //    int k2 = k1 + sectorCount + 1;      // beginning of next stack
+
+            //    for (int j = 0; j < sectorCount; ++j, ++k1, ++k2) {
+            //        if (i != 0) {
+            //            indices.push_back(k1);
+            //            indices.push_back(k2);
+            //            indices.push_back(k1 + 1);
+            //        }
+            //        if (i != (stackCount - 1)) {
+            //            indices.push_back(k1 + 1);
+            //            indices.push_back(k2);
+            //            indices.push_back(k2 + 1);
+            //        }
+            //    }
+            //}
+
+            //VertexBuffer::generate(data.vertexBuffer, sizeof(Vertex) * vertices.size(), &vertices[0]);
+            //IndexBuffer::generate(data.indexBuffer, indices);
         }
 
 

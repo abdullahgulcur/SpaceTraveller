@@ -7,6 +7,7 @@
 #include "Core.h"
 #include "VertexBuffer.h"
 #include "RandomValue.h"
+#include "AssetManager.h"
 
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -16,6 +17,28 @@ namespace Game {
 
     void PlanetSceneTest::init() {
 
+    }
+
+    void PlanetSceneTest::parsePlanetColors(std::vector<PlanetColors>& planetColors, const std::vector<unsigned char>& buffer) {
+        
+        std::string text(buffer.begin(), buffer.end());
+        std::istringstream stream(text);
+        std::string line;
+
+        while (std::getline(stream, line)) {
+            std::istringstream linestream(line);
+            int r0, g0, b0, r1, g1, b1, r2, g2, b2, r3, g3, b3;
+
+            linestream >> r0 >> g0 >> b0 >> r1 >> g1 >> b1 >> r2 >> g2 >> b2 >> r3 >> g3 >> b3;
+
+            PlanetColors colors;
+            colors.landA = glm::u8vec3(r0, g0, b0);
+            colors.landB = glm::u8vec3(r1, g1, b1);
+            colors.sea = glm::u8vec3(r2, g2, b2);
+            colors.shelf = glm::u8vec3(r3, g3, b3);
+
+            planetColors.push_back(colors);
+        }
     }
 
     void PlanetSceneTest::start() {
@@ -28,6 +51,11 @@ namespace Game {
         ImGui::StyleColorsDark();
         ImGui_ImplGlfw_InitForOpenGL(core->appSurface.glfwContext.GLFW_window, true);
         ImGui_ImplOpenGL3_Init("#version 460");
+
+        std::vector<unsigned char> buffer;
+        Engine::AssetManager assetManager;
+        assetManager.readBytesFromAsset("data/planet_color_records.txt", buffer);
+        PlanetSceneTest::parsePlanetColors(planetColors, buffer);
     }
 
     void PlanetSceneTest::update(float dt) {
@@ -42,22 +70,21 @@ namespace Game {
         ImGuiColorEditFlags base_flags = ImGuiColorEditFlags_None;
         ImGui::ColorEdit3("Water Color", (float*)&waterColor, base_flags);
         ImGui::ColorEdit3("Continental Shelf Color", (float*)&continentalShelfColor, base_flags);
-        ImGui::DragFloat("Amount Water", &amountSea, 0.01f, 0.0f, 1.f);
+        ImGui::DragFloat("Amount Water", &amountSea, 0.01f, 0.0f, 0.8f);
 
         ImGui::DragInt("Tex Index 0", &noiseOctaveTexIndex0, 0.01f, 0, 1);
         ImGui::DragInt("Tex Index 1", &noiseOctaveTexIndex1, 0.01f, 0, 1);
-        ImGui::DragInt("Tex Index 2", &noiseOctaveTexIndex2, 0.01f, 0, 1);
 
-        ImGui::DragFloat("Continental Shelf", &continentalShelf, 0.01f, 0.f, 0.1f);
+        ImGui::DragFloat("Continental Shelf", &continentalShelf, 0.01f, 0.f, 0.4f);
         ImGui::ColorEdit3("Land Color 0", (float*)&landColor0, base_flags);
         ImGui::ColorEdit3("Land Color 1", (float*)&landColor1, base_flags);
-        ImGui::DragFloat("Land Color Overlay", &landColorOverlay, 0.01f, 0.f, 10.f);
-        ImGui::DragFloat("Land Color Power", &landColorPower, 0.01f, 0.f, 10.f);
-        ImGui::DragFloat("Surface Topology Scale", &surfaceTopologyScale, 0.01f, 0.f, 3.f);
-        ImGui::DragFloat("Land Color Blend Scale", &landColorBlendScale, 0.01f, 0.1f, 5.f);
+        ImGui::DragFloat("Land Color Overlay", &landColorOverlay, 0.01f, 1.f, 2.f);
+        ImGui::DragFloat("Land Color Power", &landColorPower, 0.01f, 1.f, 10.f);
+        ImGui::DragFloat("Surface Topology Scale", &surfaceTopologyScale, 0.01f, 0.1f, 1.f);
+        ImGui::DragFloat("Land Color Blend Scale", &landColorBlendScale, 0.01f, 0.25f, 1.5f);
 
         ImGui::ColorEdit3("Cloud Color", (float*)&cloudColor, base_flags);
-        ImGui::DragFloat("Macro Scale", &macroScale, 0.01f, 0.5f, 5.f);
+        ImGui::DragFloat("Macro Scale", &macroScale, 0.01f, 2.0f, 7.0f);
         ImGui::DragFloat("Cloud Scale", &cloudScale, 0.01f, 1.f, 2.f);
         ImGui::DragFloat("Cloud Power", &cloudPower, 0.1f, 7.0f, 20.f);
         ImGui::DragFloat("Cloud Overlay", &cloudOverlay, 0.01f, 0.f, 4.0f);
@@ -70,22 +97,28 @@ namespace Game {
         ImGui::DragFloat("Fresnel Bias Atmosphere", &fresnelBiasAtmosphere, 0.01f, 0.9f, 0.95f);
 
         if (ImGui::Button("Randomize")) {
+
+            PlanetColors& colors = planetColors[Engine::Random::random(0, planetColors.size() - 1)];
+            landColor0 = glm::vec3(colors.landA) / glm::vec3(255.f);
+            landColor1 = glm::vec3(colors.landB) / glm::vec3(255.f);
+
+            waterColor = glm::vec3(colors.sea) / glm::vec3(255.f);
+            continentalShelfColor = glm::vec3(colors.shelf) / glm::vec3(255.f);
+
+
             /*waterColor = Engine::Random::randomVec3(glm::vec3(0.f), glm::vec3(1.f));
-            continentalShelfColor = Engine::Random::randomVec3(glm::vec3(0.f), glm::vec3(1.f));*/
+            continentalShelfColor = Engine::Random::randomVec3(glm::vec3(0.f), glm::vec3(1.f));
 
             landColor0 = Engine::Random::randomVec3(glm::vec3(0.f), glm::vec3(1.f));
-            landColor1 = Engine::Random::randomVec3(glm::vec3(0.f), glm::vec3(1.f));
+            landColor1 = Engine::Random::randomVec3(glm::vec3(0.f), glm::vec3(1.f));*/
 
-            /*landColor0 = glm::vec3(0.6, 0.25, 0.1);
-            landColor1 = glm::vec3(0.4, 0.2, 0.1);*/
-
-            amountSea = Engine::Random::randomFloat(0.f, 1.f);
-            continentalShelf = Engine::Random::randomFloat(0.f, 0.1f);
-            landColorOverlay = Engine::Random::randomFloat(0.f, 10.f);
-            landColorPower = Engine::Random::randomFloat(0.f, 10.f);
-            surfaceTopologyScale = Engine::Random::randomFloat(0.f, 3.f);
-            landColorBlendScale = Engine::Random::randomFloat(0.1f, 5.f);
-            macroScale = Engine::Random::randomFloat(0.5f, 5.f);
+            amountSea = Engine::Random::randomFloat(0.f, 0.8f);
+            continentalShelf = Engine::Random::randomFloat(0.f, 0.4f);
+            landColorOverlay = Engine::Random::randomFloat(1.f, 2.f);
+            landColorPower = Engine::Random::randomFloat(1.f, 10.f);
+            surfaceTopologyScale = Engine::Random::randomFloat(0.1f, 1.f);
+            landColorBlendScale = Engine::Random::randomFloat(0.25f, 1.5f);
+            macroScale = Engine::Random::randomFloat(2.f, 7.f);
             cloudScale = Engine::Random::randomFloat(1.f, 2.f);
             cloudPower = Engine::Random::randomFloat(7.f, 20.f);
             cloudOverlay = Engine::Random::randomFloat(0.f, 4.f);
@@ -161,7 +194,12 @@ namespace Game {
         planetShaderData.noiseOctaveTexIndex2 = float(noiseOctaveTexIndex2);
 
         Engine::Shader::updateUniforms(game->planetShader, planetShaderData);
+
+
+
+        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         Engine::DrawCommand::draw(game->vaoSphereMesh, game->sphereMeshData.indexBuffer.totalIndices, game->sphereMeshData.indexBuffer.indexElementType);
+        //glPolygonMode(GL_BACK, GL_FILL);
 
         game->sceneFrame.postProcess();
 

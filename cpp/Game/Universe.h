@@ -5,6 +5,13 @@
 
 namespace Game {
 
+    struct PlanetColors {
+        glm::u8vec3 landA;
+        glm::u8vec3 landB;
+        glm::u8vec3 sea;
+        glm::u8vec3 shelf;
+    };
+
     struct SolarSystem {
         unsigned short id;
         glm::i16vec3 position;
@@ -78,8 +85,12 @@ namespace Game {
         StaticArray<Planet, 2048> planetList;
         StaticArray<Satellite, 4096> satelliteList;
 
+        std::vector<PlanetColors> planetColors;
+
         Universe() {}
         ~Universe() {}
+
+        void parsePlanetColors(std::vector<PlanetColors>& planetColors, const std::vector<unsigned char>& buffer);
 
         void init();
     };
