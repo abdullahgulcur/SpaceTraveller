@@ -135,7 +135,7 @@ namespace Engine {
             getLocation(shader.loc_CameraPosition, shader.programId, "cameraPosition");
 
             getLocation(shader.loc_WaterScale, shader.programId, "waterScale");
-            getLocation(shader.loc_WaterTreshold, shader.programId, "amountSea");
+            getLocation(shader.loc_AmountWater, shader.programId, "amountWater");
             getLocation(shader.loc_WaterPower, shader.programId, "waterPower");
             getLocation(shader.loc_WaterColor, shader.programId, "waterColor");
             getLocation(shader.loc_LandColor0, shader.programId, "landColor0");
@@ -165,6 +165,9 @@ namespace Engine {
             getLocation(shader.loc_FresnelScaleAtmosphere, shader.programId, "fresnelScaleAtmosphere");
             getLocation(shader.loc_FresnelBiasAtmosphere, shader.programId, "fresnelBiasAtmosphere");
 
+            getLocation(shader.loc_SpecularStrength, shader.programId, "specularStrength");
+            getLocation(shader.loc_SpecularPower, shader.programId, "specularPower");
+
             getLocation(shader.loc_NoiseOctaveTexIndex0, shader.programId, "noiseOctaveTexIndex0");
             getLocation(shader.loc_NoiseOctaveTexIndex1, shader.programId, "noiseOctaveTexIndex1");
 
@@ -177,7 +180,7 @@ namespace Engine {
             uniform(shader.loc_ProjectionView, planetShaderData.projectionView);
             uniform(shader.loc_Model, planetShaderData.model);
             uniform(shader.loc_WaterScale, planetShaderData.waterScale);
-            uniform(shader.loc_WaterTreshold, planetShaderData.waterTreshold);
+            uniform(shader.loc_AmountWater, planetShaderData.amountWater);
             uniform(shader.loc_WaterPower, planetShaderData.waterPower);
             uniform(shader.loc_WaterColor, planetShaderData.waterColor);
             uniform(shader.loc_ContinentalShelfColor, planetShaderData.continentalShelfColor);
@@ -204,6 +207,8 @@ namespace Engine {
             uniform(shader.loc_FresnelPowerAtmosphere, planetShaderData.fresnelPowerAtmosphere);
             uniform(shader.loc_FresnelScaleAtmosphere, planetShaderData.fresnelScaleAtmosphere);
             uniform(shader.loc_FresnelBiasAtmosphere, planetShaderData.fresnelBiasAtmosphere);
+            uniform(shader.loc_SpecularStrength, planetShaderData.specularStrength);
+            uniform(shader.loc_SpecularPower, planetShaderData.specularPower);
 
             uniform(shader.loc_NoiseOctaveTexIndex0, planetShaderData.noiseOctaveTexIndex0);
             uniform(shader.loc_NoiseOctaveTexIndex1, planetShaderData.noiseOctaveTexIndex1);

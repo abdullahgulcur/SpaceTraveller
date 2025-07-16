@@ -13,8 +13,8 @@ namespace Game {
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
 //        sceneType = SceneType::TERRAIN_TEST;
-        //sceneType = SceneType::UNIVERSE;
-        sceneType = SceneType::PLANET_TEST;
+        sceneType = SceneType::UNIVERSE;
+        //sceneType = SceneType::PLANET_TEST;
 
         Engine::VertexBuffer::generateBillboardVertexBuffer(vertexBufferBillboard);
         Engine::VertexBuffer::generateQuadVertexBuffer(vertexBufferQuad);

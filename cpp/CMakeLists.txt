@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(win 0)
 set(android 1)
-set(platform ${win})
+set(platform ${android})
 
 set(sourceFiles
 

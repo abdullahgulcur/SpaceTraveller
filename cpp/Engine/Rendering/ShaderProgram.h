@@ -21,7 +21,7 @@ namespace Engine {
             float landColorOverlay;
             float landColorPower;
             float waterScale;
-            float waterTreshold;
+            float amountWater;
             float waterPower;
             float waterContinentalShelf;
             float waterDepth;
@@ -40,6 +40,8 @@ namespace Engine {
             float fresnelPowerAtmosphere;
             float fresnelScaleAtmosphere;
             float fresnelBiasAtmosphere;
+            float specularStrength;
+            float specularPower;
 
             float noiseOctaveTexIndex0;
             float noiseOctaveTexIndex1;
@@ -101,7 +103,7 @@ namespace Engine {
             unsigned int loc_Model;
             unsigned int loc_CameraPosition;
             unsigned int loc_WaterScale;
-            unsigned int loc_WaterTreshold;
+            unsigned int loc_AmountWater;
             unsigned int loc_WaterPower;
             unsigned int loc_WaterColor;
 
@@ -132,6 +134,9 @@ namespace Engine {
             unsigned int loc_FresnelPowerAtmosphere;
             unsigned int loc_FresnelScaleAtmosphere;
             unsigned int loc_FresnelBiasAtmosphere;
+
+            unsigned int loc_SpecularStrength;
+            unsigned int loc_SpecularPower;
 
             unsigned int loc_NoiseOctaveTexIndex0;
             unsigned int loc_NoiseOctaveTexIndex1;

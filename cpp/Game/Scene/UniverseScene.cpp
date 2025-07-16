@@ -266,7 +266,7 @@ namespace Game {
             planetShaderData.projectionView = camera.projectionView;
             planetShaderData.model = model;
             planetShaderData.waterColor = planet.waterColor;
-            planetShaderData.waterTreshold = planet.amountSea;
+            planetShaderData.amountWater = planet.amountWater;
             planetShaderData.continentalShelfColor = planet.continentalShelfColor;
             planetShaderData.waterContinentalShelf = planet.continentalShelf;
             planetShaderData.lightDirection = lightDirection;
@@ -296,6 +296,8 @@ namespace Game {
             planetShaderData.noiseOctaveTexIndex0 = float(planet.noiseOctaveTexIndex0);
             planetShaderData.noiseOctaveTexIndex1 = float(planet.noiseOctaveTexIndex1);
             planetShaderData.noiseOctaveTexIndex2 = float(planet.noiseOctaveTexIndex2);
+            planetShaderData.specularStrength = planet.specularStrength;
+            planetShaderData.specularPower = planet.specularPower;
 
             Engine::Shader::updateUniforms(game->planetShader, planetShaderData);
 
@@ -321,7 +323,7 @@ namespace Game {
             planetShaderData.projectionView = camera.projectionView;
             planetShaderData.model = model;
             planetShaderData.waterColor = planet.waterColor;
-            planetShaderData.waterTreshold = planet.amountSea;
+            planetShaderData.amountWater = planet.amountWater;
             planetShaderData.continentalShelfColor = planet.continentalShelfColor;
             planetShaderData.waterContinentalShelf = planet.continentalShelf;
             planetShaderData.lightDirection = lightDirection;
@@ -347,6 +349,8 @@ namespace Game {
             planetShaderData.fresnelPowerAtmosphere = planet.fresnelPowerAtmosphere;
             planetShaderData.fresnelScaleAtmosphere = planet.fresnelScaleAtmosphere;
             planetShaderData.fresnelBiasAtmosphere = planet.fresnelBiasAtmosphere;
+            planetShaderData.specularStrength = planet.specularStrength;
+            planetShaderData.specularPower = planet.specularPower;
 
             planetShaderData.noiseOctaveTexIndex0 = float(planet.noiseOctaveTexIndex0);
             planetShaderData.noiseOctaveTexIndex1 = float(planet.noiseOctaveTexIndex1);
