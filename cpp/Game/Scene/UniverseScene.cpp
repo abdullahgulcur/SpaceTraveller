@@ -6,6 +6,8 @@
 #include "Vao.h"
 #include "Core.h"
 
+#include "gtx/rotate_vector.hpp"
+
 namespace Game {
 
     void UniverseScene::init() {
@@ -241,14 +243,14 @@ namespace Game {
 
         if (currentSun.id != -1) {
             glm::vec3 sunPosition = glm::vec3(currentSun.position);
-            glm::mat4 model = glm::translate(glm::mat4(1), sunPosition) * glm::scale(glm::mat4(1), glm::vec3(10.f));
+            glm::mat4 model = glm::translate(glm::mat4(1), sunPosition) * glm::scale(glm::mat4(1), glm::vec3(6.f));
             Engine::Shader::updateUniforms(game->shaderSun, camera.projectionView, model);
             Engine::DrawCommand::draw(game->vaoSphereMesh, game->sphereMeshData.indexBuffer.totalIndices, game->sphereMeshData.indexBuffer.indexElementType);
         }
 
         if (previousSun.id != -1) {
             glm::vec3 sunPosition = glm::vec3(previousSun.position);
-            glm::mat4 model = glm::translate(glm::mat4(1), sunPosition) * glm::scale(glm::mat4(1), glm::vec3(10.f));
+            glm::mat4 model = glm::translate(glm::mat4(1), sunPosition) * glm::scale(glm::mat4(1), glm::vec3(6.f));
             Engine::Shader::updateUniforms(game->shaderSun, camera.projectionView, model);
             Engine::DrawCommand::draw(game->vaoSphereMesh, game->sphereMeshData.indexBuffer.totalIndices, game->sphereMeshData.indexBuffer.indexElementType);
         }
@@ -258,7 +260,7 @@ namespace Game {
             Planet& planet = currentPlanetList[i];
 
             glm::vec3 position = glm::vec3(currentSun.position) + planet.relativePosition;
-            glm::mat4 model = glm::translate(glm::mat4(1), position) * glm::scale(glm::mat4(1.f), glm::vec3(3.f));
+            glm::mat4 model = glm::translate(glm::mat4(1), position) * glm::scale(glm::mat4(1.f), glm::vec3(1.f));
             glm::vec3 lightDirection = glm::normalize(planet.relativePosition);
 
             Engine::Shader::PlanetShaderData planetShaderData;
@@ -315,7 +317,7 @@ namespace Game {
             Planet& planet = previousPlanetList[i];
 
             glm::vec3 position = glm::vec3(previousSun.position) + planet.relativePosition;
-            glm::mat4 model = glm::translate(glm::mat4(1), position) * glm::scale(glm::mat4(1.f), glm::vec3(3.f));
+            glm::mat4 model = glm::translate(glm::mat4(1), position) * glm::scale(glm::mat4(1.f), glm::vec3(1.f));
             glm::vec3 lightDirection = glm::normalize(planet.relativePosition);
 
             Engine::Shader::PlanetShaderData planetShaderData;
@@ -378,7 +380,7 @@ namespace Game {
 
     glm::vec3 UniverseScene::getArrivalPoint(glm::vec3& sunPosition) {
 
-        float margin = 100.f;
+        float margin = 50.f;
         float verticalOffset = 20.f;
         glm::vec3 toSun = sunPosition - cameraCtrl.currentTransform.position;
         toSun.y = 0.f;
@@ -390,10 +392,11 @@ namespace Game {
 
     glm::vec3 UniverseScene::getArrivalPointPlanet(glm::vec3& planetPosition, glm::vec3& sunPosition) {
 
-        float margin = 7.f;
-        float verticalOffset = 5.f;
+        float margin = 3.f;
+        //float verticalOffset = 5.f;
         glm::vec3 planetToSun = glm::normalize(sunPosition - planetPosition);
-        glm::vec3 arrivalPoint = planetPosition + planetToSun * margin;
+        glm::vec3 lateralOffset = glm::rotateY(planetToSun, glm::radians(90.f));
+        glm::vec3 arrivalPoint = planetPosition + (planetToSun + lateralOffset + glm::vec3(0, 1, 0) * 0.5f) * margin;
         return arrivalPoint;
     }
 

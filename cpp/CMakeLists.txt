@@ -2,13 +2,13 @@ cmake_minimum_required(VERSION 3.20)
 
 project("space")
 
-set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(win 0)
 set(android 1)
-set(platform ${android})
+set(platform ${win})
 
 set(sourceFiles
 
@@ -20,6 +20,7 @@ set(sourceFiles
         "Game/TranslateCameraController.cpp"
         "Game/CameraController.cpp"
         "Game/SceneFrame.cpp"
+        "Game/AssetGenerator.cpp"
 
         "Game/Scene/UniverseScene.cpp"
         "Game/Scene/TerrainSceneTest.cpp"
@@ -35,6 +36,7 @@ set(sourceFiles
 
         "Engine/Math/RandomValue.cpp"
 
+        "Engine/Rendering/Graphics.cpp"
         "Engine/Rendering/Camera.cpp"
         "Engine/Rendering/IndexBuffer.cpp"
         "Engine/Rendering/ShaderProgram.cpp"
@@ -125,6 +127,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${includeDirectories})
 target_compile_definitions(${PROJECT_NAME} PUBLIC ANDROID=${android})
 target_compile_definitions(${PROJECT_NAME} PUBLIC WIN=${win})
 target_compile_definitions(${PROJECT_NAME} PUBLIC PLATFORM=${platform})
+target_compile_definitions(${PROJECT_NAME} PUBLIC GLM_ENABLE_EXPERIMENTAL)
 
 if (${platform} STREQUAL ${win})
     target_compile_definitions(${PROJECT_NAME} PRIVATE GLEW_STATIC)

@@ -189,7 +189,7 @@ namespace Engine {
         void uniform(unsigned int location, glm::ivec2& value);
         void uniform(unsigned int location, unsigned int value);
         void uniform(unsigned int location, glm::uvec2& value);
-        void uniform(unsigned int location, unsigned int slot, unsigned int textureId);
+        void uniformTexture(unsigned int location, unsigned int slot, unsigned int textureId);
         void uniformTextureArray(unsigned int location, unsigned int slot, unsigned int textureId);
         void setTextureLocation(unsigned int& shaderProgramId, unsigned int index, const char* uniformName);
         void getLocation(unsigned int& location, unsigned int shaderProgramId, const char* uniformName);

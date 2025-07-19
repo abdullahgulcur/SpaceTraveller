@@ -156,11 +156,11 @@ namespace Engine{
             glDeleteTextures(1, &textureId);
         }
 
-        void setTexSlot2D(unsigned int slot, unsigned int textureId){
-            glActiveTexture(GL_TEXTURE0 + slot);
-            glBindTexture(GL_TEXTURE_2D, textureId);
-            //glUniform1i(uTextureLocation, 1);
-        }
+        //void setTexSlot2D(unsigned int slot, unsigned int textureId){
+        //    glActiveTexture(GL_TEXTURE0 + slot);
+        //    glBindTexture(GL_TEXTURE_2D, textureId);
+        //    //glUniform1i(uTextureLocation, 1);
+        //}
 
         // should be in asset manager, i think
         void generateGalaxyFrameBufferTexture(unsigned int& galaxyTextureId, unsigned int dimension){
@@ -187,7 +187,7 @@ namespace Engine{
             glDisable(GL_DEPTH_TEST);
             glClear(GL_COLOR_BUFFER_BIT);
 
-            Texture::setTexSlot2D(0, noiseTextureId);
+            //Texture::setTexSlot2D(0, noiseTextureId);
 
             unsigned int vb;
             VertexBuffer::generateQuadVertexBuffer(vb);

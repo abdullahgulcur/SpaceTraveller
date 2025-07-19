@@ -39,36 +39,39 @@ namespace Game {
             SolarSystem solarSystem(i, glm::i16vec3(Engine::Random::randomPointInSphereShell(1.f, 32000)));
             solarSystemList.push(solarSystem);
 
-            int planetCount = Engine::Random::random(5, 8);
+            int planetCount = Engine::Random::random(4, 8);
             for (int j = 0; j < planetCount; j++) {
-                float offset = Engine::Random::randomFloat(0.5f, 1.f);
-                Planet planet(j, i, Engine::Random::randomPointInCircleShell(75.f * (j + 1) - offset, 75.f * (j + 1) + offset));
+                //float offset = Engine::Random::randomFloat(0.5f, 1.f);
+                Planet planet(j, i, Engine::Random::randomPointInCircleShell(30.f * (j + 1), 30.f * (j + 1)));
 
                 PlanetColors& colors = planetColors[Engine::Random::random(0, planetColors.size() - 1)];
                 planet.landColor0 = glm::vec3(colors.landA) / glm::vec3(255.f);
                 planet.landColor1 = glm::vec3(colors.landB) / glm::vec3(255.f);
                 planet.waterColor = glm::vec3(colors.sea) / glm::vec3(255.f);
-                planet.continentalShelfColor = glm::vec3(colors.shelf) / glm::vec3(255.f);
+                //planet.continentalShelfColor = glm::vec3(colors.shelf) / glm::vec3(255.f);
                 planet.amountWater = Engine::Random::randomFloat(0.f, 0.8f);
-                planet.continentalShelf = Engine::Random::randomFloat(0.f, 0.4f);
+                //planet.continentalShelf = Engine::Random::randomFloat(0.f, 0.4f);
                 planet.landColorOverlay = Engine::Random::randomFloat(1.f, 2.f);
                 planet.landColorPower = Engine::Random::randomFloat(1.f, 10.f);
                 planet.surfaceTopologyScale = Engine::Random::randomFloat(0.1f, 1.f);
                 planet.landColorBlendScale = Engine::Random::randomFloat(0.25f, 1.5f);
                 planet.macroScale = Engine::Random::randomFloat(5.f, 15.f);
-                planet.cloudScale = Engine::Random::randomFloat(1.f, 2.f);
+                /*planet.cloudScale = Engine::Random::randomFloat(1.f, 2.f);
                 planet.cloudPower = Engine::Random::randomFloat(7.f, 20.f);
-                planet.cloudOverlay = Engine::Random::randomFloat(0.f, 4.f);
+                planet.cloudOverlay = Engine::Random::randomFloat(0.f, 4.f);*/
                 planet.fresnelPowerClouds = 0.3f;
                 planet.fresnelScaleClouds = 0.2f;
-                planet.fresnelPowerAtmosphere = 0.8f;
+                planet.fresnelBiasClouds = 1.f;
+                planet.continentalShelf = 0.04f;
+
+                /*planet.fresnelPowerAtmosphere = 0.8f;
                 planet.fresnelScaleAtmosphere = 0.15f;
-                planet.fresnelBiasAtmosphere = 1.f;
-                planet.noiseOctaveTexIndex0 = Engine::Random::random(0, 1);
-                planet.noiseOctaveTexIndex1 = Engine::Random::random(0, 1);
-                planet.noiseOctaveTexIndex2 = Engine::Random::random(0, 1);
-                planet.specularStrength = 1.f;
-                planet.specularPower = 1.f;
+                planet.fresnelBiasAtmosphere = 1.f;*/
+                planet.noiseOctaveTexIndex0 = Engine::Random::random(0, 6);
+                planet.noiseOctaveTexIndex1 = Engine::Random::random(0, 6);
+                //planet.noiseOctaveTexIndex2 = Engine::Random::random(0, 6);
+                /*planet.specularStrength = 1.f;
+                planet.specularPower = 1.f;*/
 
                 //planet.landColor0 = Engine::Random::randomVec3(glm::vec3(0.f), glm::vec3(1.f));
                 //planet.landColor1 = Engine::Random::randomVec3(glm::vec3(0.f), glm::vec3(1.f));

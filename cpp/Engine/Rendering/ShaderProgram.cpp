@@ -17,7 +17,7 @@ namespace Engine {
 
         void updateUniforms(ShaderFXAA& program, unsigned int tex, glm::ivec2 screenSize) {
             bind(program.programId);
-            uniform(program.loc_Tex, 0, tex);
+            uniformTexture(program.loc_Tex, 0, tex);
             uniform(program.loc_ScreenSize, screenSize);
         }
 
@@ -329,7 +329,7 @@ namespace Engine {
             glUniform2uiv(location, 1, &value[0]);
         }
 
-        void uniform(unsigned int location, unsigned int slot, unsigned int textureId) {
+        void uniformTexture(unsigned int location, unsigned int slot, unsigned int textureId) {
             glActiveTexture(GL_TEXTURE0 + slot);
             glBindTexture(GL_TEXTURE_2D, textureId);
             glUniform1i(location, slot);

@@ -46,48 +46,48 @@ uniform float noiseOctaveTexIndex0;
 uniform float noiseOctaveTexIndex1;
 
 // ------------------- Ref: https://learnopengl.com/PBR/Lighting ----------------------
-
-const float PI = 3.14159265359;
-
-float DistributionGGX(vec3 N, vec3 H, float roughness)
-{
-    float a = roughness*roughness;
-    float a2 = a*a;
-    float NdotH = max(dot(N, H), 0.0);
-    float NdotH2 = NdotH*NdotH;
-
-    float nom   = a2;
-    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
-    denom = PI * denom * denom;
-
-    return nom / denom;
-}
-// ----------------------------------------------------------------------------
-float GeometrySchlickGGX(float NdotV, float roughness)
-{
-    float r = (roughness + 1.0);
-    float k = (r*r) / 8.0;
-
-    float nom   = NdotV;
-    float denom = NdotV * (1.0 - k) + k;
-
-    return nom / denom;
-}
-// ----------------------------------------------------------------------------
-float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
-{
-    float NdotV = max(dot(N, V), 0.0);
-    float NdotL = max(dot(N, L), 0.0);
-    float ggx2 = GeometrySchlickGGX(NdotV, roughness);
-    float ggx1 = GeometrySchlickGGX(NdotL, roughness);
-
-    return ggx1 * ggx2;
-}
-// ----------------------------------------------------------------------------
-vec3 fresnelSchlick(float cosTheta, vec3 F0)
-{
-    return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
-}
+//
+//const float PI = 3.14159265359;
+//
+//float DistributionGGX(vec3 N, vec3 H, float roughness)
+//{
+//    float a = roughness*roughness;
+//    float a2 = a*a;
+//    float NdotH = max(dot(N, H), 0.0);
+//    float NdotH2 = NdotH*NdotH;
+//
+//    float nom   = a2;
+//    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
+//    denom = PI * denom * denom;
+//
+//    return nom / denom;
+//}
+//// ----------------------------------------------------------------------------
+//float GeometrySchlickGGX(float NdotV, float roughness)
+//{
+//    float r = (roughness + 1.0);
+//    float k = (r*r) / 8.0;
+//
+//    float nom   = NdotV;
+//    float denom = NdotV * (1.0 - k) + k;
+//
+//    return nom / denom;
+//}
+//// ----------------------------------------------------------------------------
+//float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
+//{
+//    float NdotV = max(dot(N, V), 0.0);
+//    float NdotL = max(dot(N, L), 0.0);
+//    float ggx2 = GeometrySchlickGGX(NdotV, roughness);
+//    float ggx1 = GeometrySchlickGGX(NdotL, roughness);
+//
+//    return ggx1 * ggx2;
+//}
+//// ----------------------------------------------------------------------------
+//vec3 fresnelSchlick(float cosTheta, vec3 F0)
+//{
+//    return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
+//}
 // ----------------------------------------------------------------------------
 
 float fresnel(float power, float scale, float bias){
@@ -97,15 +97,14 @@ float fresnel(float power, float scale, float bias){
 }
 
 float getSeaBlend(float albedo, float seaAmount){
-    return smoothstep(seaAmount,seaAmount - 0.03,  albedo);
-
+    return smoothstep(seaAmount,seaAmount - waterContinentalShelf,  albedo);
     //    return step(albedo, seaAmount);
 }
-
-float getContinentalShelfBlend(float albedo, float seaAmount, float continentalShelf){
-    continentalShelf = mix(seaAmount, 0.0, continentalShelf);
-    return smoothstep(continentalShelf, seaAmount, albedo);
-}
+//
+//float getContinentalShelfBlend(float albedo, float seaAmount, float continentalShelf){
+//    continentalShelf = mix(seaAmount, 0.0, continentalShelf);
+//    return smoothstep(continentalShelf, seaAmount, albedo);
+//}
 
 vec3 getWeight(vec3 normal){
     vec3 weight = abs(normal);
@@ -131,14 +130,14 @@ float getPoleBlend(vec3 normal){
 //    noise += getCloudOctave(vec2(FragPos.x, FragPos.y)) * weight.z;
 //    return clamp(pow(noise * cloudOverlay * amountSea, cloudPower), 0.0, 1.0) * cloudOpacity;
 //}
-
-float getCloudBorderBlend(float cloud){
-    return step(0.01, cloud) * step(cloud, 0.03);
-}
+//
+//float getCloudBorderBlend(float cloud){
+//    return step(0.01, cloud) * step(cloud, 0.03);
+//}
 
 float getNoiseOctave(vec2 uv){
     float noise = texture(texArray, vec3(uv * surfaceTopologyScale, noiseOctaveTexIndex0)).r;
-    return noise * texture(texArray, vec3(uv * surfaceTopologyScale * 0.33, noiseOctaveTexIndex1)).r;
+    return noise * texture(texArray, vec3(uv * surfaceTopologyScale * 0.15, noiseOctaveTexIndex1)).r;
 }
 
 float getNoise(float weight){
@@ -188,13 +187,13 @@ void main()
     vec3 albedo;
 
 //    float continentalShelfBlend = getContinentalShelfBlend(height, amountWater, waterContinentalShelf);
-    vec3 colorWater = waterColor;//mix(waterColor, continentalShelfColor, continentalShelfBlend);
+    //vec3 colorWater = waterColor;//mix(waterColor, continentalShelfColor, continentalShelfBlend);
 
     float blendNoise = getLandColorBlend(weight); // attention
     vec3 colorLand = mix(landColor0, landColor1, blendNoise) * macro;
 
     float waterBlend = getSeaBlend(height, amountWater);
-    albedo = mix(colorLand, colorWater, waterBlend);
+    albedo = mix(colorLand, waterColor, waterBlend);
 
 //    float fresnelClouds = fresnel(fresnelPowerClouds, fresnelScaleClouds, fresnelBiasClouds);// * amountSea;
 //    float fresnelAtmosphre = fresnel(fresnelPowerAtmosphere, fresnelScaleAtmosphere, fresnelBiasAtmosphere);// * clamp(amountSea * 1.5, 0.0, 1.0);
@@ -202,18 +201,18 @@ void main()
 //    albedo = mix(albedo, vec3(1.0), fresnelAtmosphre);
 
     // lighting
-    float ambient = 0.0;
+//    float ambient = 0.0;
     float diffuse = max(dot(normal, -lightDirection), 0.0) * 2.0;
 
-    vec3 viewDir = normalize(cameraPosition - FragPos);
-    vec3 reflectDir = reflect(lightDirection, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), specularPower);
-    float specular = specularStrength * spec * waterBlend;
+//    vec3 viewDir = normalize(cameraPosition - FragPos);
+//    vec3 reflectDir = reflect(lightDirection, normal);
+//    float spec = pow(max(dot(viewDir, reflectDir), 0.0), specularPower);
+//    float specular = specularStrength * spec * waterBlend;
 
     float fresnelClouds = fresnel(fresnelPowerClouds, fresnelScaleClouds, fresnelBiasClouds);
     albedo = mix(albedo, vec3(1.0), fresnelClouds);
 
-    vec3 color = albedo * (diffuse + ambient); //  + specular
+    vec3 color = albedo * (diffuse); // + ambient + specular
 
     // lighting PBR
 

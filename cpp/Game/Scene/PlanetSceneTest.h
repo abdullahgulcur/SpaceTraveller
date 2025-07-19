@@ -15,7 +15,7 @@ namespace Game {
         glm::vec3 waterColor{ 0 / 255.f, 10 / 255.f, 39 / 255.f };
         glm::vec3 continentalShelfColor{ 0 / 255.f, 15 / 255.f, 131 / 255.f };
         float amountWater = 0.65f;
-        float continentalShelf = 0.05f;
+        float continentalShelf = 0.04f;
         float surfaceTopologyScale = 0.13f;
         int noiseOctaveTexIndex0 = 0;
         int noiseOctaveTexIndex1 = 0;

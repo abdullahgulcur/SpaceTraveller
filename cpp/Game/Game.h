@@ -15,6 +15,8 @@
 #include "Universe.h"
 #include "ShaderProgram.h"
 #include "Gizmo.h"
+#include "AssetGenerator.h"
+
 
 #include "TerrainGeometryManager.h"
 
@@ -36,6 +38,7 @@ namespace Game {
 
     public:
 
+        AssetGenerator assetGenerator;
 
         UniverseScene universeScene;
         TerrainSceneTest terrainSceneTest;

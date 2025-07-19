@@ -69,13 +69,13 @@ namespace Game {
 
         ImGuiColorEditFlags base_flags = ImGuiColorEditFlags_None;
         ImGui::ColorEdit3("Water Color", (float*)&waterColor, base_flags);
-        ImGui::ColorEdit3("Continental Shelf Color", (float*)&continentalShelfColor, base_flags);
+        //ImGui::ColorEdit3("Continental Shelf Color", (float*)&continentalShelfColor, base_flags);
         ImGui::DragFloat("Amount Water", &amountWater, 0.01f, 0.0f, 0.8f);
 
-        ImGui::DragInt("Tex Index 0", &noiseOctaveTexIndex0, 0.01f, 0, 1);
-        ImGui::DragInt("Tex Index 1", &noiseOctaveTexIndex1, 0.01f, 0, 1);
+        ImGui::DragInt("Tex Index 0", &noiseOctaveTexIndex0, 0.01f, 0, 6);
+        ImGui::DragInt("Tex Index 1", &noiseOctaveTexIndex1, 0.01f, 0, 6);
 
-        ImGui::DragFloat("Continental Shelf", &continentalShelf, 0.01f, 0.f, 0.4f);
+        ImGui::DragFloat("Continental Shelf", &continentalShelf, 0.01f, 0.f, 0.1f);
         ImGui::ColorEdit3("Land Color 0", (float*)&landColor0, base_flags);
         ImGui::ColorEdit3("Land Color 1", (float*)&landColor1, base_flags);
         ImGui::DragFloat("Land Color Overlay", &landColorOverlay, 0.01f, 1.f, 2.f);
@@ -83,21 +83,22 @@ namespace Game {
         ImGui::DragFloat("Surface Topology Scale", &surfaceTopologyScale, 0.01f, 0.1f, 1.f);
         ImGui::DragFloat("Land Color Blend Scale", &landColorBlendScale, 0.01f, 0.25f, 1.5f);
 
-        ImGui::ColorEdit3("Cloud Color", (float*)&cloudColor, base_flags);
+        //ImGui::ColorEdit3("Cloud Color", (float*)&cloudColor, base_flags);
         ImGui::DragFloat("Macro Scale", &macroScale, 0.01f, 5.0f, 12.0f);
-        ImGui::DragFloat("Cloud Scale", &cloudScale, 0.01f, 1.f, 2.f);
+        /*ImGui::DragFloat("Cloud Scale", &cloudScale, 0.01f, 1.f, 2.f);
         ImGui::DragFloat("Cloud Power", &cloudPower, 0.1f, 7.0f, 20.f);
         ImGui::DragFloat("Cloud Overlay", &cloudOverlay, 0.01f, 0.f, 4.0f);
         ImGui::DragFloat("Cloud Opacity", &cloudOpacity, 0.01f, 0.f, 1.f);
         ImGui::DragFloat("Fresnel Power Clouds", &fresnelPowerClouds, 0.01f, 0.f, 1.f);
         ImGui::DragFloat("Fresnel Scale Clouds", &fresnelScaleClouds, 0.01f, 0.f, 1.f);
-        //ImGui::DragFloat("Fresnel Bias Clouds", &fresnelBiasClouds, 0.01f, 0.f, 1.f);
-        ImGui::DragFloat("Fresnel Power Atmosphere", &fresnelPowerAtmosphere, 0.01f, 0.f, 1.f);
-        ImGui::DragFloat("Fresnel Scale Atmosphere", &fresnelScaleAtmosphere, 0.01f, 0.f, 1.f);
-        ImGui::DragFloat("Fresnel Bias Atmosphere", &fresnelBiasAtmosphere, 0.01f, 0.f, 1.f);
+        ImGui::DragFloat("Fresnel Bias Clouds", &fresnelBiasClouds, 0.01f, 0.f, 1.f);*/
 
-        ImGui::DragFloat("Specular Strength", &specularStrength, 0.01f, 0.f, 10.f);
-        ImGui::DragFloat("Specular Power", &specularPower, 0.01f, 0.f, 100.f);
+        /*ImGui::DragFloat("Fresnel Power Atmosphere", &fresnelPowerAtmosphere, 0.01f, 0.f, 1.f);
+        ImGui::DragFloat("Fresnel Scale Atmosphere", &fresnelScaleAtmosphere, 0.01f, 0.f, 1.f);
+        ImGui::DragFloat("Fresnel Bias Atmosphere", &fresnelBiasAtmosphere, 0.01f, 0.f, 1.f);*/
+
+        //ImGui::DragFloat("Specular Strength", &specularStrength, 0.01f, 0.f, 10.f);
+        //ImGui::DragFloat("Specular Power", &specularPower, 0.01f, 0.f, 100.f);
 
 
         if (ImGui::Button("Randomize")) {
@@ -117,7 +118,7 @@ namespace Game {
             landColor1 = Engine::Random::randomVec3(glm::vec3(0.f), glm::vec3(1.f));*/
 
             amountWater = Engine::Random::randomFloat(0.f, 0.8f);
-            continentalShelf = Engine::Random::randomFloat(0.f, 0.4f);
+            continentalShelf = 0.04f;
             landColorOverlay = Engine::Random::randomFloat(1.f, 2.f);
             landColorPower = Engine::Random::randomFloat(1.f, 10.f);
             surfaceTopologyScale = Engine::Random::randomFloat(0.1f, 1.f);
@@ -128,14 +129,16 @@ namespace Game {
             cloudOverlay = Engine::Random::randomFloat(0.f, 4.f);
             //cloudOpacity = Engine::Random::randomFloat(0.f, 1.f);
             fresnelPowerClouds = 0.3f;
-            fresnelScaleClouds = 0.2f;// Engine::Random::randomFloat(0.f, 1.f);
-            fresnelPowerAtmosphere = 0.8f;// Engine::Random::randomFloat(0.0f, 1.f);
-            fresnelScaleAtmosphere = 0.15f;// Engine::Random::randomFloat(0.0f, 1.f);
-            fresnelBiasAtmosphere = 1.f;// Engine::Random::randomFloat(0.0f, 1.f);
+            fresnelScaleClouds = 0.2f;
+            fresnelBiasClouds = 1.f;
+            
+            //fresnelPowerAtmosphere = 0.8f;// Engine::Random::randomFloat(0.0f, 1.f);
+            //fresnelScaleAtmosphere = 0.15f;// Engine::Random::randomFloat(0.0f, 1.f);
+            //fresnelBiasAtmosphere = 1.f;// Engine::Random::randomFloat(0.0f, 1.f);
 
-            noiseOctaveTexIndex0 = Engine::Random::random(0, 1);
-            noiseOctaveTexIndex1 = Engine::Random::random(0, 1);
-            noiseOctaveTexIndex2 = Engine::Random::random(0, 1);
+            noiseOctaveTexIndex0 = Engine::Random::random(0, 6);
+            noiseOctaveTexIndex1 = Engine::Random::random(0, 6);
+            //noiseOctaveTexIndex2 = Engine::Random::random(0, 1);
         }
 
         ImGui::End();

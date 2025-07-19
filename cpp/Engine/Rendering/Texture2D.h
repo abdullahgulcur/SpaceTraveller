@@ -53,7 +53,7 @@ namespace Engine{
         void generateTex(unsigned int& textureId);
         void unbindTex2D();
         void clearTex(unsigned int& textureId);
-        void setTexSlot2D(unsigned int slot, unsigned int textureId);
+        //void setTexSlot2D(unsigned int slot, unsigned int textureId);
         void generateGalaxyFrameBufferTexture(unsigned int& galaxyTextureId, unsigned int dimension);
 
     }

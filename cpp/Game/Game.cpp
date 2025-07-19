@@ -9,10 +9,10 @@ namespace Game {
 
     void Game::init() {
 
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
-//        sceneType = SceneType::TERRAIN_TEST;
+        assetGenerator.init();
+
+        //sceneType = SceneType::TERRAIN_TEST;
         sceneType = SceneType::UNIVERSE;
         //sceneType = SceneType::PLANET_TEST;
 
@@ -39,7 +39,15 @@ namespace Game {
         Engine::Texture::createTexture2D(perlinTextureId, "texture/noise/perlin.jpg");
         Engine::Texture::createTexture2D(macroTextureId, "texture/noise/macro.jpg");
 
-        std::vector<std::string> pathList = { "texture/noise/perlin.jpg" , "texture/noise/macro.jpg" };
+        std::vector<std::string> pathList = { 
+            "texture/noise/perlin.jpg",
+            "texture/noise/macro.jpg",
+            "texture/noise/rock.jpg",
+            "texture/noise/rocky.jpg",
+            "texture/noise/soil.jpg",
+            "texture/noise/stone.jpg",
+            "texture/noise/grass.jpg"
+        };
         Engine::Texture::createTextureArray2D(noiseTextureArrayId, pathList);
 
         Engine::Shader::createShaderTerrain(shaderTerrain);

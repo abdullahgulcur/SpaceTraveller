@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "core.h"
-
-#include "GraphicsApi.h" // should not be here
+#include "Graphics.h"
 
 namespace Engine {
 
@@ -11,20 +10,7 @@ namespace Engine {
 
         appSurface.init();
         input.init();
-
-#if PLATFORM == WIN
-        glewExperimental = true;
-        glewInit();
-#endif
-
-        // should not be here ---------
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LESS);
-
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
-        glFrontFace(GL_CCW);
-        //  ---------  ---------
+        Graphics::init();
     }
 
     void Core::update() {
@@ -33,7 +19,6 @@ namespace Engine {
         appSurface.glfwContext.pollEvents();
 #endif
         input.update();
-
         systemTimer.update();
     }
 
