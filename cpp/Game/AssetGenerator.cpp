@@ -50,7 +50,7 @@ namespace Game {
 
         Engine::Shader::createShaderTerrain(shaderTerrain);
 
-        //AssetGenerator::generateSunBillboardTexture();
+        AssetGenerator::generateSunBillboardTexture();
 	}
 
     //TODO: burdaki vao, vbo gibi seyler genelde kullaniliyor. olusturup sildirmek gereksiz is yuku
@@ -74,7 +74,7 @@ namespace Game {
         Engine::Shader::createShaderTextureGeneratorSun(program);
 
         glViewport(0, 0, 64, 64);
-        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glDisable(GL_DEPTH_TEST);
         glClear(GL_COLOR_BUFFER_BIT);
 

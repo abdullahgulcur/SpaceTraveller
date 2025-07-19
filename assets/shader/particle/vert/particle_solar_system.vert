@@ -59,7 +59,7 @@ void main() {
 
     // Determine a fixed quad size in NDC units (screen size)
     //float scale = 0.005;
-    float scale = 0.03;
+    float scale = 0.1;
 
     vec2 screenSize = vec2(scale, scale * aspectRatio); // tweak this (e.g. 0.05 NDC = ~100px on a 1080p screen)
     vec2 offset = aLocalPos * screenSize;

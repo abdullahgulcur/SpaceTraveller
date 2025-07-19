@@ -229,7 +229,7 @@ namespace Engine {
             uniform(program.loc_CameraRight, cameraRight);
             uniform(program.loc_CameraUp, cameraUp);
             uniform(program.loc_AspectRatio, aspectRatio);
-            uniform(program.loc_Tex, textureId);
+            uniformTexture(program.loc_Tex, 0, textureId);
         }
 
         template <typename T>

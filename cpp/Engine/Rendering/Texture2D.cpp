@@ -156,56 +156,6 @@ namespace Engine{
             glDeleteTextures(1, &textureId);
         }
 
-        //void setTexSlot2D(unsigned int slot, unsigned int textureId){
-        //    glActiveTexture(GL_TEXTURE0 + slot);
-        //    glBindTexture(GL_TEXTURE_2D, textureId);
-        //    //glUniform1i(uTextureLocation, 1);
-        //}
-
-        // should be in asset manager, i think
-        //void generateGalaxyFrameBufferTexture(unsigned int& galaxyTextureId, unsigned int dimension){
-
-        //    unsigned int noiseTextureId;
-        //    createTexture2D(noiseTextureId, "texture/noise.jpg");
-
-        //    Texture2DConfig galaxyTexConfig;
-        //    galaxyTexConfig.width = dimension;
-        //    galaxyTexConfig.height = dimension;
-        //    galaxyTexConfig.internalFormat = GL_RGBA8;
-        //    galaxyTexConfig.format = GL_RGBA;
-
-        //    createTexture2D(galaxyTextureId, galaxyTexConfig);
-
-        //    unsigned int fbo;
-        //    FrameBuffer::generateFbo(fbo, galaxyTextureId, GL_COLOR_ATTACHMENT0);
-
-        //    unsigned int galaxyShader;
-        //    Shader::createShaderGalaxy(galaxyShader);
-
-        //    glViewport(0, 0, dimension, dimension);
-        //    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        //    glDisable(GL_DEPTH_TEST);
-        //    glClear(GL_COLOR_BUFFER_BIT);
-
-        //    //Texture::setTexSlot2D(0, noiseTextureId);
-
-        //    unsigned int vb;
-        //    VertexBuffer::generateQuadVertexBuffer(vb);
-
-        //    unsigned int vao;
-        //    Vao::createQuadMeshVao(vao, vb);
-
-        //    DrawCommand::drawQuad(vao);
-
-        //    mipmapTex2D(galaxyTextureId);
-
-        //    VertexBuffer::clear(vb);
-        //    Vao::deleteVao(vao);
-        //    Shader::deleteShaderProgram(galaxyShader);
-        //    clearTex(noiseTextureId);
-        //    FrameBuffer::deleteFbo(fbo);
-        //}
-
     }
 
 }

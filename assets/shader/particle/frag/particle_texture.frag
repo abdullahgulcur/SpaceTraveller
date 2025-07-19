@@ -14,8 +14,8 @@ out vec4 FragColor;
 uniform sampler2D tex;
 
 void main() {
-    float alpha = texture(tex, TexCoord).r;
-    if (alpha < 0.001)
+    vec4 col = texture(tex, TexCoord).rgba;
+    if (col.a < 0.001)
         discard;
-    FragColor = vec4(Color.rgb, Color.a * alpha);
+    FragColor = col;
 }

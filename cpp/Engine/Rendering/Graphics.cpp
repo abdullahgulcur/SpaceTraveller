@@ -24,7 +24,9 @@ namespace Engine {
             glFrontFace(GL_CCW);
 
             glEnable(GL_BLEND);
-            glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+            //glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 		}
 	}
 }

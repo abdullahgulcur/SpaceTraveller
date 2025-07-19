@@ -422,8 +422,8 @@ namespace Game {
         Engine::ParticleSystem::ParticleSolarSystem<256>& particleSolarSystems = game->assetGenerator.particleSolarSystems;
         Engine::AppSurface& appSurface = core->appSurface;
 
-        //Engine::Shader::updateUniformsParticleFixedSizeTextured(game->assetGenerator.shaderParticleSolarSystem, camera.projectionView, camera.right, camera.up, appSurface.getAspectRatio(), game->assetGenerator.sunFarBillboardTextureId);
-        Engine::Shader::updateUniformsParticleFixedSize(game->assetGenerator.shaderParticleSolarSystem, camera.projectionView, camera.right, camera.up, appSurface.getAspectRatio());
+        Engine::Shader::updateUniformsParticleFixedSizeTextured(game->assetGenerator.shaderParticleSolarSystem, camera.projectionView, camera.right, camera.up, appSurface.getAspectRatio(), game->assetGenerator.sunFarBillboardTextureId);
+        //Engine::Shader::updateUniformsParticleFixedSize(game->assetGenerator.shaderParticleSolarSystem, camera.projectionView, camera.right, camera.up, appSurface.getAspectRatio());
 
         Engine::ParticleSystem::ParticleGPUDataSolarSystem gpuData[256];
         Engine::ParticleSystem::fillInstanceData(particleSolarSystems, gpuData);

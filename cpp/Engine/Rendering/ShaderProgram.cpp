@@ -84,7 +84,8 @@ namespace Engine {
         void createShaderParticleSolarSystem(ShaderParticleSolarSystem& shader) {
 
             std::string vertShader = "shader/particle/vert/particle_solar_system.vert";
-            std::string fragShader = "shader/particle/frag/particle_base.frag";
+            std::string fragShader = "shader/particle/frag/particle_texture.frag";
+            //std::string fragShader = "shader/particle/frag/particle_base.frag";
 
             createShaderProgram(shader.programId, vertShader.c_str(), fragShader.c_str());
             bind(shader.programId);
