@@ -67,7 +67,7 @@ namespace Game {
         };
         std::vector<TerrainGPUData> instanceArray;
 
-        Engine::Shader::updateUniforms(game->shaderTerrain, camera.projectionView, camera.position, 16);
+        Engine::Shader::updateUniforms(game->assetGenerator.shaderTerrain, camera.projectionView, camera.position, 16);
 
         for (int i = game->terrainGeometryManager.startClipmapLevel; i < game->terrainGeometryManager.totalClipmapLevel; i++) {
             for (int j = 0; j < 36; j++) {
@@ -81,8 +81,8 @@ namespace Game {
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
         if (instanceArray.size()) {
-            Engine::VertexBuffer::bufferSubData(game->instanceBufferTerrain, 0, instanceArray.size() * sizeof(TerrainGPUData), &instanceArray[0]);
-            Engine::DrawCommand::drawInstanced(game->vaoTerrainBlock, game->terrainBlockMeshData.indexBuffer.totalIndices, game->terrainBlockMeshData.indexBuffer.indexElementType, instanceArray.size());
+            Engine::VertexBuffer::bufferSubData(game->assetGenerator.instanceBufferTerrain, 0, instanceArray.size() * sizeof(TerrainGPUData), &instanceArray[0]);
+            Engine::DrawCommand::drawInstanced(game->assetGenerator.vaoTerrainBlock, game->assetGenerator.terrainBlockMeshData.indexBuffer.totalIndices, game->assetGenerator.terrainBlockMeshData.indexBuffer.indexElementType, instanceArray.size());
         }
 
         //glPolygonMode(GL_BACK, GL_FILL);

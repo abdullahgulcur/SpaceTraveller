@@ -22,6 +22,7 @@ set(sourceFiles
         "Game/SceneFrame.cpp"
         "Game/AssetGenerator.cpp"
 
+        "Game/Scene/SceneManager.cpp"
         "Game/Scene/UniverseScene.cpp"
         "Game/Scene/TerrainSceneTest.cpp"
 
@@ -128,6 +129,7 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC ANDROID=${android})
 target_compile_definitions(${PROJECT_NAME} PUBLIC WIN=${win})
 target_compile_definitions(${PROJECT_NAME} PUBLIC PLATFORM=${platform})
 target_compile_definitions(${PROJECT_NAME} PUBLIC GLM_ENABLE_EXPERIMENTAL)
+target_compile_definitions(${PROJECT_NAME} PUBLIC IMGUI_ENABLE)
 
 if (${platform} STREQUAL ${win})
     target_compile_definitions(${PROJECT_NAME} PRIVATE GLEW_STATIC)

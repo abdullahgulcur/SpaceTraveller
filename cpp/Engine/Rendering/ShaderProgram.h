@@ -161,6 +161,11 @@ namespace Engine {
             unsigned int loc_Tex;
             unsigned int loc_ScreenSize;
         };
+
+        struct ShaderTextureGeneratorSun {
+            unsigned int programId;
+            unsigned int loc_Tex;
+        };
         
         void createShaderGrid(ShaderGrid& program);
         void createShaderParticle(ShaderParticle& program);
@@ -168,7 +173,7 @@ namespace Engine {
         void createShaderParticleSolarSystem(ShaderParticleSolarSystem& shader);
         void createShaderTerrain(ShaderTerrain& shader);
         void createShaderFXAA(ShaderFXAA& shader);
-        void createShaderGalaxy(unsigned int& program);
+        void createShaderTextureGeneratorSun(ShaderTextureGeneratorSun& program);
         //void createShaderPhong(ShaderPhongTextured& program);
         //void createShaderPhong(ShaderPhong& program);
         void createShaderPlanet(PlanetShader& shader);
@@ -215,6 +220,16 @@ namespace Engine {
             uniform(program.loc_CameraRight, cameraRight);
             uniform(program.loc_CameraUp, cameraUp);
             uniform(program.loc_AspectRatio, aspectRatio);
+        }
+
+        template <typename T>
+        void updateUniformsParticleFixedSizeTextured(T& program, glm::mat4& projectionView, glm::vec3& cameraRight, glm::vec3& cameraUp, float aspectRatio, unsigned int textureId) {
+            bind(program.programId);
+            uniform(program.loc_ProjectionView, projectionView);
+            uniform(program.loc_CameraRight, cameraRight);
+            uniform(program.loc_CameraUp, cameraUp);
+            uniform(program.loc_AspectRatio, aspectRatio);
+            uniform(program.loc_Tex, textureId);
         }
 
         template <typename T>

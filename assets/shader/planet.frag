@@ -45,6 +45,9 @@ uniform float specularPower;
 uniform float noiseOctaveTexIndex0;
 uniform float noiseOctaveTexIndex1;
 
+// TODO: macro amount, power, tex index
+// TODO: coast and mountain color parameters including overlay etc.
+
 // ------------------- Ref: https://learnopengl.com/PBR/Lighting ----------------------
 //
 //const float PI = 3.14159265359;

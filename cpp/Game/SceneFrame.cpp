@@ -43,7 +43,7 @@ namespace Game {
         Engine::Shader::createShaderFXAA(shaderFXAA);
 
         Game* game = Game::getInstance();
-        planeVAO = game->quadVAO;
+        planeVAO = game->assetGenerator.quadVAO;
 
     }
 

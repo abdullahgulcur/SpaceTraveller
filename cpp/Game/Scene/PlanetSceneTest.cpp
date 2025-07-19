@@ -179,9 +179,9 @@ namespace Game {
         planetShaderData.landColorPower = landColorPower;
         planetShaderData.surfaceTopologyScale = surfaceTopologyScale;
         planetShaderData.landColorBlendScale = landColorBlendScale;
-        planetShaderData.tex0 = game->perlinTextureId;
-        planetShaderData.tex1 = game->macroTextureId;
-        planetShaderData.texArray = game->noiseTextureArrayId;
+        planetShaderData.tex0 = game->assetGenerator.perlinTextureId;
+        planetShaderData.tex1 = game->assetGenerator.macroTextureId;
+        planetShaderData.texArray = game->assetGenerator.noiseTextureArrayId;
 
         planetShaderData.macroScale = macroScale;
         planetShaderData.cloudScale = cloudScale;
@@ -202,12 +202,12 @@ namespace Game {
         planetShaderData.noiseOctaveTexIndex1 = float(noiseOctaveTexIndex1);
         planetShaderData.noiseOctaveTexIndex2 = float(noiseOctaveTexIndex2);
 
-        Engine::Shader::updateUniforms(game->planetShader, planetShaderData);
+        Engine::Shader::updateUniforms(game->assetGenerator.planetShader, planetShaderData);
 
 
 
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        Engine::DrawCommand::draw(game->vaoSphereMesh, game->sphereMeshData.indexBuffer.totalIndices, game->sphereMeshData.indexBuffer.indexElementType);
+        Engine::DrawCommand::draw(game->assetGenerator.vaoSphereMesh, game->assetGenerator.sphereMeshData.indexBuffer.totalIndices, game->assetGenerator.sphereMeshData.indexBuffer.indexElementType);
         //glPolygonMode(GL_BACK, GL_FILL);
 
         game->sceneFrame.postProcess();

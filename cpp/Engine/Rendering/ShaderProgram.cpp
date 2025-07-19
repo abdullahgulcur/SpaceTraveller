@@ -22,10 +22,14 @@ namespace Engine {
         }
 
 
-        void createShaderGalaxy(unsigned int& program){
-            createShaderProgram(program, "shader/quad.vert", "shader/galaxy.frag");
-            bind(program);
-            //setTextureLocation(program, 0, "tex");
+        void createShaderTextureGeneratorSun(ShaderTextureGeneratorSun& program){
+
+            std::string vertShader = "shader/quad.vert";
+            std::string fragShader = "shader/tex_gen_sun.frag";
+
+            createShaderProgram(program.programId, vertShader.c_str(), fragShader.c_str());
+            bind(program.programId);
+            getLocation(program.loc_Tex, program.programId, "tex");
         }
 
         //void createShaderPhong(ShaderPhongTextured& program) {
@@ -88,6 +92,7 @@ namespace Engine {
             getLocation(shader.loc_CameraRight, shader.programId, "cameraRight");
             getLocation(shader.loc_CameraUp, shader.programId, "cameraUp");
             getLocation(shader.loc_AspectRatio, shader.programId, "aspectRatio");
+            getLocation(shader.loc_Tex, shader.programId, "tex");
         }
 
         void createShaderTerrain(ShaderTerrain& shader) {

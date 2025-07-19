@@ -1,5 +1,6 @@
 #ifdef ANDROID
 precision mediump float;
+precision mediump sampler2D;
 #endif
 
 #ifdef WIN
