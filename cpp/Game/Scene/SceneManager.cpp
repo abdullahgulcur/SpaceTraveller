@@ -8,6 +8,7 @@ namespace Game {
         //sceneType = SceneType::TERRAIN_TEST;
         sceneType = SceneType::UNIVERSE;
         //sceneType = SceneType::PLANET_TEST;
+        //sceneType = SceneType::SUN_TEST;
 
         universeScene.init();
         terrainSceneTest.init();
@@ -19,13 +20,15 @@ namespace Game {
         case SceneType::TERRAIN_TEST: {
             terrainSceneTest.start(); break;
         }
-        case SceneType::PLANET_TEST: {
-
 #if PLATFORM == WIN
+        case SceneType::PLANET_TEST: {
             planetSceneTest.start(); break;
+        }
+        case SceneType::SUN_TEST: {
+            sunSceneTest.start(); break;
+        }
 #endif
 
-        }
         }
 
 	}
@@ -39,13 +42,15 @@ namespace Game {
         case SceneType::TERRAIN_TEST: {
             terrainSceneTest.update(dt); break;
         }
-        case SceneType::PLANET_TEST: {
-
 #if PLATFORM == WIN
+        case SceneType::PLANET_TEST: {
             planetSceneTest.update(dt); break;
+        }
+        case SceneType::SUN_TEST: {
+            sunSceneTest.update(dt); break;
+        }
 #endif
 
-        }
         }
     }
 

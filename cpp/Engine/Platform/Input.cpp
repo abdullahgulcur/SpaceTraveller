@@ -1,23 +1,26 @@
 #include "pch.h"
 #include "Input.h"
-#include "Core.h"
+//#include "Game.h"
 
 #if PLATFORM == WIN
 #endif
 
 namespace Engine {
 
-    void Input::init() {
+    // main thread de once data allocate edilir
+    // sadece special thread lere ozel kod orada calistirilir. mesela makecontextcurrent gibi
 
+    void Input::init(AppSurface* appSurface) {
+
+        this->appSurface = appSurface;
 #if PLATFORM == ANDROID
         input.init();
 #elif PLATFORM == WIN
-        input.init(Core::getInstance()->appSurface.glfwContext.GLFW_window);
+        input.init(this->appSurface->glfwContext.GLFW_window);
 #endif
     }
 
     void Input::update(){
-
         input.update();
     }
 
@@ -43,13 +46,13 @@ namespace Engine {
 
 #if PLATFORM == ANDROID
         glm::ivec2 size;
-        Core::getInstance()->appSurface.getSize(size);
+        Game::getInstance()->appSurface.getSize(size);
         position.x = (input.pointerPosition[0].x / (float)size.x) * 2.0f - 1.0f;
         //position.y = (input.pointerPosition.y / (float)size.y) * 2.0f - 1.0f;
         position.y = 1.0f - (input.pointerPosition[0].y / (float)size.y) * 2.0f;
 #elif PLATFORM == WIN
         glm::ivec2 size;
-        Core::getInstance()->appSurface.getSize(size);
+        appSurface->getSize(size);
         position.x = (input.pointerPosition.x / (float)size.x) * 2.0f - 1.0f;
         //position.y = (input.pointerPosition.y / (float)size.y) * 2.0f - 1.0f;
         position.y = 1.0f - (input.pointerPosition.y / (float)size.y) * 2.0f;

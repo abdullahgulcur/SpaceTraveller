@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Shader.h"
 #include "MeshData.h"
 #include "ShaderProgram.h"
 #include "ParticleSystem.h"
@@ -17,10 +17,10 @@ namespace Game {
         Engine::MeshData::MeshData terrainOuterDegenerateMeshData;
 
         // ------- sHADER -------
-        Engine::Shader::PlanetShader planetShader;
-        Engine::Shader::ShaderSun shaderSun;
-        Engine::Shader::ShaderParticleSolarSystem shaderParticleSolarSystem;
-        Engine::Shader::ShaderTerrain shaderTerrain;
+        Shader::ShaderPlanet planetShader;
+        Shader::ShaderSun shaderSun;
+        Shader::ShaderParticleSolarSystem shaderParticleSolarSystem;
+        Shader::ShaderTerrain shaderTerrain;
 
         // ------- TEXTURE -------
         unsigned int perlinTextureId;
@@ -36,8 +36,8 @@ namespace Game {
         unsigned int vaoTerrainOuterDegenerate;
 
         // ------- PARTICLE -------
-        Engine::ParticleSystem::ParticleTunnel<1024> particleSystem;
-        Engine::ParticleSystem::ParticleSolarSystem<256> particleSolarSystems;
+        ParticleSystem::ParticleTunnel<1024> particleSystem;
+        ParticleSystem::ParticleSolarSystem<256> particleSolarSystems;
 
         // ------- VERTEX BUFFER -------
         unsigned int vertexBufferBillboard;
@@ -52,5 +52,12 @@ namespace Game {
 
 		void init();
 		void generateSunBillboardTexture();
+
+        // -------------- VAO --------------
+
+        void createParticleMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId);
+        void createParticleMeshSolarSystemVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId);
+        void createGalaxyMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId);
+        void createTerrainMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int indexBufferId, unsigned int instanceBufferId);
 	};
 }

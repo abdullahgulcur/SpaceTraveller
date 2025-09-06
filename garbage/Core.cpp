@@ -8,15 +8,16 @@ namespace Engine {
 
     void Core::init() {
 
-        appSurface.init();
+        appSurface.init(); // rendering thread
+
         input.init();
-        Graphics::init();
+        Graphics::init(); // rendering thread
     }
 
     void Core::update() {
 
 #if PLATFORM == WIN
-        appSurface.glfwContext.pollEvents();
+        appSurface.glfwContext.pollEvents(); // rendering thread
 #endif
         input.update();
         systemTimer.update();

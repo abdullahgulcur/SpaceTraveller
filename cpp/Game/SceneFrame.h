@@ -1,7 +1,7 @@
 #pragma once
 
 #include "glm.hpp"
-#include "ShaderProgram.h"
+#include "Shader.h"
 
 namespace Game {
 
@@ -16,7 +16,7 @@ namespace Game {
         unsigned int depthTextureId;
         unsigned int FBO;
         unsigned int RBO;
-        Engine::Shader::ShaderFXAA shaderFXAA;
+        Shader::ShaderFXAA shaderFXAA;
 
         SceneFrame() {}
         void init(glm::ivec2 size);

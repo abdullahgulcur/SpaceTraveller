@@ -14,5 +14,9 @@
 #include <memory>
 #include <random>
 #include <cmath>
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <atomic>
 
 #include "StaticArray.h"

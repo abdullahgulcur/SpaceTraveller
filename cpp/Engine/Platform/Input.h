@@ -1,5 +1,6 @@
 #pragma once
 #include "glm.hpp"
+#include "AppSurface.h"
 
 #if PLATFORM == ANDROID
 #include "AndroidInput.h"
@@ -12,6 +13,8 @@ namespace Engine {
     class Input {
     private:
 
+        AppSurface* appSurface;
+
 #if PLATFORM == ANDROID
         AndroidInput input;
 #elif PLATFORM == WIN
@@ -22,7 +25,8 @@ namespace Engine {
 
         Input(){}
         ~Input(){}
-        void init();
+
+        void init(AppSurface* appSurface);
         void update();
 
         const glm::ivec2& getPointerDelta() const;

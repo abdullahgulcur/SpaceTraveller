@@ -4,7 +4,7 @@
 #include "FrameBuffer.h"
 #include "Game.h"
 #include "Vao.h"
-#include "Core.h"
+//#include "Core.h"
 #include "VertexBuffer.h"
 #include "RandomValue.h"
 #include "AssetManager.h"
@@ -43,13 +43,11 @@ namespace Game {
 
     void PlanetSceneTest::start() {
 
-        Engine::Core* core = Engine::Core::getInstance();
-
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO(); (void)io;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
         ImGui::StyleColorsDark();
-        ImGui_ImplGlfw_InitForOpenGL(core->appSurface.glfwContext.GLFW_window, true);
+        ImGui_ImplGlfw_InitForOpenGL(Game::getInstance()->appSurface.glfwContext.GLFW_window, true);
         ImGui_ImplOpenGL3_Init("#version 460");
 
         std::vector<unsigned char> buffer;
@@ -147,70 +145,70 @@ namespace Game {
 
         //---------
 
-        Engine::Core* core = Engine::Core::getInstance();
-        Game* game = Game::getInstance();
-        Engine::Input& input = core->input;
-        Engine::Camera::Camera& camera = game->camera;
+        //Engine::Core* core = Engine::Core::getInstance();
+        //Game* game = Game::getInstance();
+        //Engine::Input& input = core->input;
+        //Engine::Camera::Camera& camera = game->camera;
 
-        if (input.getPointerDown() && input.getButtonDown(Engine::InputCode::Space)) {
-            float deltaX = input.getPointerDelta().x * 0.01f;
-            float deltaY = -input.getPointerDelta().y * 0.01f;
-            cameraCtrl.ProcessInput(deltaX, deltaY, 0.f);
-        }
+        //if (input.getPointerDown() && input.getButtonDown(Engine::InputCode::Space)) {
+        //    float deltaX = input.getPointerDelta().x * 0.01f;
+        //    float deltaY = -input.getPointerDelta().y * 0.01f;
+        //    cameraCtrl.ProcessInput(deltaX, deltaY, 0.f);
+        //}
 
-        cameraCtrl.Update(dt);
+        //cameraCtrl.Update(dt);
 
-        Engine::Camera::lookAt(camera, cameraCtrl.m_position, glm::vec3(0.f), glm::vec3(0.f, 1.f, 0.f));
+        //Engine::Camera::lookAt(camera, cameraCtrl.m_position, glm::vec3(0.f), glm::vec3(0.f, 1.f, 0.f));
 
-        game->sceneFrame.activate();
+        //game->sceneFrame.activate();
 
-        Engine::Shader::PlanetShaderData planetShaderData;
-        planetShaderData.cameraPosition = camera.position;
-        planetShaderData.projectionView = camera.projectionView;
-        planetShaderData.model = glm::translate(glm::mat4(1), glm::vec3(0.f)) * glm::scale(glm::mat4(1.f), glm::vec3(1.f));
-        planetShaderData.waterColor = waterColor;
-        planetShaderData.amountWater = amountWater;
-        planetShaderData.continentalShelfColor = continentalShelfColor;
-        planetShaderData.waterContinentalShelf = continentalShelf;
-        planetShaderData.lightDirection = glm::normalize(glm::vec3(1, 0, 1));
-        planetShaderData.landColor0 = landColor0;
-        planetShaderData.landColor1 = landColor1;
-        planetShaderData.landColorOverlay = landColorOverlay;
-        planetShaderData.landColorPower = landColorPower;
-        planetShaderData.surfaceTopologyScale = surfaceTopologyScale;
-        planetShaderData.landColorBlendScale = landColorBlendScale;
-        planetShaderData.tex0 = game->assetGenerator.perlinTextureId;
-        planetShaderData.tex1 = game->assetGenerator.macroTextureId;
-        planetShaderData.texArray = game->assetGenerator.noiseTextureArrayId;
+        //Engine::Shader::PlanetShaderData planetShaderData;
+        //planetShaderData.cameraPosition = camera.position;
+        //planetShaderData.projectionView = camera.projectionView;
+        //planetShaderData.model = glm::translate(glm::mat4(1), glm::vec3(0.f)) * glm::scale(glm::mat4(1.f), glm::vec3(1.f));
+        //planetShaderData.waterColor = waterColor;
+        //planetShaderData.amountWater = amountWater;
+        //planetShaderData.continentalShelfColor = continentalShelfColor;
+        //planetShaderData.waterContinentalShelf = continentalShelf;
+        //planetShaderData.lightDirection = glm::normalize(glm::vec3(1, 0, 1));
+        //planetShaderData.landColor0 = landColor0;
+        //planetShaderData.landColor1 = landColor1;
+        //planetShaderData.landColorOverlay = landColorOverlay;
+        //planetShaderData.landColorPower = landColorPower;
+        //planetShaderData.surfaceTopologyScale = surfaceTopologyScale;
+        //planetShaderData.landColorBlendScale = landColorBlendScale;
+        //planetShaderData.tex0 = game->assetGenerator.perlinTextureId;
+        //planetShaderData.tex1 = game->assetGenerator.macroTextureId;
+        //planetShaderData.texArray = game->assetGenerator.noiseTextureArrayId;
 
-        planetShaderData.macroScale = macroScale;
-        planetShaderData.cloudScale = cloudScale;
-        planetShaderData.cloudPower = cloudPower;
-        planetShaderData.cloudOverlay = cloudOverlay;
-        planetShaderData.cloudOpacity = cloudOpacity;
-        planetShaderData.cloudColor = cloudColor;
-        planetShaderData.fresnelPowerClouds = fresnelPowerClouds;
-        planetShaderData.fresnelScaleClouds = fresnelScaleClouds;
-        planetShaderData.fresnelBiasClouds = fresnelBiasClouds;
-        planetShaderData.fresnelPowerAtmosphere = fresnelPowerAtmosphere;
-        planetShaderData.fresnelScaleAtmosphere = fresnelScaleAtmosphere;
-        planetShaderData.fresnelBiasAtmosphere = fresnelBiasAtmosphere;
-        planetShaderData.specularStrength = specularStrength;
-        planetShaderData.specularPower = specularPower;
+        //planetShaderData.macroScale = macroScale;
+        //planetShaderData.cloudScale = cloudScale;
+        //planetShaderData.cloudPower = cloudPower;
+        //planetShaderData.cloudOverlay = cloudOverlay;
+        //planetShaderData.cloudOpacity = cloudOpacity;
+        //planetShaderData.cloudColor = cloudColor;
+        //planetShaderData.fresnelPowerClouds = fresnelPowerClouds;
+        //planetShaderData.fresnelScaleClouds = fresnelScaleClouds;
+        //planetShaderData.fresnelBiasClouds = fresnelBiasClouds;
+        //planetShaderData.fresnelPowerAtmosphere = fresnelPowerAtmosphere;
+        //planetShaderData.fresnelScaleAtmosphere = fresnelScaleAtmosphere;
+        //planetShaderData.fresnelBiasAtmosphere = fresnelBiasAtmosphere;
+        //planetShaderData.specularStrength = specularStrength;
+        //planetShaderData.specularPower = specularPower;
 
-        planetShaderData.noiseOctaveTexIndex0 = float(noiseOctaveTexIndex0);
-        planetShaderData.noiseOctaveTexIndex1 = float(noiseOctaveTexIndex1);
-        planetShaderData.noiseOctaveTexIndex2 = float(noiseOctaveTexIndex2);
+        //planetShaderData.noiseOctaveTexIndex0 = float(noiseOctaveTexIndex0);
+        //planetShaderData.noiseOctaveTexIndex1 = float(noiseOctaveTexIndex1);
+        //planetShaderData.noiseOctaveTexIndex2 = float(noiseOctaveTexIndex2);
 
-        Engine::Shader::updateUniforms(game->assetGenerator.planetShader, planetShaderData);
+        //Engine::Shader::updateUniforms(game->assetGenerator.planetShader, planetShaderData);
 
 
 
-        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        Engine::DrawCommand::draw(game->assetGenerator.vaoSphereMesh, game->assetGenerator.sphereMeshData.indexBuffer.totalIndices, game->assetGenerator.sphereMeshData.indexBuffer.indexElementType);
-        //glPolygonMode(GL_BACK, GL_FILL);
+        ////glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        //Engine::DrawCommand::draw(game->assetGenerator.vaoSphereMesh, game->assetGenerator.sphereMeshData.indexBuffer.totalIndices, game->assetGenerator.sphereMeshData.indexBuffer.indexElementType);
+        ////glPolygonMode(GL_BACK, GL_FILL);
 
-        game->sceneFrame.postProcess();
+        //game->sceneFrame.postProcess();
 
         //---------
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

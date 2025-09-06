@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "GlfwContext.h"
-//#include "core.h"
 
 namespace Engine {
 
@@ -10,7 +9,6 @@ namespace Engine {
 		if (!glfwInit())
 			fprintf(stderr, "Failed to initialize GLFW\n");
 
-		//glfwWindowHint(GLFW_SAMPLES, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -26,10 +24,11 @@ namespace Engine {
 
 		glfwSetInputMode(GLFW_window, GLFW_STICKY_KEYS, GL_TRUE);
 		glfwSetInputMode(GLFW_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	}
 
-		//glfwSetKeyCallback(GLFW_window, key_callback);
-		//glfwSetMouseButtonCallback(GLFW_window, mouseButtonCallback);
-		//glfwSetScrollCallback(GLFW_window, mouseScrollCallback);
+	void GlfwContext::makeContextCurrent() {
+
+		glfwMakeContextCurrent(GLFW_window);
 	}
 
 	bool GlfwContext::shouldClose() {
@@ -61,43 +60,9 @@ namespace Engine {
 		glfwSetWindowTitle(GLFW_window, title);
 	}
 
-
-	//void GlfwContext::setCursorPos(glm::u16vec2 cursorPos) {
-
-	//	glfwSetCursorPos(GLFW_window, cursorPos.x, cursorPos.y);
-	//}
-
-	//void GlfwContext::getCursorPos(glm::u16vec2& cursorPos) {
-
-	//	double xPos, yPos;
-	//	glfwGetCursorPos(GLFW_window, &xPos, &yPos);
-	//	cursorPos = glm::u16vec2(xPos, yPos);
-	//}
-
 	void GlfwContext::getScreenSize(glm::ivec2& screenSize) {
 
 		screenSize = glm::ivec2(mode->width, mode->height);
 	}
-
-	//void GlfwContext::setCursorVisible(bool visible) {
-
-	//	int value = visible ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN;
-	//	glfwSetInputMode(GLFW_window, GLFW_CURSOR, value);
-	//}
-
-	//void GlfwContext::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-
-	//	//Core::getInput()->handleKeyboardInput(key, action);
-	//}
-
-	//void GlfwContext::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
-
-	//	//Core::getInput()->handleMouseInput(button, action);
-	//}
-
-	//void GlfwContext::mouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
-
-	//	//Core::getInput()->handleMouseScrollInput(yoffset);
-	//}
 
 }

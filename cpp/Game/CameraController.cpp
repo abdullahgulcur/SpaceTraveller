@@ -43,6 +43,9 @@ namespace Game{
         float posLerpFactor = 1.0f - expf(-positionSmoothness * deltaTime);
         float rotLerpFactor = 1.0f - expf(-rotationSmoothness * deltaTime);
 
+        posLerpFactor = glm::clamp(posLerpFactor, 0.f, 1.f);
+        rotLerpFactor = glm::clamp(rotLerpFactor, 0.f, 1.f);
+
         currentTransform.position = glm::mix(currentTransform.position, targetTransform.position, posLerpFactor);
         currentTransform.pitch = glm::mix(currentTransform.pitch, targetTransform.pitch, rotLerpFactor);
         currentTransform.yaw = glm::mix(currentTransform.yaw, targetTransform.yaw, rotLerpFactor);

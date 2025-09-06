@@ -2,13 +2,13 @@ cmake_minimum_required(VERSION 3.20)
 
 project("space")
 
-set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(win 0)
 set(android 1)
-set(platform ${android})
+set(platform ${win})
 
 set(sourceFiles
 
@@ -21,13 +21,14 @@ set(sourceFiles
         "Game/CameraController.cpp"
         "Game/SceneFrame.cpp"
         "Game/AssetGenerator.cpp"
+        "Game/Timer.cpp"
+        "Game/RenderingContext.cpp"
+        "Game/Shader.cpp"
 
         "Game/Scene/SceneManager.cpp"
         "Game/Scene/UniverseScene.cpp"
         "Game/Scene/TerrainSceneTest.cpp"
-
-        "Engine/Core/Core.cpp"
-        "Engine/Core/Timer.cpp"
+        
         "Engine/Core/pch.cpp"
 
         "Engine/Modules/Terrain/TerrainGeometryManager.cpp"
@@ -44,10 +45,8 @@ set(sourceFiles
         "Engine/Rendering/Texture2D.cpp"
         "Engine/Rendering/Vao.cpp"
         "Engine/Rendering/VertexBuffer.cpp"
-        "Engine/Rendering/ParticleSystem.cpp"
         "Engine/Rendering/DrawCommand.cpp"
         "Engine/Rendering/FrameBuffer.cpp"
-        "Engine/Rendering/Gizmo.cpp"
 
         "Engine/Resource/MeshData.cpp"
 
@@ -67,6 +66,7 @@ elseif (${platform} STREQUAL ${win})
 
     list(APPEND sourceFiles
             "Game/Scene/PlanetSceneTest.cpp"
+            "Game/Scene/SunSceneTest.cpp"
             "Engine/Platform/Glfw/GlfwContext.cpp"
             "Engine/Platform/Glfw/GlfwInput.cpp"
             "Engine/Platform/Windows/WindowsAssetManager.cpp"
@@ -129,7 +129,7 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC ANDROID=${android})
 target_compile_definitions(${PROJECT_NAME} PUBLIC WIN=${win})
 target_compile_definitions(${PROJECT_NAME} PUBLIC PLATFORM=${platform})
 target_compile_definitions(${PROJECT_NAME} PUBLIC GLM_ENABLE_EXPERIMENTAL)
-target_compile_definitions(${PROJECT_NAME} PUBLIC IMGUI_ENABLE)
+# target_compile_definitions(${PROJECT_NAME} PUBLIC IMGUI_ENABLE)
 
 if (${platform} STREQUAL ${win})
     target_compile_definitions(${PROJECT_NAME} PRIVATE GLEW_STATIC)

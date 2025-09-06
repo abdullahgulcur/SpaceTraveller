@@ -1,5 +1,4 @@
 #include "pch.h"
-#include "Core.h"
 #include "FrameBuffer.h"
 #include "GraphicsApi.h"
 
@@ -47,11 +46,11 @@ namespace Engine{
         }
 
         void refreshScreen(){
-            Engine::Core* core = Engine::Core::getInstance();
-            glViewport(0, 0, core->appSurface.getWidth(), core->appSurface.getHeight());
-            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            glEnable(GL_DEPTH_TEST);
+            //Engine::Core* core = Engine::Core::getInstance();
+            //glViewport(0, 0, core->appSurface.getWidth(), core->appSurface.getHeight());
+            //glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+            //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            //glEnable(GL_DEPTH_TEST);
 
         }
     }

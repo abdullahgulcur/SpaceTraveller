@@ -22,7 +22,7 @@ namespace Game {
         StaticArray<Engine::Camera::CameraTransform, 4> transformQueue;
         StaticArray<float, 4> durationQueue;
 
-        Engine::Timer::StopWatch stopWatch;
+        Timer::StopWatch stopWatch;
         bool isUpdating = false;
         /*float accelerationPeriod = 1.5f;
         float movePeriod = 1.5f;

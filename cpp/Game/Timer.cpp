@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Timer.h"
-#include "Core.h"
+#include "Game.h"
 
-namespace Engine{
+namespace Game{
 
     namespace Timer{
 
@@ -50,7 +50,7 @@ namespace Engine{
         //---------------------------------------------
 
         bool TimerTrigger::shouldTrigger(float interval){
-            float now = static_cast<unsigned short>(Core::getInstance()->systemTimer.getTotalSeconds());
+            float now = static_cast<unsigned short>(Game::getInstance()->systemTimer.getTotalSeconds());
             float elapsed = now - lastTriggerTime;
             if (elapsed >= interval) {
                 lastTriggerTime = now;
@@ -62,11 +62,11 @@ namespace Engine{
         //---------------------------------------------
 
         void StopWatch::start() {
-            startTime = static_cast<float>(Engine::Core::getInstance()->systemTimer.getTotalSeconds());
+            startTime = static_cast<float>(Game::getInstance()->systemTimer.getTotalSeconds());
         }
 
         float StopWatch::getDuration() {
-            return static_cast<float>(Engine::Core::getInstance()->systemTimer.getTotalSeconds()) - startTime;
+            return static_cast<float>(Game::getInstance()->systemTimer.getTotalSeconds()) - startTime;
         }
     }
 

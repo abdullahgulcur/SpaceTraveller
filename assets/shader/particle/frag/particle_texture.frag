@@ -15,7 +15,7 @@ uniform sampler2D tex;
 
 void main() {
     vec4 col = texture(tex, TexCoord).rgba;
-    if (col.a < 0.001)
+    if (col.a < 0.01)
         discard;
     FragColor = col;
 }

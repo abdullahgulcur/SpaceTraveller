@@ -1,10 +1,11 @@
 #include "pch.h"
 #include "UniverseScene.h"
 #include "DrawCommand.h"
+#include "Shader.h"
 #include "FrameBuffer.h"
 #include "Game.h"
 #include "Vao.h"
-#include "Core.h"
+//#include "Core.h"
 
 #include "gtx/rotate_vector.hpp"
 
@@ -27,7 +28,6 @@ namespace Game {
     void UniverseScene::start() {
 
         Game* game = Game::getInstance();
-        Engine::Core* core = Engine::Core::getInstance();
 
         cameraCtrl.init(Engine::Camera::CameraTransform());
 
@@ -35,7 +35,7 @@ namespace Game {
         for (int i = 0; i < game->universe.solarSystemList.size(); i++)
             solarSystemPositions[i] = game->universe.solarSystemList[i].position;
 
-        Engine::ParticleSystem::start(game->assetGenerator.particleSolarSystems, solarSystemPositions);
+        ParticleSystem::start(game->assetGenerator.particleSolarSystems, solarSystemPositions);
 
         stateCameraMovement = StateCamera::UNIVERSE_IDLE;
 
@@ -46,7 +46,7 @@ namespace Game {
         ImGuiIO& io = ImGui::GetIO(); (void)io;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
         ImGui::StyleColorsDark();
-        ImGui_ImplGlfw_InitForOpenGL(core->appSurface.glfwContext.GLFW_window, true);
+        ImGui_ImplGlfw_InitForOpenGL(game->appSurface.glfwContext.GLFW_window, true);
         ImGui_ImplOpenGL3_Init("#version 460");
 #endif // IMGUI_ENABLE
 
@@ -117,15 +117,12 @@ namespace Game {
     void UniverseScene::stateUniverseIdle(float dt) {
 
         /* LOCALS */
-        Engine::Core* core = Engine::Core::getInstance();
         Game* game = Game::getInstance();
         Engine::Camera::Camera& camera = game->camera;
-        Engine::ParticleSystem::ParticleSolarSystem<256>& particleSolarSystems = game->assetGenerator.particleSolarSystems;
-        Engine::Input& input = core->input;
-        Engine::AppSurface& appSurface = core->appSurface;
+        ParticleSystem::ParticleSolarSystem<256>& particleSolarSystems = game->assetGenerator.particleSolarSystems;
 
         /* PARTICLE SYSTEM UPDATE */
-        Engine::ParticleSystem::update(particleSolarSystems, 1.f);
+        ParticleSystem::update(particleSolarSystems, 1.f);
 
         /* CAMERA UPDATE */
         UniverseScene::translateCameraUpdate(dt);
@@ -141,12 +138,9 @@ namespace Game {
     void UniverseScene::stateUniverseMoveTarget(float dt) {
 
         /* LOCALS */
-        Engine::Core* core = Engine::Core::getInstance();
         Game* game = Game::getInstance();
         Engine::Camera::Camera& camera = game->camera;
-        Engine::ParticleSystem::ParticleSolarSystem<256>& particleSolarSystems = game->assetGenerator.particleSolarSystems;
-        Engine::Input& input = core->input;
-        Engine::AppSurface& appSurface = core->appSurface;
+        ParticleSystem::ParticleSolarSystem<256>& particleSolarSystems = game->assetGenerator.particleSolarSystems;
 
         /* CAMERA UPDATE */
         if (!translateCameraCtrl.isUpdating) {
@@ -159,7 +153,7 @@ namespace Game {
         translateCameraCtrl.update(dt);
 
         /* PARTICLE SYSTEM UPDATE */
-        Engine::ParticleSystem::update(particleSolarSystems, 1.f);
+        ParticleSystem::update(particleSolarSystems, 1.f);
 
         /* ENGINE CAMERA LOOK AT */
         Engine::Camera::lookAt(camera, translateCameraCtrl.getPosition(), translateCameraCtrl.getPosition() + translateCameraCtrl.getForward(), glm::vec3(0.f, 1.f, 0.f));
@@ -168,15 +162,12 @@ namespace Game {
     void UniverseScene::solarSystemIdle(float dt) {
 
         /* LOCALS */
-        Engine::Core* core = Engine::Core::getInstance();
         Game* game = Game::getInstance();
         Engine::Camera::Camera& camera = game->camera;
-        Engine::ParticleSystem::ParticleSolarSystem<256>& particleSolarSystems = game->assetGenerator.particleSolarSystems;
-        Engine::Input& input = core->input;
-        Engine::AppSurface& appSurface = core->appSurface;
+        ParticleSystem::ParticleSolarSystem<256>& particleSolarSystems = game->assetGenerator.particleSolarSystems;
 
         /* PARTICLE SYSTEM UPDATE */
-        Engine::ParticleSystem::update(particleSolarSystems, 1.f);
+        ParticleSystem::update(particleSolarSystems, 1.f);
 
         /* CAMERA UPDATE */
         UniverseScene::translateCameraUpdate(dt);
@@ -194,18 +185,15 @@ namespace Game {
     void UniverseScene::stateSolarSystemMoveTarget(float dt) {
 
         /* LOCALS */
-        Engine::Core* core = Engine::Core::getInstance();
         Game* game = Game::getInstance();
         Engine::Camera::Camera& camera = game->camera;
-        Engine::ParticleSystem::ParticleSolarSystem<256>& particleSolarSystems = game->assetGenerator.particleSolarSystems;
-        Engine::Input& input = core->input;
-        Engine::AppSurface& appSurface = core->appSurface;
+        ParticleSystem::ParticleSolarSystem<256>& particleSolarSystems = game->assetGenerator.particleSolarSystems;
 
         /* CAMERA UPDATE */
         translateCameraCtrl.update(dt);
 
         /* PARTICLE SYSTEM UPDATE */
-        Engine::ParticleSystem::update(particleSolarSystems, 1.f);
+        ParticleSystem::update(particleSolarSystems, 1.f);
 
         /* ENGINE CAMERA LOOK AT */
         Engine::Camera::lookAt(camera, translateCameraCtrl.getPosition(), translateCameraCtrl.getPosition() + translateCameraCtrl.getForward(), glm::vec3(0.f, 1.f, 0.f));
@@ -223,15 +211,13 @@ namespace Game {
     void UniverseScene::stateOrbitIdle(float dt) {
 
         /* LOCALS */
-        Engine::Core* core = Engine::Core::getInstance();
         Game* game = Game::getInstance();
         Engine::Camera::Camera& camera = game->camera;
-        Engine::ParticleSystem::ParticleSolarSystem<256>& particleSolarSystems = game->assetGenerator.particleSolarSystems;
-        Engine::Input& input = core->input;
-        Engine::AppSurface& appSurface = core->appSurface;
+        ParticleSystem::ParticleSolarSystem<256>& particleSolarSystems = game->assetGenerator.particleSolarSystems;
+        Engine::Input& input = game->input;
 
         /* PARTICLE SYSTEM UPDATE */
-        Engine::ParticleSystem::update(particleSolarSystems, 1.f);
+        ParticleSystem::update(particleSolarSystems, 1.f);
 
         /* CAMERA UPDATE */
         UniverseScene::translateCameraUpdate(dt);
@@ -260,15 +246,12 @@ namespace Game {
     void UniverseScene::stateOrbitMoveTarget(float dt) {
 
         /* LOCALS */
-        Engine::Core* core = Engine::Core::getInstance();
         Game* game = Game::getInstance();
         Engine::Camera::Camera& camera = game->camera;
-        Engine::ParticleSystem::ParticleSolarSystem<256>& particleSolarSystems = game->assetGenerator.particleSolarSystems;
-        Engine::Input& input = core->input;
-        Engine::AppSurface& appSurface = core->appSurface;
-
+        ParticleSystem::ParticleSolarSystem<256>& particleSolarSystems = game->assetGenerator.particleSolarSystems;
+        
         /* PARTICLE SYSTEM UPDATE */
-        Engine::ParticleSystem::update(particleSolarSystems, 1.f);
+        ParticleSystem::update(particleSolarSystems, 1.f);
 
         /* CAMERA UPDATE */
         translateCameraCtrl.update(dt);
@@ -287,21 +270,29 @@ namespace Game {
 
     void UniverseScene::renderSolarSystem() {
 
-        Engine::Core* core = Engine::Core::getInstance();
         Game* game = Game::getInstance();
         Engine::Camera::Camera& camera = game->camera;
 
         if (currentSun.id != -1) {
             glm::vec3 sunPosition = glm::vec3(currentSun.position);
             glm::mat4 model = glm::translate(glm::mat4(1), sunPosition) * glm::scale(glm::mat4(1), glm::vec3(6.f));
-            Engine::Shader::updateUniforms(game->assetGenerator.shaderSun, camera.projectionView, model);
+
+            Shader::ShaderDataSun shaderData;
+            shaderData.projectionView = camera.projectionView;
+            shaderData.model = model;
+            Shader::updateUniforms(game->assetGenerator.shaderSun, shaderData);
             Engine::DrawCommand::draw(game->assetGenerator.vaoSphereMesh, game->assetGenerator.sphereMeshData.indexBuffer.totalIndices, game->assetGenerator.sphereMeshData.indexBuffer.indexElementType);
         }
 
         if (previousSun.id != -1) {
             glm::vec3 sunPosition = glm::vec3(previousSun.position);
             glm::mat4 model = glm::translate(glm::mat4(1), sunPosition) * glm::scale(glm::mat4(1), glm::vec3(6.f));
-            Engine::Shader::updateUniforms(game->assetGenerator.shaderSun, camera.projectionView, model);
+
+            Shader::ShaderDataSun shaderData;
+            shaderData.projectionView = camera.projectionView;
+            shaderData.model = model;
+            Shader::updateUniforms(game->assetGenerator.shaderSun, shaderData);
+            //Shader::updateUniforms(game->assetGenerator.shaderSun, camera.projectionView, model);
             Engine::DrawCommand::draw(game->assetGenerator.vaoSphereMesh, game->assetGenerator.sphereMeshData.indexBuffer.totalIndices, game->assetGenerator.sphereMeshData.indexBuffer.indexElementType);
         }
 
@@ -313,7 +304,7 @@ namespace Game {
             glm::mat4 model = glm::translate(glm::mat4(1), position) * glm::scale(glm::mat4(1.f), glm::vec3(1.f));
             glm::vec3 lightDirection = glm::normalize(planet.relativePosition);
 
-            Engine::Shader::PlanetShaderData planetShaderData;
+            Shader::ShaderDataPlanet planetShaderData;
             planetShaderData.cameraPosition = camera.position;
             planetShaderData.projectionView = camera.projectionView;
             planetShaderData.model = model;
@@ -351,26 +342,20 @@ namespace Game {
             planetShaderData.specularStrength = planet.specularStrength;
             planetShaderData.specularPower = planet.specularPower;
 
-            Engine::Shader::updateUniforms(game->assetGenerator.planetShader, planetShaderData);
+            Shader::updateUniforms(game->assetGenerator.planetShader, planetShaderData);
 
             Engine::DrawCommand::draw(game->assetGenerator.vaoSphereMesh, game->assetGenerator.sphereMeshData.indexBuffer.totalIndices, game->assetGenerator.sphereMeshData.indexBuffer.indexElementType);
         }
 
         for (int i = 0; i < previousPlanetList.size(); i++) {
-            /*glm::vec3 waterColor(0.1f, 0.3f, 0.9f);
-            glm::vec3 position = glm::vec3(previousSun.position) + previousPlanetList[i].relativePosition;
-            glm::mat4 model = glm::translate(glm::mat4(1), position) * glm::scale(glm::mat4(1.f), glm::vec3(3.f));
-            glm::vec3 lightDirection = glm::normalize(previousPlanetList[i].relativePosition);*/
-            //Engine::Shader::updateUniforms(game->planetShader, camera.projectionView, model, camera.position, waterColor, waterColor, lightDirection, 5.0f, 0.5f, 2.5f, 0.1f, 0.1f, game->perlinTextureId, game->macroTextureId);
-
-
+            
             Planet& planet = previousPlanetList[i];
 
             glm::vec3 position = glm::vec3(previousSun.position) + planet.relativePosition;
             glm::mat4 model = glm::translate(glm::mat4(1), position) * glm::scale(glm::mat4(1.f), glm::vec3(1.f));
             glm::vec3 lightDirection = glm::normalize(planet.relativePosition);
 
-            Engine::Shader::PlanetShaderData planetShaderData;
+            Shader::ShaderDataPlanet planetShaderData;
             planetShaderData.cameraPosition = camera.position;
             planetShaderData.projectionView = camera.projectionView;
             planetShaderData.model = model;
@@ -408,7 +393,7 @@ namespace Game {
             planetShaderData.noiseOctaveTexIndex1 = float(planet.noiseOctaveTexIndex1);
             planetShaderData.noiseOctaveTexIndex2 = float(planet.noiseOctaveTexIndex2);
 
-            Engine::Shader::updateUniforms(game->assetGenerator.planetShader, planetShaderData);
+            Shader::updateUniforms(game->assetGenerator.planetShader, planetShaderData);
 
             Engine::DrawCommand::draw(game->assetGenerator.vaoSphereMesh, game->assetGenerator.sphereMeshData.indexBuffer.totalIndices, game->assetGenerator.sphereMeshData.indexBuffer.indexElementType);
         }
@@ -416,18 +401,29 @@ namespace Game {
 
     void UniverseScene::renderStars() {
 
-        Engine::Core* core = Engine::Core::getInstance();
         Game* game = Game::getInstance();
         Engine::Camera::Camera& camera = game->camera;
-        Engine::ParticleSystem::ParticleSolarSystem<256>& particleSolarSystems = game->assetGenerator.particleSolarSystems;
-        Engine::AppSurface& appSurface = core->appSurface;
+        ParticleSystem::ParticleSolarSystem<256>& particleSolarSystems = game->assetGenerator.particleSolarSystems;
 
-        Engine::Shader::updateUniformsParticleFixedSizeTextured(game->assetGenerator.shaderParticleSolarSystem, camera.projectionView, camera.right, camera.up, appSurface.getAspectRatio(), game->assetGenerator.sunFarBillboardTextureId);
-        //Engine::Shader::updateUniformsParticleFixedSize(game->assetGenerator.shaderParticleSolarSystem, camera.projectionView, camera.right, camera.up, appSurface.getAspectRatio());
+        Shader::ShaderDataParticleSolarSystem shaderData;
+        shaderData.aspectRatio = game->appSurface.getAspectRatio();
+        shaderData.projectionView = camera.projectionView;
+        shaderData.cameraRight = camera.right;
+        shaderData.cameraUp = camera.up;
+        shaderData.cameraPosition = camera.position;
+        shaderData.textureId = game->assetGenerator.sunFarBillboardTextureId;
 
-        Engine::ParticleSystem::ParticleGPUDataSolarSystem gpuData[256];
-        Engine::ParticleSystem::fillInstanceData(particleSolarSystems, gpuData);
-        Engine::DrawCommand::drawQuadsInstanced(game->assetGenerator.vaoParticleSolarSystem, particleSolarSystems.particleCount, game->assetGenerator.instanceBufferParticleDynamic, sizeof(Engine::ParticleSystem::ParticleGPUDataSolarSystem), &gpuData[0]);
+        Shader::updateUniforms(game->assetGenerator.shaderParticleSolarSystem, shaderData);
+        //Shader::updateUniformsParticleFixedSize(game->assetGenerator.shaderParticleSolarSystem, camera.projectionView, camera.right, camera.up, appSurface.getAspectRatio());
+
+        ParticleSystem::ParticleGPUDataSolarSystem gpuData[256];
+        ParticleSystem::fillInstanceData(particleSolarSystems, gpuData);
+
+        glEnable(GL_BLEND);
+        glDepthMask(GL_FALSE);
+        Engine::DrawCommand::drawQuadsInstanced(game->assetGenerator.vaoParticleSolarSystem, particleSolarSystems.particleCount, game->assetGenerator.instanceBufferParticleDynamic, sizeof(ParticleSystem::ParticleGPUDataSolarSystem), &gpuData[0]);
+        glDisable(GL_BLEND);
+        glDepthMask(GL_TRUE);
     }
 
     glm::vec3 UniverseScene::getArrivalPoint(glm::vec3& sunPosition) {
@@ -470,7 +466,7 @@ namespace Game {
         glm::vec3 ndc = glm::vec3(clipSpace) / clipSpace.w;
         glm::vec2 screenSpaceCoordsNormalized = glm::vec2(ndc);
         glm::ivec2 screenSpaceCoords;
-        Engine::Core::getInstance()->appSurface.getScreenSpaceCoordinate(screenSpaceCoords, screenSpaceCoordsNormalized);
+        Game::getInstance()->appSurface.getScreenSpaceCoordinate(screenSpaceCoords, screenSpaceCoordsNormalized);
         return glm::vec2(screenSpaceCoords);
     }
 
@@ -502,10 +498,9 @@ namespace Game {
 
     bool UniverseScene::solarSystemClick() {
 
-        Engine::Core* core = Engine::Core::getInstance();
         Game* game = Game::getInstance();
         Engine::Camera::Camera& camera = game->camera;
-        Engine::Input& input = core->input;
+        Engine::Input& input = game->input;
 
         if (input.getPointerClick()) {
             glm::vec2 pointerPosition = glm::vec2(input.getPointerPosition());
@@ -529,10 +524,9 @@ namespace Game {
 
     bool UniverseScene::planetClick() {
 
-        Engine::Core* core = Engine::Core::getInstance();
         Game* game = Game::getInstance();
         Engine::Camera::Camera& camera = game->camera;
-        Engine::Input& input = core->input;
+        Engine::Input& input = game->input;
 
         if (input.getPointerClick()) {
             glm::vec2 pointerPosition = glm::vec2(input.getPointerPosition());
@@ -557,8 +551,7 @@ namespace Game {
 
     void UniverseScene::translateCameraUpdate(float dt) {
 
-        Engine::Core* core = Engine::Core::getInstance();
-        Engine::Input& input = core->input;
+        Engine::Input& input = Game::getInstance()->input;
 
         if (input.getPointerDown()) {
             float deltaX = -input.getPointerDelta().x * 0.1f;

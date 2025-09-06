@@ -1,30 +1,107 @@
-#include "pch.h"
-#include "ParticleSystem.h"
-#include "Core.h"
-#include "VertexBuffer.h"
-#include "DrawCommand.h"
-#include "RandomValue.h"
-//#include "Algebra.h"
+#pragma once
 
-namespace Engine{
+#include "glm.hpp"
+#include "Timer.h"
+#include "RandomValue.h"
+
+namespace Game{
 
     namespace ParticleSystem{
 
-        template void update<256>(ParticleSmoke<256>&, float);
-        template void fillInstanceData<256>(ParticleSmoke<256>&, ParticleGPUData*);
+        struct ParticleGPUDataTunnelEffect {
+            glm::i8vec3 position;
+            unsigned char color;
+        };
 
-        template void update<1024>(ParticleTunnel<1024>&, float, float);
-        template void fillInstanceData<1024>(ParticleTunnel<1024>&, ParticleGPUData*, glm::mat4&);
+        struct ParticleGPUDataBurst {
+            glm::i8vec3 position;
+            glm::u8vec4 color;
+            unsigned char scaleRotation;
+        };
 
-        template void start<128>(ParticleSolarSystems<128>&);
-        template void update<128>(ParticleSolarSystems<128>&, float, float);
-        template void fillInstanceData<128>(ParticleSolarSystems<128>&, ParticleGPUData*);
+        struct ParticleGPUDataSolarSystem {
+            glm::i16vec3 position;
+            unsigned char alpha;
+            unsigned char rotation;
+        };
 
-        template void start<256>(ParticleSolarSystem<256>&, glm::i16vec3*);
-        template void update<256>(ParticleSolarSystem<256>&, float);
-        template void fillInstanceData<256>(ParticleSolarSystem<256>&, ParticleGPUDataSolarSystem*);
+        struct ParticleGPUData {
+            unsigned short scale;
+            glm::i16vec3 positionD;
+            glm::i8vec3 positionF;
+            glm::u8vec4 color;
+            unsigned char rotation;
+        };
 
-        bool shouldTrigger(float& lastTriggerTime, float duration, float interval){
+        template <std::size_t N>
+        struct ParticleSmoke {
+            float startTime[N];
+            float lifeTime[N];
+
+            float posX[N];
+            float posY[N];
+            float posZ[N];
+            float scale[N];
+            float rotation[N];
+            glm::u8vec4 color[N];
+
+            unsigned int particleCount = 0;
+            float particleStartTime;
+            float particleLastTriggerTime;
+        };
+
+        template <std::size_t N>
+        struct ParticleTunnel {
+            float startTime[N];
+            float lifeTime[N];
+
+            float posX[N];
+            float posY[N];
+            float posZ[N];
+            float scale[N];
+            glm::u8vec4 color[N];
+
+            unsigned int particleCount = 0;
+            float particleStartTime;
+            float particleLastTriggerTime;
+        };
+
+        template <std::size_t N>
+        struct ParticleSolarSystems {
+            //float startTime[N];
+            //float lifeTime[N];
+
+            float posX[N];
+            float posY[N];
+            float posZ[N];
+            float scale[N];
+            float rotation[N];
+            glm::u8vec4 color[N];
+
+            unsigned int particleCount = 0;
+            float particleStartTime;
+            float particleLastTriggerTime;
+        };
+
+        template <std::size_t N>
+        struct ParticleSolarSystem {
+            
+            unsigned short posX[N];
+            unsigned short posY[N];
+            unsigned short posZ[N];
+            unsigned char rotation[N];
+            unsigned char alpha[N];
+
+            unsigned int particleCount = 0;
+            bool anyUpdate;
+
+            //float particleStartTime;
+            //float particleLastTriggerTime;
+        };
+
+        //---------- GENERAL ---------- 
+
+        bool shouldTrigger(float& lastTriggerTime, float duration, float interval) {
             float elapsed = duration - lastTriggerTime;
             if (elapsed >= interval) {
                 lastTriggerTime = duration;
@@ -32,6 +109,15 @@ namespace Engine{
             }
             return false;
         }
+
+        template <typename T>
+        void start(T& t, float time){
+            t.particleCount = 0;
+            t.particleStartTime = time;
+            t.particleLastTriggerTime = 0.f;
+        }
+
+        //---------- SMOKE ---------- 
 
         template<std::size_t N>
         void reorder(ParticleSmoke<N>& p, float duration) {
@@ -56,9 +142,9 @@ namespace Engine{
         }
 
         template<std::size_t N>
-        void update(ParticleSmoke<N>& p, float dt) {
+        void update(ParticleSmoke<N>& p, float totalTime, float dt) {
 
-            float duration = static_cast<float>(Core::getInstance()->systemTimer.getTotalSeconds()) - p.particleStartTime;
+            float duration = totalTime - p.particleStartTime;
 
             reorder(p, duration);
 
@@ -70,11 +156,6 @@ namespace Engine{
 
                 p.scale[index] = Random::randomFloat(0.1, 0.5);
 
-                //float angle = Random::randomFloat(0.f, 2.f * 3.14159265359f);
-                //float radius = sqrt(Random::randomFloat(0.f, 1.f)) * 5.f; // Uniform distribution
-                //p.posX[index] = cos(angle) * radius;
-                //p.posY[index] = 0.f;
-                //p.posZ[index] = sin(angle) * radius;
                 float angle = Random::randomFloat(0.f, 2.f * 3.14159265359f);
                 float radius = 5.f; // Circle radius
                 p.posX[index] = cos(angle) * radius;
@@ -138,9 +219,9 @@ namespace Engine{
         }
 
         template<std::size_t N>
-        void update(ParticleTunnel<N>& p, float dt, float f) {
+        void update(ParticleTunnel<N>& p, float totalTime, float dt, float f) {
 
-            float duration = static_cast<float>(Core::getInstance()->systemTimer.getTotalSeconds()) - p.particleStartTime;
+            float duration = totalTime - p.particleStartTime;
 
             reorder(p, duration);
 
@@ -160,7 +241,7 @@ namespace Engine{
                 float angle = Random::randomFloat(0.f, 2.f * 3.14159265359f);
                 float radius = 5.f; // Circle radius
                 p.posX[index] = cos(angle) * radius;
-                p.posY[index] = sin(angle) * radius; 
+                p.posY[index] = sin(angle) * radius;
                 p.posZ[index] = -20.f;
                 //p.rotation[index] = 0.f;
                 p.color[index] = glm::u8vec4(255, 255, 255, 255);// glm::u8vec4(Random::random(0, 255), Random::random(0, 255), Random::random(0, 255), 255);
@@ -171,8 +252,8 @@ namespace Engine{
                 float d = duration - p.startTime[i];
                 p.posZ[i] += (f * 50 + 1.f) * dt;
                 p.color[i].a = f * 255;
-//                p.rotation[i] += dt;
-                //p.color[i].a = (1 - glm::smoothstep(0.7f, 1.0f, d / p.lifeTime[i])) * 255;
+                //                p.rotation[i] += dt;
+                                //p.color[i].a = (1 - glm::smoothstep(0.7f, 1.0f, d / p.lifeTime[i])) * 255;
             }
         }
 
@@ -191,7 +272,7 @@ namespace Engine{
                 pData.positionD = glm::i16vec3(intPart);
                 pData.positionF = glm::i8vec3(fracPart);
                 pData.scale = uint16_t((p.scale[i] / 100.f) * 65535.0f);
-//                pData.rotation = uint8_t((p.rotation[i] / (2.0f * 3.14159265359f)) * 255.0f);
+                //                pData.rotation = uint8_t((p.rotation[i] / (2.0f * 3.14159265359f)) * 255.0f);
                 pData.color = p.color[i];
 
                 data[i] = pData;
@@ -201,10 +282,10 @@ namespace Engine{
         //---------- SOLAR SYSTEMS ---------- 
 
         template<std::size_t N>
-        void start(ParticleSolarSystems<N>& p) { // take positions as parameter
+        void start(ParticleSolarSystems<N>& p, float totalTime) { // take positions as parameter
 
             p.particleCount = N;
-            p.particleStartTime = Engine::Core::getInstance()->systemTimer.getTotalSeconds();
+            p.particleStartTime = totalTime;
             p.particleLastTriggerTime = p.particleStartTime;
 
             for (int i = 0; i < N; i++) {

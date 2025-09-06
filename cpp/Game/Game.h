@@ -1,10 +1,14 @@
 #pragma once
 
-#include "Core.h"
+#include "AppSurface.h"
+#include "Input.h"
+#include "Timer.h"
+
 #include "Camera.h"
 #include "SceneFrame.h"
 #include "Universe.h"
-#include "Gizmo.h"
+#include "RenderingContext.h"
+//#include "Gizmo.h"
 #include "AssetGenerator.h"
 #include "SceneManager.h"
 #include "TerrainGeometryManager.h"
@@ -15,9 +19,14 @@ namespace Game {
     private:
 
         static Game* instance;
-        Engine::Gizmo::Grid grid;
+        //Engine::Gizmo::Grid grid;
 
     public:
+
+
+        Engine::AppSurface appSurface;
+        Engine::Input input;
+        Timer::SystemTimer systemTimer;
 
         Universe universe;
         AssetGenerator assetGenerator;
@@ -27,12 +36,15 @@ namespace Game {
 
         Engine::TerrainGeometryManager terrainGeometryManager; // burda olmasi cok mantikli gelmedi, geciciydi sanirim
 
+        RenderingContext renderingContext;
+
         Game() {}
         ~Game() {}
-
+        void open();
+        void threadRendering();
         void init();
-        void update(float dt);
-
+        void initRenderThread();
+        void update();
         static Game* getInstance();
     };
 }

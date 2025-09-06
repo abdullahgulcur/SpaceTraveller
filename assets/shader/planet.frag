@@ -1,6 +1,5 @@
 #ifdef ANDROID
 precision highp float;
-precision mediump sampler2D;
 precision mediump sampler2DArray;
 #endif
 
@@ -47,6 +46,7 @@ uniform float noiseOctaveTexIndex1;
 
 // TODO: macro amount, power, tex index
 // TODO: coast and mountain color parameters including overlay etc.
+// TODO: krater texture
 
 // ------------------- Ref: https://learnopengl.com/PBR/Lighting ----------------------
 //

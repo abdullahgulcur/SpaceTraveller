@@ -4,6 +4,7 @@
 #include "TerrainSceneTest.h"
 #if PLATFORM == WIN
 #include "PlanetSceneTest.h"
+#include "SunSceneTest.h"
 #endif
 
 namespace Game {
@@ -11,7 +12,8 @@ namespace Game {
 	enum class SceneType {
 		UNIVERSE = 0,
 		TERRAIN_TEST = 1,
-		PLANET_TEST = 2
+		PLANET_TEST = 2,
+		SUN_TEST = 3
 	};
 
 	class SceneManager {
@@ -23,10 +25,9 @@ namespace Game {
 		TerrainSceneTest terrainSceneTest;
 #if PLATFORM == WIN
 		PlanetSceneTest planetSceneTest;
+		SunSceneTest sunSceneTest;
 #endif
-
 		SceneType sceneType;
-
 
 		SceneManager() {}
 		~SceneManager() {}

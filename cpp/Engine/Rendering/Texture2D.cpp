@@ -4,7 +4,6 @@
 #include "ShaderProgram.h"
 #include "VertexBuffer.h"
 #include "Vao.h"
-#include "Core.h"
 #include "TextureData.h"
 #include "DrawCommand.h"
 #include "AssetManager.h"

@@ -1,39 +1,96 @@
 #include "pch.h"
 #include "Game.h"
+#include "Graphics.h"
+
+// game::init fonksiyonunun threadlere ayrilmasi
+// rendering context in buffer lar implementasyonu
+// rendering update loop
+// android implementasyonu
 
 namespace Game {
 
     Game* Game::instance;
 
-    void Game::init() {
+    void Game::open() {
 
-        universe.init();
-        assetGenerator.init();
-        sceneManager.init();
+        Game::init();
 
-        Engine::Gizmo::init(grid);
+        std::thread renderThread(&Game::threadRendering, this);
 
-        Engine::Core* core = Engine::Core::getInstance();
+        while (!appSurface.glfwContext.shouldClose())
+            Game::update();
 
-        Engine::Camera::init(camera, 45.0f, core->appSurface.getAspectRatio());
-
-        glm::ivec2 screenSize;
-        core->appSurface.getSize(screenSize);
-        sceneFrame.init(screenSize);
-        //terrainGeometryManager.init(camera.position); // burda olmasi cok mantikli gelmedi, geciciydi sanirim
+        renderingContext.appClose = true;
+        renderThread.join();
     }
 
-    void Game::update(float dt) {
+    void Game::threadRendering() {
 
-        //terrainGeometryManager.update(camera.position); // burda olmasi cok mantikli gelmedi, geciciydi sanirim
+        Game::initRenderThread();
 
-        sceneManager.update(dt);
+        while (!renderingContext.appClose)
+            renderingContext.render();
+    }
 
-        //Engine::Gizmo::update(grid, camera.projectionView);
 
-        Engine::Core* core = Engine::Core::getInstance();
-        if (core->appSurface.aspectChanged())
-            Engine::Camera::setAspect(camera, core->appSurface.getAspectRatio());
+    void Game::initRenderThread() {
+
+        //appSurface.init(); // main and rendering thread
+
+        //input.init(&appSurface); // main thread
+        //Engine::Graphics::init(); // rendering thread
+
+        ////----------------------
+
+        //universe.init(); // main thread
+        //assetGenerator.init(); // rendering thread
+        //sceneManager.init(); // main thread
+
+        ////Engine::Gizmo::init(grid);
+
+        //Engine::Camera::init(camera, 45.0f, appSurface.getAspectRatio()); // main thread
+
+        //glm::ivec2 screenSize;
+        //appSurface.getSize(screenSize); // main thread
+        //sceneFrame.init(screenSize); // rendering thread
+
+        renderingContext.init();
+    }
+
+    void Game::init() {
+
+        appSurface.init(); // main and rendering thread
+
+        input.init(&appSurface); // main thread
+        Engine::Graphics::init(); // rendering thread
+
+        //----------------------
+
+        universe.init(); // main thread
+        assetGenerator.init(); // rendering thread
+        sceneManager.init(); // main thread
+
+        //Engine::Gizmo::init(grid);
+
+        Engine::Camera::init(camera, 45.0f, appSurface.getAspectRatio()); // main thread
+
+        glm::ivec2 screenSize;
+        appSurface.getSize(screenSize); // main thread
+        sceneFrame.init(screenSize); // rendering thread
+    }
+
+    void Game::update() {
+
+        appSurface.glfwContext.pollEvents();
+        input.update();
+
+        systemTimer.update(); // sim thread
+        sceneManager.update(systemTimer.getDeltaSeconds()); // sim thread
+
+        if (appSurface.aspectChanged()) // sim thread
+            Engine::Camera::setAspect(camera, appSurface.getAspectRatio()); // sim thread
+
+        appSurface.update(); // render thread
     }
 
     Game* Game::getInstance() {

@@ -4,6 +4,8 @@
 
 namespace Engine {
 
+    // buradan gelebilecek butun data triple buffere yazilacak
+
     enum class GlfwInputCode {
         Q = GLFW_KEY_Q,
         W = GLFW_KEY_W,

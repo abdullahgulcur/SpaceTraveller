@@ -1,0 +1,1 @@
+magick noiseTexture.png -resize 256x256 -normalize -colorspace Gray -depth 8 output.jpg

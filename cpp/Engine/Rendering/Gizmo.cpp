@@ -13,7 +13,7 @@ namespace Engine {
             unsigned int gridVertexBuffer;
             Engine::VertexBuffer::generateGridVertexBuffer(gridVertexBuffer, grid.vertexCount);
             Engine::Vao::createGridVao(grid.vao, gridVertexBuffer);
-            Engine::Shader::createShaderGrid(grid.shaderProgram);
+            Engine::Shader::createShader(grid.shaderProgram);
         }
 
         void update(Grid& grid, glm::mat4& projectionView) {

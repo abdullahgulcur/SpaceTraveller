@@ -1,5 +1,4 @@
 #include "pch.h"
-#include "Core.h"
 #include "Game.h"
 
 #if PLATFORM == ANDROID
@@ -118,22 +117,9 @@ int main() {
 
     std::cout << "Welcome to Space game !" << std::endl;
 
-    Engine::Core* coreInstance = Engine::Core::getInstance();
     Game::Game* gameInstance = Game::Game::getInstance();
-    coreInstance->init();
-    gameInstance->init();
+    gameInstance->open();
 
-    while (!coreInstance->appSurface.glfwContext.shouldClose()) {
-
-        //Engine code
-        coreInstance->update();
-
-        //Game code
-        gameInstance->update(coreInstance->systemTimer.getDeltaSeconds());
-
-        coreInstance->appSurface.update();
-    }
-   
     return 0;
 }
 

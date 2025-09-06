@@ -40,7 +40,7 @@ namespace Game {
         //    int x = 5;
         //}
 
-        Engine::Shader::createShaderFXAA(shaderFXAA);
+        Shader::createShader(shaderFXAA);
 
         Game* game = Game::getInstance();
         planeVAO = game->assetGenerator.quadVAO;
@@ -60,11 +60,15 @@ namespace Game {
 
         Engine::FrameBuffer::unbindFbo();
         glViewport(0, 0, size.x, size.y);
-        glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         glDisable(GL_DEPTH_TEST);
 
-        Engine::Shader::updateUniforms(shaderFXAA, colorTextureId, size);
+        Shader::ShaderDataFXAA shaderData;
+        shaderData.textureId = colorTextureId;
+        shaderData.screenSize = size;
+
+        Shader::updateUniforms(shaderFXAA, shaderData);
         Engine::DrawCommand::drawQuad(planeVAO);
     }
 

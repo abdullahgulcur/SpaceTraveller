@@ -18,11 +18,8 @@ namespace Engine {
         void createLitMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int indexBufferId);
         void createLitMeshTexturedVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int indexBufferId);
         void createBillboardMeshVao(unsigned int& vao, unsigned int vertexBufferId);
-        void createParticleMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId);
-        void createParticleMeshSolarSystemVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId);
-        void createGalaxyMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int instanceBufferId);
-        void createQuadMeshVao(unsigned int& vao, unsigned int vertexBufferId);
         void createGridVao(unsigned int& vao, unsigned int vertexBufferId);
-        void createTerrainMeshVao(unsigned int& vao, unsigned int vertexBufferId, unsigned int indexBufferId, unsigned int instanceBufferId);
+        void createQuadMeshVao(unsigned int& vao, unsigned int vertexBufferId);
+
     }
 }

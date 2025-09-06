@@ -14,7 +14,10 @@ layout(location = 3) in uint aRotation;
 uniform mat4 projectionView;
 uniform vec3 cameraRight;
 uniform vec3 cameraUp;
+uniform vec3 cameraPosition;
+
 uniform float aspectRatio;
+
 //uniform float scale;
 
 out vec2 TexCoord;
@@ -59,7 +62,10 @@ void main() {
 
     // Determine a fixed quad size in NDC units (screen size)
     //float scale = 0.005;
-    float scale = 0.1;
+
+    float distance = distance(cameraPosition, worldPos);
+
+    float scale = 0.1 - (distance / 500000.0);
 
     vec2 screenSize = vec2(scale, scale * aspectRatio); // tweak this (e.g. 0.05 NDC = ~100px on a 1080p screen)
     vec2 offset = aLocalPos * screenSize;

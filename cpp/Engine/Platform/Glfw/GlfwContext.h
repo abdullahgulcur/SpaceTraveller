@@ -6,6 +6,8 @@
 
 namespace Engine {
 
+	// buradan gelebilecek butun data triple buffere yazilacak
+
 	class GlfwContext {
 	private:
 
@@ -20,17 +22,12 @@ namespace Engine {
 		~GlfwContext() {}
 
 		void init();
+		void makeContextCurrent();
 		bool shouldClose();
 		void pollEvents();
 		void swapBuffers();
 		void destroy();
 		void setTitle(const char* title);
-		/*void setCursorPos(glm::u16vec2 cursorPos);
-		void getCursorPos(glm::u16vec2& cursorPos);*/
 		void getScreenSize(glm::ivec2& screenSize);
-		//void setCursorVisible(bool visible);
-		/*static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-		static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-		static void mouseScrollCallback(GLFWwindow* window, double xoffset, double yoffset);*/
 	};
 }
