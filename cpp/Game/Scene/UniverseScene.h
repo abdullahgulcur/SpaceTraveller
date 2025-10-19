@@ -64,8 +64,8 @@ namespace Game {
         void setPlanetList(unsigned int solarSystemId);
         void cleanPreviousSolarSystem();
 
-        void renderSolarSystem();
-        void renderStars();
+        void submitSolarSystem();
+        void submitStars();
 
         bool solarSystemClick();
         bool planetClick();

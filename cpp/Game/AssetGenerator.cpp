@@ -13,6 +13,10 @@ namespace Game {
 
 	void AssetGenerator::init() {
 
+        // sounds etc.
+	}
+
+    void AssetGenerator::initRenderObjects() {
 
         Engine::VertexBuffer::generateBillboardVertexBuffer(vertexBufferBillboard);
         Engine::VertexBuffer::generateQuadVertexBuffer(vertexBufferQuad);
@@ -51,7 +55,8 @@ namespace Game {
         Shader::createShader(shaderTerrain);
 
         AssetGenerator::generateSunBillboardTexture();
-	}
+    }
+
 
     //TODO: burdaki vao, vbo gibi seyler genelde kullaniliyor. olusturup sildirmek gereksiz is yuku
 	void AssetGenerator::generateSunBillboardTexture() {

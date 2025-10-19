@@ -20,7 +20,7 @@ namespace Engine {
 		GLFW_window = glfwCreateWindow(mode->width, mode->height, "Application", monitor, NULL); // fullscreen
 
 		glfwMaximizeWindow(GLFW_window);
-		glfwMakeContextCurrent(GLFW_window);
+		//glfwMakeContextCurrent(GLFW_window);
 
 		glfwSetInputMode(GLFW_window, GLFW_STICKY_KEYS, GL_TRUE);
 		glfwSetInputMode(GLFW_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

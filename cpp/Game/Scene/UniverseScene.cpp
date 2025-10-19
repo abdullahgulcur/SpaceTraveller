@@ -42,6 +42,7 @@ namespace Game {
 #if PLATFORM == WIN
 
 #ifdef IMGUI_ENABLE
+
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO(); (void)io;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
@@ -97,12 +98,12 @@ namespace Game {
 #endif
 
         /* RENDER PART */
-        game->sceneFrame.activate();
+        //game->sceneFrame.activate();
 
-        UniverseScene::renderStars();
-        UniverseScene::renderSolarSystem();
+        UniverseScene::submitStars();
+        UniverseScene::submitSolarSystem();
 
-        game->sceneFrame.postProcess();
+        //game->sceneFrame.postProcess();
 
 #if PLATFORM == WIN
 
@@ -268,7 +269,7 @@ namespace Game {
         }
     }
 
-    void UniverseScene::renderSolarSystem() {
+    void UniverseScene::submitSolarSystem() {
 
         Game* game = Game::getInstance();
         Engine::Camera::Camera& camera = game->camera;
@@ -304,8 +305,11 @@ namespace Game {
             glm::mat4 model = glm::translate(glm::mat4(1), position) * glm::scale(glm::mat4(1.f), glm::vec3(1.f));
             glm::vec3 lightDirection = glm::normalize(planet.relativePosition);
 
-            Shader::ShaderDataPlanet planetShaderData;
-            planetShaderData.cameraPosition = camera.position;
+            Shader::ShaderDataPlanet planetShaderData(planet, camera, model, lightDirection, game->assetGenerator.noiseTextureArrayId);
+
+            game->renderingContext.submit(planetShaderData);
+
+            /*planetShaderData.cameraPosition = camera.position;
             planetShaderData.projectionView = camera.projectionView;
             planetShaderData.model = model;
             planetShaderData.waterColor = planet.waterColor;
@@ -340,11 +344,11 @@ namespace Game {
             planetShaderData.noiseOctaveTexIndex1 = float(planet.noiseOctaveTexIndex1);
             planetShaderData.noiseOctaveTexIndex2 = float(planet.noiseOctaveTexIndex2);
             planetShaderData.specularStrength = planet.specularStrength;
-            planetShaderData.specularPower = planet.specularPower;
+            planetShaderData.specularPower = planet.specularPower;*/
 
-            Shader::updateUniforms(game->assetGenerator.planetShader, planetShaderData);
+            //Shader::updateUniforms(game->assetGenerator.planetShader, planetShaderData);
 
-            Engine::DrawCommand::draw(game->assetGenerator.vaoSphereMesh, game->assetGenerator.sphereMeshData.indexBuffer.totalIndices, game->assetGenerator.sphereMeshData.indexBuffer.indexElementType);
+            //Engine::DrawCommand::draw(game->assetGenerator.vaoSphereMesh, game->assetGenerator.sphereMeshData.indexBuffer.totalIndices, game->assetGenerator.sphereMeshData.indexBuffer.indexElementType);
         }
 
         for (int i = 0; i < previousPlanetList.size(); i++) {
@@ -355,8 +359,13 @@ namespace Game {
             glm::mat4 model = glm::translate(glm::mat4(1), position) * glm::scale(glm::mat4(1.f), glm::vec3(1.f));
             glm::vec3 lightDirection = glm::normalize(planet.relativePosition);
 
-            Shader::ShaderDataPlanet planetShaderData;
-            planetShaderData.cameraPosition = camera.position;
+            //Shader::ShaderDataPlanet planetShaderData;
+
+            Shader::ShaderDataPlanet planetShaderData(planet, camera, model, lightDirection, game->assetGenerator.noiseTextureArrayId);
+            game->renderingContext.submit(planetShaderData);
+
+
+            /*planetShaderData.cameraPosition = camera.position;
             planetShaderData.projectionView = camera.projectionView;
             planetShaderData.model = model;
             planetShaderData.waterColor = planet.waterColor;
@@ -391,15 +400,15 @@ namespace Game {
 
             planetShaderData.noiseOctaveTexIndex0 = float(planet.noiseOctaveTexIndex0);
             planetShaderData.noiseOctaveTexIndex1 = float(planet.noiseOctaveTexIndex1);
-            planetShaderData.noiseOctaveTexIndex2 = float(planet.noiseOctaveTexIndex2);
+            planetShaderData.noiseOctaveTexIndex2 = float(planet.noiseOctaveTexIndex2);*/
 
-            Shader::updateUniforms(game->assetGenerator.planetShader, planetShaderData);
+            //Shader::updateUniforms(game->assetGenerator.planetShader, planetShaderData);
 
-            Engine::DrawCommand::draw(game->assetGenerator.vaoSphereMesh, game->assetGenerator.sphereMeshData.indexBuffer.totalIndices, game->assetGenerator.sphereMeshData.indexBuffer.indexElementType);
+            //Engine::DrawCommand::draw(game->assetGenerator.vaoSphereMesh, game->assetGenerator.sphereMeshData.indexBuffer.totalIndices, game->assetGenerator.sphereMeshData.indexBuffer.indexElementType);
         }
     }
 
-    void UniverseScene::renderStars() {
+    void UniverseScene::submitStars() {
 
         Game* game = Game::getInstance();
         Engine::Camera::Camera& camera = game->camera;
@@ -413,17 +422,7 @@ namespace Game {
         shaderData.cameraPosition = camera.position;
         shaderData.textureId = game->assetGenerator.sunFarBillboardTextureId;
 
-        Shader::updateUniforms(game->assetGenerator.shaderParticleSolarSystem, shaderData);
-        //Shader::updateUniformsParticleFixedSize(game->assetGenerator.shaderParticleSolarSystem, camera.projectionView, camera.right, camera.up, appSurface.getAspectRatio());
-
-        ParticleSystem::ParticleGPUDataSolarSystem gpuData[256];
-        ParticleSystem::fillInstanceData(particleSolarSystems, gpuData);
-
-        glEnable(GL_BLEND);
-        glDepthMask(GL_FALSE);
-        Engine::DrawCommand::drawQuadsInstanced(game->assetGenerator.vaoParticleSolarSystem, particleSolarSystems.particleCount, game->assetGenerator.instanceBufferParticleDynamic, sizeof(ParticleSystem::ParticleGPUDataSolarSystem), &gpuData[0]);
-        glDisable(GL_BLEND);
-        glDepthMask(GL_TRUE);
+        game->renderingContext.submit(particleSolarSystems, shaderData);
     }
 
     glm::vec3 UniverseScene::getArrivalPoint(glm::vec3& sunPosition) {

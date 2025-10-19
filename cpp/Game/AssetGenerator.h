@@ -16,7 +16,7 @@ namespace Game {
         Engine::MeshData::MeshData terrainBlockMeshData;
         Engine::MeshData::MeshData terrainOuterDegenerateMeshData;
 
-        // ------- sHADER -------
+        // ------- SHADER -------
         Shader::ShaderPlanet planetShader;
         Shader::ShaderSun shaderSun;
         Shader::ShaderParticleSolarSystem shaderParticleSolarSystem;
@@ -50,7 +50,8 @@ namespace Game {
 		AssetGenerator() {}
 		~AssetGenerator() {}
 
-		void init();
+        void init();
+        void initRenderObjects();
 		void generateSunBillboardTexture();
 
         // -------------- VAO --------------

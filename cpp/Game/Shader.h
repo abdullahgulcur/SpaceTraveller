@@ -2,6 +2,9 @@
 
 #include "glm.hpp"
 
+#include "Universe.h"
+#include "Camera.h"
+
 #include "Texture2D.h"
 
 namespace Game {
@@ -92,9 +95,49 @@ namespace Game {
             float noiseOctaveTexIndex1;
             float noiseOctaveTexIndex2;
 
-            unsigned int tex0;
-            unsigned int tex1;
+            //unsigned int tex0;
+            //unsigned int tex1;
             unsigned int texArray;
+
+            ShaderDataPlanet(){}
+
+            ShaderDataPlanet(Planet& planet, Engine::Camera::Camera& camera, glm::mat4& model, glm::vec3& lightDirection, unsigned int& noiseTextureArrayId) {
+
+                cameraPosition = camera.position;
+                projectionView = camera.projectionView;
+                this->model = model;
+                waterColor = planet.waterColor;
+                amountWater = planet.amountWater;
+                continentalShelfColor = planet.continentalShelfColor;
+                waterContinentalShelf = planet.continentalShelf;
+                this->lightDirection = lightDirection;
+                landColor0 = planet.landColor0;
+                landColor1 = planet.landColor1;
+                landColorOverlay = planet.landColorOverlay;
+                landColorPower = planet.landColorPower;
+                surfaceTopologyScale = planet.surfaceTopologyScale;
+                landColorBlendScale = planet.landColorBlendScale;
+                texArray = noiseTextureArrayId;
+
+                macroScale = planet.macroScale;
+                cloudScale = planet.cloudScale;
+                cloudPower = planet.cloudPower;
+                cloudOverlay = planet.cloudOverlay;
+                cloudOpacity = planet.cloudOpacity;
+                cloudColor = planet.cloudColor;
+                fresnelPowerClouds = planet.fresnelPowerClouds;
+                fresnelScaleClouds = planet.fresnelScaleClouds;
+                fresnelBiasClouds = planet.fresnelBiasClouds;
+                fresnelPowerAtmosphere = planet.fresnelPowerAtmosphere;
+                fresnelScaleAtmosphere = planet.fresnelScaleAtmosphere;
+                fresnelBiasAtmosphere = planet.fresnelBiasAtmosphere;
+
+                noiseOctaveTexIndex0 = float(planet.noiseOctaveTexIndex0);
+                noiseOctaveTexIndex1 = float(planet.noiseOctaveTexIndex1);
+                noiseOctaveTexIndex2 = float(planet.noiseOctaveTexIndex2);
+                specularStrength = planet.specularStrength;
+                specularPower = planet.specularPower;
+            }
         };
 
         struct ShaderSun {
@@ -191,7 +234,7 @@ namespace Game {
             glm::vec3 cameraUp;
             glm::vec3 cameraPosition;
             float aspectRatio;
-            unsigned int textureId;
+            unsigned int textureId; // const
         };
 
         struct ShaderTerrain {

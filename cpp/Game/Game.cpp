@@ -28,69 +28,51 @@ namespace Game {
 
         Game::initRenderThread();
 
-        while (!renderingContext.appClose)
-            renderingContext.render();
+        while (!renderingContext.appClose) {
+            renderingContext.update();
+            appSurface.update();
+        }
     }
 
 
     void Game::initRenderThread() {
 
-        //appSurface.init(); // main and rendering thread
+        appSurface.glfwContext.makeContextCurrent();
+        Engine::Graphics::init();
 
-        //input.init(&appSurface); // main thread
-        //Engine::Graphics::init(); // rendering thread
-
-        ////----------------------
-
-        //universe.init(); // main thread
-        //assetGenerator.init(); // rendering thread
-        //sceneManager.init(); // main thread
-
-        ////Engine::Gizmo::init(grid);
-
-        //Engine::Camera::init(camera, 45.0f, appSurface.getAspectRatio()); // main thread
+        assetGenerator.initRenderObjects();
 
         //glm::ivec2 screenSize;
-        //appSurface.getSize(screenSize); // main thread
-        //sceneFrame.init(screenSize); // rendering thread
+        //appSurface.getSize(screenSize);
+        //sceneFrame.init(screenSize);
 
         renderingContext.init();
     }
 
     void Game::init() {
 
-        appSurface.init(); // main and rendering thread
-
-        input.init(&appSurface); // main thread
-        Engine::Graphics::init(); // rendering thread
-
-        //----------------------
-
-        universe.init(); // main thread
-        assetGenerator.init(); // rendering thread
-        sceneManager.init(); // main thread
-
-        //Engine::Gizmo::init(grid);
-
-        Engine::Camera::init(camera, 45.0f, appSurface.getAspectRatio()); // main thread
-
-        glm::ivec2 screenSize;
-        appSurface.getSize(screenSize); // main thread
-        sceneFrame.init(screenSize); // rendering thread
+        appSurface.init();
+        input.init(&appSurface);
+        universe.init();
+        assetGenerator.init();
+        sceneManager.init();
+        Engine::Camera::init(camera, 45.0f, appSurface.getAspectRatio());
     }
 
     void Game::update() {
 
         appSurface.glfwContext.pollEvents();
         input.update();
+        systemTimer.update();
 
-        systemTimer.update(); // sim thread
-        sceneManager.update(systemTimer.getDeltaSeconds()); // sim thread
+        // -------- sequence is important --------
+        renderingContext.setSimulationBufferIndex();
+        sceneManager.update(systemTimer.getDeltaSeconds());
+        renderingContext.setLastFilledBufferIndex();
+        // ---------------------------------------
 
-        if (appSurface.aspectChanged()) // sim thread
-            Engine::Camera::setAspect(camera, appSurface.getAspectRatio()); // sim thread
-
-        appSurface.update(); // render thread
+        if (appSurface.aspectChanged())
+            Engine::Camera::setAspect(camera, appSurface.getAspectRatio());
     }
 
     Game* Game::getInstance() {

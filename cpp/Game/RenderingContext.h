@@ -5,45 +5,65 @@
 
 namespace Game {
 
-    enum RenderQueueState {
-        AVAILABLE = 0,
-        BUSY = 1,
-        READY = 2
+    struct BufferDataStars {
+        StaticArray<ParticleSystem::ParticleGPUDataSolarSystem, 256> gpuData[3];
+        Shader::ShaderDataParticleSolarSystem shaderDataParticleSolarSystem[3];
+        //unsigned int vao; // const
+        //unsigned int instanceBuffer; // const
+        //unsigned int stride; // const
+        bool isActive[3];
+    };
+
+    struct BufferDataSolarSystem {
+        StaticArray<Shader::ShaderDataPlanet, 32> shaderDataPlanet[3]; // 32 parametre gibi olmasi laizm
+        bool isActive[3];
     };
 
     class RenderingContext {
     private:
 
-        int getQueueIndexForRendering();
-        void setQueueAvailable(int queueIndex);
-        int getQueueIndexForSimulation();
-        void setQueueReadyForRendering(int queueIndex);
+        std::mutex queueMutex;
+        int lastFilledQueueIndex = -1;
+        int renderingQueueIndex = -1;
+        int simulationBufferIndex = -1;
+
+        void draw();
 
     public:
 
-        RenderQueueState stateQueueList[3] = { RenderQueueState::AVAILABLE , RenderQueueState::AVAILABLE , RenderQueueState::AVAILABLE };
-        int recentlyFilledQueueIndex = -1;
-        std::mutex queueMutex;
 
-        StaticArray<ParticleSystem::ParticleGPUDataSolarSystem, 256> gpuData[3];
-        Shader::ShaderDataParticleSolarSystem shaderDataParticleSolarSystem[3];
+        BufferDataStars bufferDataStars;
+        BufferDataSolarSystem bufferDataSolarSystem;
 
         bool appClose = false;
 
-        /*StaticArray<Shader::ShaderDataFXAA, 256> shaderDataListFXAA;
-        StaticArray<Shader::ShaderDataParticle, 256> shaderDataListFXAA;
-        StaticArray<Shader::ShaderDataParticleTextured, 256> shaderDataListFXAA;
-        StaticArray<Shader::ShaderDataPlanet, 256> shaderDataListFXAA;
-        StaticArray<Shader::ShaderDataSun, 256> shaderDataListFXAA;
-        StaticArray<Shader::ShaderDataTerrain, 256> shaderDataListFXAA;
-        StaticArray<Shader::ShaderDataTextureGeneratorSun, 256> shaderDataListFXAA;*/
-
         RenderingContext() {}
         ~RenderingContext() {}
-        void renderMain();
+        //void renderMain();
         void init();
-        void render();
-        void fillRenderQueue(); // take render objects as parameter
+        void update();
+        void setSimulationBufferIndex();
+        void setLastFilledBufferIndex();
+        void cleanBuffers();
+        
+        template<std::size_t N>
+        void submit(ParticleSystem::ParticleSolarSystem<N>& p, Shader::ShaderDataParticleSolarSystem& shaderDataParticleSolarSystem) {
 
+            bufferDataStars.isActive[simulationBufferIndex] = true;
+            bufferDataStars.shaderDataParticleSolarSystem[simulationBufferIndex] = shaderDataParticleSolarSystem;
+
+            for (int i = 0; i < p.particleCount; i++) {
+
+                ParticleSystem::ParticleGPUDataSolarSystem pData;
+                glm::i16vec3 position(p.posX[i], p.posY[i], p.posZ[i]);
+                pData.position = position;
+                pData.rotation = p.rotation[i];
+                pData.alpha = p.alpha[i];
+                bufferDataStars.gpuData[simulationBufferIndex].push(pData);
+            }
+
+        }
+
+        void submit(Shader::ShaderDataPlanet& shaderDataPlanet);
     };
 }
