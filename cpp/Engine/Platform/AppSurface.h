@@ -11,13 +11,15 @@ namespace Engine {
     class AppSurface {
     private:
 
-    public:
-
 #if PLATFORM == ANDROID
         EglContext eglContext;
 #elif PLATFORM == WIN
         GlfwContext glfwContext;
 #endif
+
+    public:
+
+        friend class Input;
 
         AppSurface() {}
         ~AppSurface() {}
@@ -30,5 +32,9 @@ namespace Engine {
         unsigned int getHeight();
         void getSize(glm::ivec2& size);
         void getScreenSpaceCoordinate(glm::ivec2& screenSpaceCoordinate, glm::vec2 normalizedCoordinate);
+
+        void makeRenderingContextCurrent();
+        bool shouldClose();
+        void pollEvents();
     };
 }

@@ -2,44 +2,26 @@
 #include "Game.h"
 #include "Graphics.h"
 
-// game::init fonksiyonunun threadlere ayrilmasi
-// rendering context in buffer lar implementasyonu
-// rendering update loop
-// android implementasyonu
-
 namespace Game {
 
     Game* Game::instance;
 
-    void Game::open() {
+    void Game::init() {
 
-        Game::init();
-
-        std::thread renderThread(&Game::threadRendering, this);
-
-        while (!appSurface.glfwContext.shouldClose())
-            Game::update();
-
-        renderingContext.appClose = true;
-        renderThread.join();
+        shouldOpen = true;
+        appSurface.init();
+        input.init(&appSurface);
+        universe.init();
+        assetGenerator.init();
+        sceneManager.init();
+        Engine::Camera::init(camera, 45.0f, 1.5);
+        renderThread = std::thread(&Game::threadRendering, this);
     }
 
     void Game::threadRendering() {
 
-        Game::initRenderThread();
-
-        while (!renderingContext.appClose) {
-            renderingContext.update();
-            appSurface.update();
-        }
-    }
-
-
-    void Game::initRenderThread() {
-
-        appSurface.glfwContext.makeContextCurrent();
+        appSurface.makeRenderingContextCurrent();
         Engine::Graphics::init();
-
         assetGenerator.initRenderObjects();
 
         //glm::ivec2 screenSize;
@@ -47,21 +29,28 @@ namespace Game {
         //sceneFrame.init(screenSize);
 
         renderingContext.init();
-    }
 
-    void Game::init() {
-
-        appSurface.init();
-        input.init(&appSurface);
-        universe.init();
-        assetGenerator.init();
-        sceneManager.init();
-        Engine::Camera::init(camera, 45.0f, appSurface.getAspectRatio());
+        while (shouldOpen) {
+            renderingContext.update();
+            appSurface.update();
+        }
     }
 
     void Game::update() {
 
-        appSurface.glfwContext.pollEvents();
+#if PLATFORM == WIN
+        if (appSurface.shouldClose())
+            shouldOpen = false;
+#endif
+        if (!shouldOpen) {
+            renderThread.join();
+            return;
+        }
+
+#if PLATFORM == WIN
+        appSurface.pollEvents();
+#endif
+
         input.update();
         systemTimer.update();
 

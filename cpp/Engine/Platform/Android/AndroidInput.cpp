@@ -112,6 +112,8 @@ namespace Engine {
                         pointerDelta[pointer.id] = newPosition - pointerPosition[pointer.id];
                         pointerPosition[pointer.id] = newPosition;
 
+                        //__android_log_print(ANDROID_LOG_DEBUG, "MyAppTag", "x: %d y: %d", pointerDelta[pointer.id].x, pointerDelta[pointer.id].y);
+
                         //aout << "(" << pointer.id << ", " << x << ", " << y << ")";
 
                         //if (index != (motionEvent.pointerCount - 1)) aout << ",";

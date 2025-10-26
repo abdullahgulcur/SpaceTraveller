@@ -24,10 +24,9 @@ void handle_cmd(android_app *pApp, int32_t cmd) {
         case APP_CMD_INIT_WINDOW:{
 
             AndroidApplication::init(pApp);
-            Engine::Core* coreInstance = Engine::Core::getInstance();
             Game::Game* gameInstance = Game::Game::getInstance();
-            coreInstance->init();
             gameInstance->init();
+
             appStarted = true;
             break;
         }
@@ -35,7 +34,9 @@ void handle_cmd(android_app *pApp, int32_t cmd) {
 
             if (pApp->userData) {
                 Game::Game* gameInstance = Game::Game::getInstance();
-                Engine::Core* coreInstance = Engine::Core::getInstance();
+                gameInstance->shouldOpen = false;
+//                Game::Game* gameInstance = Game::Game::getInstance();
+//                Engine::Core* coreInstance = Engine::Core::getInstance();
                 //delete
             }
             break;
@@ -100,12 +101,10 @@ void android_main(struct android_app *pApp) {
 
         if (appStarted) {
 
-            Engine::Core* instance = Engine::Core::getInstance();
             Game::Game* gameInstance = Game::Game::getInstance();
-            instance->update();
-            gameInstance->update(instance->systemTimer.getDeltaSeconds());
+            if(gameInstance->shouldOpen)
+                gameInstance->update();
 
-            instance->appSurface.update();
         }
     } while (!pApp->destroyRequested);
 }
@@ -118,7 +117,9 @@ int main() {
     std::cout << "Welcome to Space game !" << std::endl;
 
     Game::Game* gameInstance = Game::Game::getInstance();
-    gameInstance->open();
+    gameInstance->init();
+    while (gameInstance->shouldOpen)
+        gameInstance->update();
 
     return 0;
 }

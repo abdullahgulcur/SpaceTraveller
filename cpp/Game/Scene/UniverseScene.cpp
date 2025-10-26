@@ -21,9 +21,7 @@
 
 namespace Game {
 
-    void UniverseScene::init() {
-
-    }
+    void UniverseScene::init() {}
 
     void UniverseScene::start() {
 
@@ -99,10 +97,8 @@ namespace Game {
 
         /* RENDER PART */
         //game->sceneFrame.activate();
-
         UniverseScene::submitStars();
         UniverseScene::submitSolarSystem();
-
         //game->sceneFrame.postProcess();
 
 #if PLATFORM == WIN
@@ -274,155 +270,55 @@ namespace Game {
         Game* game = Game::getInstance();
         Engine::Camera::Camera& camera = game->camera;
 
-        if (currentSun.id != -1) {
-            glm::vec3 sunPosition = glm::vec3(currentSun.position);
-            glm::mat4 model = glm::translate(glm::mat4(1), sunPosition) * glm::scale(glm::mat4(1), glm::vec3(6.f));
+        //if (currentSun.id != -1) {
+        //    glm::vec3 sunPosition = glm::vec3(currentSun.position);
+        //    glm::mat4 model = glm::translate(glm::mat4(1), sunPosition) * glm::scale(glm::mat4(1), glm::vec3(6.f));
 
-            Shader::ShaderDataSun shaderData;
-            shaderData.projectionView = camera.projectionView;
-            shaderData.model = model;
-            Shader::updateUniforms(game->assetGenerator.shaderSun, shaderData);
-            Engine::DrawCommand::draw(game->assetGenerator.vaoSphereMesh, game->assetGenerator.sphereMeshData.indexBuffer.totalIndices, game->assetGenerator.sphereMeshData.indexBuffer.indexElementType);
-        }
+        //    Shader::ShaderDataSun shaderData;
+        //    shaderData.projectionView = camera.projectionView;
+        //    shaderData.model = model;
+        //    Shader::updateUniforms(game->assetGenerator.shaderSun, shaderData);
+        //    Engine::DrawCommand::draw(game->assetGenerator.vaoSphereMesh, game->assetGenerator.sphereMeshData.indexBuffer.totalIndices, game->assetGenerator.sphereMeshData.indexBuffer.indexElementType);
+        //}
 
-        if (previousSun.id != -1) {
-            glm::vec3 sunPosition = glm::vec3(previousSun.position);
-            glm::mat4 model = glm::translate(glm::mat4(1), sunPosition) * glm::scale(glm::mat4(1), glm::vec3(6.f));
+        //if (previousSun.id != -1) {
+        //    glm::vec3 sunPosition = glm::vec3(previousSun.position);
+        //    glm::mat4 model = glm::translate(glm::mat4(1), sunPosition) * glm::scale(glm::mat4(1), glm::vec3(6.f));
 
-            Shader::ShaderDataSun shaderData;
-            shaderData.projectionView = camera.projectionView;
-            shaderData.model = model;
-            Shader::updateUniforms(game->assetGenerator.shaderSun, shaderData);
-            //Shader::updateUniforms(game->assetGenerator.shaderSun, camera.projectionView, model);
-            Engine::DrawCommand::draw(game->assetGenerator.vaoSphereMesh, game->assetGenerator.sphereMeshData.indexBuffer.totalIndices, game->assetGenerator.sphereMeshData.indexBuffer.indexElementType);
-        }
+        //    Shader::ShaderDataSun shaderData;
+        //    shaderData.projectionView = camera.projectionView;
+        //    shaderData.model = model;
+        //    Shader::updateUniforms(game->assetGenerator.shaderSun, shaderData);
+        //    //Shader::updateUniforms(game->assetGenerator.shaderSun, camera.projectionView, model);
+        //    Engine::DrawCommand::draw(game->assetGenerator.vaoSphereMesh, game->assetGenerator.sphereMeshData.indexBuffer.totalIndices, game->assetGenerator.sphereMeshData.indexBuffer.indexElementType);
+        //}
 
         for (int i = 0; i < currentPlanetList.size(); i++) {
 
             Planet& planet = currentPlanetList[i];
-
             glm::vec3 position = glm::vec3(currentSun.position) + planet.relativePosition;
             glm::mat4 model = glm::translate(glm::mat4(1), position) * glm::scale(glm::mat4(1.f), glm::vec3(1.f));
             glm::vec3 lightDirection = glm::normalize(planet.relativePosition);
-
             Shader::ShaderDataPlanet planetShaderData(planet, camera, model, lightDirection, game->assetGenerator.noiseTextureArrayId);
-
             game->renderingContext.submit(planetShaderData);
-
-            /*planetShaderData.cameraPosition = camera.position;
-            planetShaderData.projectionView = camera.projectionView;
-            planetShaderData.model = model;
-            planetShaderData.waterColor = planet.waterColor;
-            planetShaderData.amountWater = planet.amountWater;
-            planetShaderData.continentalShelfColor = planet.continentalShelfColor;
-            planetShaderData.waterContinentalShelf = planet.continentalShelf;
-            planetShaderData.lightDirection = lightDirection;
-            planetShaderData.landColor0 = planet.landColor0;
-            planetShaderData.landColor1 = planet.landColor1;
-            planetShaderData.landColorOverlay = planet.landColorOverlay;
-            planetShaderData.landColorPower = planet.landColorPower;
-            planetShaderData.surfaceTopologyScale = planet.surfaceTopologyScale;
-            planetShaderData.landColorBlendScale = planet.landColorBlendScale;
-            planetShaderData.tex0 = game->assetGenerator.perlinTextureId;
-            planetShaderData.tex1 = game->assetGenerator.macroTextureId;
-            planetShaderData.texArray = game->assetGenerator.noiseTextureArrayId;
-
-            planetShaderData.macroScale = planet.macroScale;
-            planetShaderData.cloudScale = planet.cloudScale;
-            planetShaderData.cloudPower = planet.cloudPower;
-            planetShaderData.cloudOverlay = planet.cloudOverlay;
-            planetShaderData.cloudOpacity = planet.cloudOpacity;
-            planetShaderData.cloudColor = planet.cloudColor;
-            planetShaderData.fresnelPowerClouds = planet.fresnelPowerClouds;
-            planetShaderData.fresnelScaleClouds = planet.fresnelScaleClouds;
-            planetShaderData.fresnelBiasClouds = planet.fresnelBiasClouds;
-            planetShaderData.fresnelPowerAtmosphere = planet.fresnelPowerAtmosphere;
-            planetShaderData.fresnelScaleAtmosphere = planet.fresnelScaleAtmosphere;
-            planetShaderData.fresnelBiasAtmosphere = planet.fresnelBiasAtmosphere;
-
-            planetShaderData.noiseOctaveTexIndex0 = float(planet.noiseOctaveTexIndex0);
-            planetShaderData.noiseOctaveTexIndex1 = float(planet.noiseOctaveTexIndex1);
-            planetShaderData.noiseOctaveTexIndex2 = float(planet.noiseOctaveTexIndex2);
-            planetShaderData.specularStrength = planet.specularStrength;
-            planetShaderData.specularPower = planet.specularPower;*/
-
-            //Shader::updateUniforms(game->assetGenerator.planetShader, planetShaderData);
-
-            //Engine::DrawCommand::draw(game->assetGenerator.vaoSphereMesh, game->assetGenerator.sphereMeshData.indexBuffer.totalIndices, game->assetGenerator.sphereMeshData.indexBuffer.indexElementType);
         }
 
         for (int i = 0; i < previousPlanetList.size(); i++) {
             
             Planet& planet = previousPlanetList[i];
-
             glm::vec3 position = glm::vec3(previousSun.position) + planet.relativePosition;
             glm::mat4 model = glm::translate(glm::mat4(1), position) * glm::scale(glm::mat4(1.f), glm::vec3(1.f));
             glm::vec3 lightDirection = glm::normalize(planet.relativePosition);
-
-            //Shader::ShaderDataPlanet planetShaderData;
-
             Shader::ShaderDataPlanet planetShaderData(planet, camera, model, lightDirection, game->assetGenerator.noiseTextureArrayId);
             game->renderingContext.submit(planetShaderData);
-
-
-            /*planetShaderData.cameraPosition = camera.position;
-            planetShaderData.projectionView = camera.projectionView;
-            planetShaderData.model = model;
-            planetShaderData.waterColor = planet.waterColor;
-            planetShaderData.amountWater = planet.amountWater;
-            planetShaderData.continentalShelfColor = planet.continentalShelfColor;
-            planetShaderData.waterContinentalShelf = planet.continentalShelf;
-            planetShaderData.lightDirection = lightDirection;
-            planetShaderData.landColor0 = planet.landColor0;
-            planetShaderData.landColor1 = planet.landColor1;
-            planetShaderData.landColorOverlay = planet.landColorOverlay;
-            planetShaderData.landColorPower = planet.landColorPower;
-            planetShaderData.surfaceTopologyScale = planet.surfaceTopologyScale;
-            planetShaderData.landColorBlendScale = planet.landColorBlendScale;
-            planetShaderData.tex0 = game->assetGenerator.perlinTextureId;
-            planetShaderData.tex1 = game->assetGenerator.macroTextureId;
-            planetShaderData.texArray = game->assetGenerator.noiseTextureArrayId;
-
-            planetShaderData.macroScale = planet.macroScale;
-            planetShaderData.cloudScale = planet.cloudScale;
-            planetShaderData.cloudPower = planet.cloudPower;
-            planetShaderData.cloudOverlay = planet.cloudOverlay;
-            planetShaderData.cloudOpacity = planet.cloudOpacity;
-            planetShaderData.cloudColor = planet.cloudColor;
-            planetShaderData.fresnelPowerClouds = planet.fresnelPowerClouds;
-            planetShaderData.fresnelScaleClouds = planet.fresnelScaleClouds;
-            planetShaderData.fresnelBiasClouds = planet.fresnelBiasClouds;
-            planetShaderData.fresnelPowerAtmosphere = planet.fresnelPowerAtmosphere;
-            planetShaderData.fresnelScaleAtmosphere = planet.fresnelScaleAtmosphere;
-            planetShaderData.fresnelBiasAtmosphere = planet.fresnelBiasAtmosphere;
-            planetShaderData.specularStrength = planet.specularStrength;
-            planetShaderData.specularPower = planet.specularPower;
-
-            planetShaderData.noiseOctaveTexIndex0 = float(planet.noiseOctaveTexIndex0);
-            planetShaderData.noiseOctaveTexIndex1 = float(planet.noiseOctaveTexIndex1);
-            planetShaderData.noiseOctaveTexIndex2 = float(planet.noiseOctaveTexIndex2);*/
-
-            //Shader::updateUniforms(game->assetGenerator.planetShader, planetShaderData);
-
-            //Engine::DrawCommand::draw(game->assetGenerator.vaoSphereMesh, game->assetGenerator.sphereMeshData.indexBuffer.totalIndices, game->assetGenerator.sphereMeshData.indexBuffer.indexElementType);
         }
     }
 
     void UniverseScene::submitStars() {
 
         Game* game = Game::getInstance();
-        Engine::Camera::Camera& camera = game->camera;
-        ParticleSystem::ParticleSolarSystem<256>& particleSolarSystems = game->assetGenerator.particleSolarSystems;
-
-        Shader::ShaderDataParticleSolarSystem shaderData;
-        shaderData.aspectRatio = game->appSurface.getAspectRatio();
-        shaderData.projectionView = camera.projectionView;
-        shaderData.cameraRight = camera.right;
-        shaderData.cameraUp = camera.up;
-        shaderData.cameraPosition = camera.position;
-        shaderData.textureId = game->assetGenerator.sunFarBillboardTextureId;
-
-        game->renderingContext.submit(particleSolarSystems, shaderData);
+        Shader::ShaderDataParticleSolarSystem shaderData(game->camera, game->appSurface.getAspectRatio(), game->assetGenerator.sunFarBillboardTextureId);
+        game->renderingContext.submit(game->assetGenerator.particleSolarSystems, shaderData);
     }
 
     glm::vec3 UniverseScene::getArrivalPoint(glm::vec3& sunPosition) {
@@ -553,8 +449,14 @@ namespace Game {
         Engine::Input& input = Game::getInstance()->input;
 
         if (input.getPointerDown()) {
-            float deltaX = -input.getPointerDelta().x * 0.1f;
-            float deltaY = input.getPointerDelta().y * 0.1f;
+            float deltaX = -input.getPointerDelta().x * 0.001f;
+            float deltaY = input.getPointerDelta().y * 0.001f;
+
+            //std::cout << "X: " << deltaX << " Y: " << deltaY << std::endl;
+
+            //__android_log_print(ANDROID_LOG_DEBUG, "MyAppTag", "x: %.2f y: %.2f", deltaX, deltaY);
+
+
             cameraCtrl.addTargetPitch(deltaY);
             cameraCtrl.addTargetYaw(deltaX);
         }

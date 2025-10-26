@@ -35,8 +35,6 @@ namespace Game {
         BufferDataStars bufferDataStars;
         BufferDataSolarSystem bufferDataSolarSystem;
 
-        bool appClose = false;
-
         RenderingContext() {}
         ~RenderingContext() {}
         //void renderMain();

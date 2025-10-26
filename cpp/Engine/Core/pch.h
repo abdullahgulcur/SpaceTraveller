@@ -19,4 +19,8 @@
 #include <condition_variable>
 #include <atomic>
 
+#if PLATFORM == ANDROID
+#include <android/log.h>
+#endif
+
 #include "StaticArray.h"

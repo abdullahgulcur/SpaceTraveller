@@ -46,7 +46,7 @@ namespace Engine {
 
 #if PLATFORM == ANDROID
         glm::ivec2 size;
-        Game::getInstance()->appSurface.getSize(size);
+        appSurface->getSize(size);
         position.x = (input.pointerPosition[0].x / (float)size.x) * 2.0f - 1.0f;
         //position.y = (input.pointerPosition.y / (float)size.y) * 2.0f - 1.0f;
         position.y = 1.0f - (input.pointerPosition[0].y / (float)size.y) * 2.0f;

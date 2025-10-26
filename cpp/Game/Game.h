@@ -18,6 +18,8 @@ namespace Game {
     class Game {
     private:
 
+        std::thread renderThread;
+
         static Game* instance;
         //Engine::Gizmo::Grid grid;
 
@@ -38,12 +40,13 @@ namespace Game {
 
         RenderingContext renderingContext;
 
+        bool shouldOpen = false;
+
         Game() {}
         ~Game() {}
-        void open();
+        //void open();
         void threadRendering();
         void init();
-        void initRenderThread();
         void update();
         static Game* getInstance();
     };

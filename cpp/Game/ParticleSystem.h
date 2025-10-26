@@ -154,15 +154,15 @@ namespace Game {
                 p.startTime[index] = duration;
                 p.lifeTime[index] = 2.f;
 
-                p.scale[index] = Random::randomFloat(0.1, 0.5);
+                p.scale[index] = Engine::Random::randomFloat(0.1, 0.5);
 
-                float angle = Random::randomFloat(0.f, 2.f * 3.14159265359f);
+                float angle = Engine::Random::randomFloat(0.f, 2.f * 3.14159265359f);
                 float radius = 5.f; // Circle radius
                 p.posX[index] = cos(angle) * radius;
                 p.posY[index] = 0.f;
                 p.posZ[index] = sin(angle) * radius;
                 p.rotation[index] = 0.f;
-                p.color[index] = glm::u8vec4(Random::random(0, 255), Random::random(0, 255), Random::random(0, 255), 255);
+                p.color[index] = glm::u8vec4(Engine::Random::random(0, 255), Engine::Random::random(0, 255), Engine::Random::random(0, 255), 255);
             }
 
             for (int i = 0; i < p.particleCount; i++) {
@@ -231,20 +231,20 @@ namespace Game {
                 p.startTime[index] = duration;
                 p.lifeTime[index] = 1.f;
 
-                p.scale[index] = Random::randomFloat(0.05f, 0.1f);
+                p.scale[index] = Engine::Random::randomFloat(0.05f, 0.1f);
 
-                //float angle = Random::randomFloat(0.f, 2.f * 3.14159265359f);
+                //float angle = Engine::Random::randomFloat(0.f, 2.f * 3.14159265359f);
                 //float radius = sqrt(Random::randomFloat(0.f, 1.f)) * 5.f; // Uniform distribution
                 //p.posX[index] = cos(angle) * radius;
                 //p.posY[index] = 0.f;
                 //p.posZ[index] = sin(angle) * radius;
-                float angle = Random::randomFloat(0.f, 2.f * 3.14159265359f);
+                float angle = Engine::Random::randomFloat(0.f, 2.f * 3.14159265359f);
                 float radius = 5.f; // Circle radius
                 p.posX[index] = cos(angle) * radius;
                 p.posY[index] = sin(angle) * radius;
                 p.posZ[index] = -20.f;
                 //p.rotation[index] = 0.f;
-                p.color[index] = glm::u8vec4(255, 255, 255, 255);// glm::u8vec4(Random::random(0, 255), Random::random(0, 255), Random::random(0, 255), 255);
+                p.color[index] = glm::u8vec4(255, 255, 255, 255);// glm::u8vec4(Random::random(0, 255), Engine::Random::random(0, 255), Engine::Random::random(0, 255), 255);
             }
 
             for (int i = 0; i < p.particleCount; i++) {
@@ -295,10 +295,10 @@ namespace Game {
                 p.posY[i] = position.y;
                 p.posZ[i] = position.z;
 
-                p.scale[i] = Random::randomFloat(2.f, 3.f);
+                p.scale[i] = Engine::Random::randomFloat(2.f, 3.f);
 
                 p.rotation[i] = 0.f;
-                p.color[i] = glm::u8vec4(255, 255, 255, 255);//glm::u8vec4(Random::random(0, 255), Random::random(0, 255), Random::random(0, 255), 255);
+                p.color[i] = glm::u8vec4(255, 255, 255, 255);//glm::u8vec4(Random::random(0, 255), Engine::Random::random(0, 255), Engine::Random::random(0, 255), 255);
 
             }
 
@@ -350,7 +350,7 @@ namespace Game {
                 p.posZ[i] = position.z;
                 p.rotation[i] = 0;// unsigned char((Random::randomFloat(0.f, 360.f) / (2.0f * 3.14159265359f)) * 255.0f);
                 p.alpha[i] = 255;
-                //p.color[i] = glm::u8vec4(255, 255, 255, 255);//glm::u8vec4(Random::random(0, 255), Random::random(0, 255), Random::random(0, 255), 255);
+                //p.color[i] = glm::u8vec4(255, 255, 255, 255);//glm::u8vec4(Random::random(0, 255), Engine::Random::random(0, 255), Engine::Random::random(0, 255), 255);
             }
 
         }

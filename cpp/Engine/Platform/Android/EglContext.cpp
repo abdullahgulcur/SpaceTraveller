@@ -49,28 +49,11 @@ namespace Engine {
                     return false;
                 });
 
-        //aout << "Found " << numConfigs << " configs" << std::endl;
-        //aout << "Chose " << config << std::endl;
-
-        // create the proper window surface
         EGLint format;
         eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
-        EGLSurface surface = eglCreateWindowSurface(display, config, AndroidApplication::application->window, nullptr);
-
-        // Create a GLES 3 context
-        EGLint contextAttribs[] = {EGL_CONTEXT_CLIENT_VERSION, 3, EGL_CONTEXT_MINOR_VERSION, 2, EGL_NONE};
-        EGLContext context = eglCreateContext(display, config, nullptr, contextAttribs);
-
-        // get some window metrics
-        auto madeCurrent = eglMakeCurrent(display, surface, surface, context);
-        //assert(madeCurrent);
 
         this->display = display;
-        this->surface = surface;
-        this->context = context;
-
-        eglQuerySurface(display, surface, EGL_WIDTH, &this->width);
-        eglQuerySurface(display, surface, EGL_HEIGHT, &this->height);
+        this->config = config;
     }
 
     void EglContext::updateRenderArea() {
@@ -95,4 +78,14 @@ namespace Engine {
         eglSwapBuffers(display, surface);
     }
 
+    void EglContext::makeContextCurrent(){
+
+        EGLSurface surface = eglCreateWindowSurface(display, config, AndroidApplication::application->window, nullptr);
+        EGLint contextAttribs[] = {EGL_CONTEXT_CLIENT_VERSION, 3, EGL_CONTEXT_MINOR_VERSION, 2, EGL_NONE};
+        EGLContext context = eglCreateContext(display, config, nullptr, contextAttribs);
+        eglMakeCurrent(display, surface, surface, context);
+
+        this->context = context;
+        this->surface = surface;
+    }
 }

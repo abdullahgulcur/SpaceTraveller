@@ -95,8 +95,6 @@ namespace Game {
             float noiseOctaveTexIndex1;
             float noiseOctaveTexIndex2;
 
-            //unsigned int tex0;
-            //unsigned int tex1;
             unsigned int texArray;
 
             ShaderDataPlanet(){}
@@ -185,11 +183,6 @@ namespace Game {
             float fresnelBias;
         };
 
-        //struct ShaderGrid {
-        //    unsigned int programId;
-        //    unsigned int loc_ProjectionView;
-        //};
-
         struct ShaderParticle {
             unsigned int programId;
             unsigned int loc_ProjectionView;
@@ -235,6 +228,17 @@ namespace Game {
             glm::vec3 cameraPosition;
             float aspectRatio;
             unsigned int textureId; // const
+
+            ShaderDataParticleSolarSystem() {}
+
+            ShaderDataParticleSolarSystem(Engine::Camera::Camera camera, float aspectRatio, unsigned int textureId) {
+                this->aspectRatio = aspectRatio;
+                projectionView = camera.projectionView;
+                cameraRight = camera.right;
+                cameraUp = camera.up;
+                cameraPosition = camera.position;
+                this->textureId = textureId;
+            }
         };
 
         struct ShaderTerrain {
@@ -270,7 +274,6 @@ namespace Game {
             unsigned int textureId;
         };
 
-        //void createShader(ShaderGrid& program);
         void createShader(ShaderParticle& program);
         void createShader(ShaderParticleTextured& program);
         void createShader(ShaderParticleSolarSystem& shader);
@@ -284,11 +287,8 @@ namespace Game {
         void updateUniforms(ShaderPlanet& shader, ShaderDataPlanet& planetShaderData);
         void updateUniforms(ShaderSun& shader, ShaderDataSun& shaderDataSun);
         void updateUniforms(ShaderParticleSolarSystem& program, ShaderDataParticleSolarSystem& shaderData);
-
         void updateUniforms(ShaderTerrain& program, ShaderDataTerrain& shaderData);
         void updateUniforms(ShaderFXAA& program, ShaderDataFXAA& shaderData);
-        //void updateUniforms(ShaderGrid& shaderProgram, glm::mat4& projectionView);
-
     }
 
 }

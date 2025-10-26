@@ -66,4 +66,29 @@ namespace Engine {
         screenSpaceCoordinate.y = (1.0f - normalizedCoordinate.y) * 0.5f * size.y;
     }
 
+
+    bool AppSurface::shouldClose() {
+#if PLATFORM == ANDROID
+
+#elif PLATFORM == WIN
+        return glfwContext.shouldClose();
+#endif
+    }
+
+    void AppSurface::pollEvents() {
+#if PLATFORM == ANDROID
+
+#elif PLATFORM == WIN
+        glfwContext.pollEvents();
+#endif
+    }
+
+
+    void AppSurface::makeRenderingContextCurrent() {
+#if PLATFORM == ANDROID
+        eglContext.makeContextCurrent();
+#elif PLATFORM == WIN
+        glfwContext.makeContextCurrent();
+#endif
+    }
 }

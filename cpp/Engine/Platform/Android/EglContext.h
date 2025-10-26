@@ -12,6 +12,7 @@ namespace Engine {
         EGLDisplay display;
         EGLSurface surface;
         EGLContext context;
+        EGLConfig config;
         EGLint width;
         EGLint height;
         bool aspectChanged = false;
@@ -22,5 +23,8 @@ namespace Engine {
         void init();
         void updateRenderArea();
         void swapBuffers();
+        void makeContextCurrent();
+
+
     };
 }

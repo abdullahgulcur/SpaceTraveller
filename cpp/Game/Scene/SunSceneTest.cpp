@@ -49,8 +49,8 @@ namespace Game {
         ImGuiIO& io = ImGui::GetIO(); (void)io;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
         ImGui::StyleColorsDark();
-        ImGui_ImplGlfw_InitForOpenGL(Game::getInstance()->appSurface.glfwContext.GLFW_window, true);
-        ImGui_ImplOpenGL3_Init("#version 460");
+        //ImGui_ImplGlfw_InitForOpenGL(Game::getInstance()->appSurface.glfwContext.GLFW_window, true);
+        //ImGui_ImplOpenGL3_Init("#version 460");
 
         //std::vector<unsigned char> buffer;
         //Engine::AssetManager assetManager;
