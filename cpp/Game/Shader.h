@@ -231,7 +231,7 @@ namespace Game {
 
             ShaderDataParticleSolarSystem() {}
 
-            ShaderDataParticleSolarSystem(Engine::Camera::Camera camera, float aspectRatio, unsigned int textureId) {
+            ShaderDataParticleSolarSystem(Engine::Camera::Camera& camera, float aspectRatio, unsigned int textureId) {
                 this->aspectRatio = aspectRatio;
                 projectionView = camera.projectionView;
                 cameraRight = camera.right;
@@ -252,6 +252,14 @@ namespace Game {
             glm::mat4 projectionView;
             glm::vec3 cameraPosition;
             unsigned int blockSize;
+
+            ShaderDataTerrain() {}
+            ShaderDataTerrain(Engine::Camera::Camera& camera, unsigned int blockSize) {
+                projectionView = camera.projectionView;
+                cameraPosition = camera.position;
+                this->blockSize = blockSize;
+            }
+
         };
 
         struct ShaderFXAA {

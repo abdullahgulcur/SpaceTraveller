@@ -27,6 +27,7 @@ set(sourceFiles
 
         "Game/Scene/SceneManager.cpp"
         "Game/Scene/UniverseScene.cpp"
+        "Game/Scene/PlanetScene.cpp"
         "Game/Scene/TerrainSceneTest.cpp"
         
         "Engine/Core/pch.cpp"

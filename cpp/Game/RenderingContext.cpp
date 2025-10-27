@@ -30,7 +30,7 @@ namespace Game {
     void RenderingContext::draw() {
 
         Engine::FrameBuffer::bindFbo(0);
-        glViewport(0, 0, 1560, 720); // TODO:
+        glViewport(0, 0, 1920, 1080); // TODO:
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //glEnable(GL_DEPTH_TEST);
@@ -48,13 +48,21 @@ namespace Game {
         }
 
         if (bufferDataSolarSystem.isActive) {
-
             for (int i = 0; i < bufferDataSolarSystem.shaderDataPlanet[renderingQueueIndex].size(); i++) {
                 Shader::updateUniforms(game->assetGenerator.planetShader, bufferDataSolarSystem.shaderDataPlanet[renderingQueueIndex][i]);
                 Engine::DrawCommand::draw(game->assetGenerator.vaoSphereMesh, game->assetGenerator.sphereMeshData.indexBuffer.totalIndices, game->assetGenerator.sphereMeshData.indexBuffer.indexElementType);
             }
         }
 
+        if (bufferDataTerrainClipmaps.isActive) {
+            if (bufferDataTerrainClipmaps.gpuData[renderingQueueIndex].size()) {
+                Shader::updateUniforms(game->assetGenerator.shaderTerrain, bufferDataTerrainClipmaps.shaderDataTerrain[renderingQueueIndex]);
+                Engine::VertexBuffer::bufferSubData(game->assetGenerator.instanceBufferTerrain, 0, bufferDataTerrainClipmaps.gpuData[renderingQueueIndex].size() * sizeof(TerrainGPUData), &bufferDataTerrainClipmaps.gpuData[renderingQueueIndex][0]);
+                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+                Engine::DrawCommand::drawInstanced(game->assetGenerator.vaoTerrainBlock, game->assetGenerator.terrainBlockMeshData.indexBuffer.totalIndices, game->assetGenerator.terrainBlockMeshData.indexBuffer.indexElementType, bufferDataTerrainClipmaps.gpuData[renderingQueueIndex].size());
+                glPolygonMode(GL_BACK, GL_FILL);
+            }
+        }
     }
 
     void RenderingContext::setSimulationBufferIndex() {
@@ -78,9 +86,11 @@ namespace Game {
 
         bufferDataStars.isActive[simulationBufferIndex] = false;
         bufferDataSolarSystem.isActive[simulationBufferIndex] = false;
+        bufferDataTerrainClipmaps.isActive[simulationBufferIndex] = false;
 
         bufferDataStars.gpuData[simulationBufferIndex].clean();
         bufferDataSolarSystem.shaderDataPlanet[simulationBufferIndex].clean();
+        bufferDataTerrainClipmaps.gpuData[simulationBufferIndex].clean();
     }
 
     void RenderingContext::submit(Shader::ShaderDataPlanet& shaderDataPlanet) {
@@ -88,6 +98,20 @@ namespace Game {
         bufferDataSolarSystem.shaderDataPlanet[simulationBufferIndex].push(shaderDataPlanet);
     }
 
+    void RenderingContext::submit(Engine::TerrainGeometryManager& terrainGeometryManager, Shader::ShaderDataTerrain& shaderDataTerrain) {
+
+        bufferDataTerrainClipmaps.isActive[simulationBufferIndex] = true;
+        bufferDataTerrainClipmaps.shaderDataTerrain[simulationBufferIndex] = shaderDataTerrain;
+
+        for (int i = terrainGeometryManager.startClipmapLevel; i < terrainGeometryManager.totalClipmapLevel; i++) {
+            for (int j = 0; j < 36; j++) {
+                if ((!terrainGeometryManager.getIsInner(i, j) || i == terrainGeometryManager.startClipmapLevel) &&
+                    !terrainGeometryManager.getOutOfBorder(i, j))
+                    bufferDataTerrainClipmaps.gpuData[simulationBufferIndex].push(TerrainGPUData(glm::u8vec2(terrainGeometryManager.getBlockIndexWorldSpace(i, j)), i));
+            }
+        }
+
+    }
 
 
 }

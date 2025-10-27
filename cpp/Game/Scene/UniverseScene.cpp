@@ -258,9 +258,9 @@ namespace Game {
 
         /* CAMERA UPDATE */
         if (glm::distance(translateCameraCtrl.getPosition(), currentPlanet.relativePosition + glm::vec3(currentSun.position)) < 3.1f) {
-            game->sceneManager.sceneType = SceneType::TERRAIN_TEST;
+            game->sceneManager.sceneType = SceneType::PLANET;
             translateCameraCtrl.cleanQueue();
-            game->sceneManager.terrainSceneTest.start();
+            game->sceneManager.planetScene.start();
             return;
         }
     }
@@ -449,8 +449,8 @@ namespace Game {
         Engine::Input& input = Game::getInstance()->input;
 
         if (input.getPointerDown()) {
-            float deltaX = -input.getPointerDelta().x * 0.001f;
-            float deltaY = input.getPointerDelta().y * 0.001f;
+            float deltaX = -input.getPointerDelta().x * 0.1f;
+            float deltaY = input.getPointerDelta().y * 0.1f;
 
             //std::cout << "X: " << deltaX << " Y: " << deltaY << std::endl;
 

@@ -2,8 +2,16 @@
 
 #include "Shader.h"
 #include "ParticleSystem.h"
+#include "TerrainGeometryManager.h"
 
 namespace Game {
+
+    struct TerrainGPUData {
+        glm::u8vec2 position;
+        unsigned char level;
+        TerrainGPUData() {}
+        TerrainGPUData(glm::u8vec2 position, unsigned char level) : position(position), level(level) {}
+    };
 
     struct BufferDataStars {
         StaticArray<ParticleSystem::ParticleGPUDataSolarSystem, 256> gpuData[3];
@@ -16,6 +24,12 @@ namespace Game {
 
     struct BufferDataSolarSystem {
         StaticArray<Shader::ShaderDataPlanet, 32> shaderDataPlanet[3]; // 32 parametre gibi olmasi laizm
+        bool isActive[3];
+    };
+
+    struct BufferDataTerrainClipmaps {
+        StaticArray<TerrainGPUData, 256> gpuData[3]; // TODO: 256 olarak kalamaz
+        Shader::ShaderDataTerrain shaderDataTerrain[3];
         bool isActive[3];
     };
 
@@ -34,6 +48,7 @@ namespace Game {
 
         BufferDataStars bufferDataStars;
         BufferDataSolarSystem bufferDataSolarSystem;
+        BufferDataTerrainClipmaps bufferDataTerrainClipmaps;
 
         RenderingContext() {}
         ~RenderingContext() {}
@@ -63,5 +78,6 @@ namespace Game {
         }
 
         void submit(Shader::ShaderDataPlanet& shaderDataPlanet);
+        void submit(Engine::TerrainGeometryManager& terrainGeometryManager, Shader::ShaderDataTerrain& shaderDataTerrain);
     };
 }

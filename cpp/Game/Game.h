@@ -8,10 +8,8 @@
 #include "SceneFrame.h"
 #include "Universe.h"
 #include "RenderingContext.h"
-//#include "Gizmo.h"
 #include "AssetGenerator.h"
 #include "SceneManager.h"
-#include "TerrainGeometryManager.h"
 
 namespace Game {
 
@@ -21,10 +19,8 @@ namespace Game {
         std::thread renderThread;
 
         static Game* instance;
-        //Engine::Gizmo::Grid grid;
 
     public:
-
 
         Engine::AppSurface appSurface;
         Engine::Input input;
@@ -36,15 +32,12 @@ namespace Game {
         SceneFrame sceneFrame;
         Engine::Camera::Camera camera;
 
-        Engine::TerrainGeometryManager terrainGeometryManager; // burda olmasi cok mantikli gelmedi, geciciydi sanirim
-
         RenderingContext renderingContext;
 
         bool shouldOpen = false;
 
         Game() {}
         ~Game() {}
-        //void open();
         void threadRendering();
         void init();
         void update();
