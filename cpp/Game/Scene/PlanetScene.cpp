@@ -55,7 +55,7 @@ namespace Game {
         cameraCtrl.update(dt);
         Engine::Camera::lookAt(camera, cameraCtrl.getPosition(), cameraCtrl.getPosition() + cameraCtrl.getForward(), glm::vec3(0.f, 1.f, 0.f));
        
-        Shader::ShaderDataTerrain shaderData(camera, terrainGeometryManager.blockSize);
+        Shader::ShaderDataTerrain shaderData(camera, terrainGeometryManager.getBlockSize());
         game->renderingContext.submit(terrainGeometryManager, shaderData);
     }
 

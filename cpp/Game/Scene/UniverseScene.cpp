@@ -458,8 +458,8 @@ namespace Game {
         Engine::Input& input = Game::getInstance()->input;
 
         if (input.getPointerDown()) {
-            float deltaX = -input.getPointerDelta().x * 0.001f;
-            float deltaY = input.getPointerDelta().y * 0.001f;
+            float deltaX = -input.getPointerDelta().x * 0.1f;
+            float deltaY = input.getPointerDelta().y * 0.1f;
 
             //std::cout << "X: " << deltaX << " Y: " << deltaY << std::endl;
 

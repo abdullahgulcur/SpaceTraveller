@@ -9,7 +9,6 @@ namespace Game {
 
     void RenderingContext::init() {
 
-
     }
 
     void RenderingContext::update() {
@@ -108,9 +107,9 @@ namespace Game {
         bufferDataTerrainClipmaps.isActive[simulationBufferIndex] = true;
         bufferDataTerrainClipmaps.shaderDataTerrain[simulationBufferIndex] = shaderDataTerrain;
 
-        for (int i = terrainGeometryManager.startClipmapLevel; i < terrainGeometryManager.totalClipmapLevel; i++) {
+        for (int i = terrainGeometryManager.getStartClipmapLevel(); i < terrainGeometryManager.getTotalClipmapLevel(); i++) {
             for (int j = 0; j < 36; j++) {
-                if ((!terrainGeometryManager.getIsInner(i, j) || i == terrainGeometryManager.startClipmapLevel) &&
+                if ((!terrainGeometryManager.getIsInner(i, j) || i == terrainGeometryManager.getStartClipmapLevel()) &&
                     !terrainGeometryManager.getOutOfBorder(i, j))
                     bufferDataTerrainClipmaps.gpuData[simulationBufferIndex].push(TerrainGPUData(glm::u8vec2(terrainGeometryManager.getBlockIndexWorldSpace(i, j)), i));
             }
