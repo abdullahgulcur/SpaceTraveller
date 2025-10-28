@@ -1,5 +1,4 @@
 #include "pch.h"
-#include "Game.h"
 
 #if PLATFORM == ANDROID
 
@@ -10,117 +9,21 @@
 
 #include "AndroidApplication.h"
 
-extern "C" {
+extern "C" void android_main(struct android_app* app) {
 
-bool appStarted = false;
-
-/*!
- * Handles commands sent to this Android application
- * @param pApp the app the commands are coming from
- * @param cmd the command to handle
- */
-void handle_cmd(android_app *pApp, int32_t cmd) {
-    switch (cmd) {
-        case APP_CMD_INIT_WINDOW:{
-
-            AndroidApplication::init(pApp);
-            Game::Game* gameInstance = Game::Game::getInstance();
-            gameInstance->init();
-
-            appStarted = true;
-            break;
-        }
-        case APP_CMD_TERM_WINDOW:
-
-            if (pApp->userData) {
-                Game::Game* gameInstance = Game::Game::getInstance();
-                gameInstance->shouldOpen = false;
-//                Game::Game* gameInstance = Game::Game::getInstance();
-//                Engine::Core* coreInstance = Engine::Core::getInstance();
-                //delete
-            }
-            break;
-        default:
-            break;
-    }
-}
-
-/*!
- * Enable the motion events you want to handle; not handled events are
- * passed back to OS for further processing. For this example case,
- * only pointer and joystick devices are enabled.
- *
- * @param motionEvent the newly arrived GameActivityMotionEvent.
- * @return true if the event is from a pointer or joystick device,
- *         false for all other input devices.
- */
-bool motion_event_filter_func(const GameActivityMotionEvent *motionEvent) {
-    auto sourceClass = motionEvent->source & AINPUT_SOURCE_CLASS_MASK;
-    return (sourceClass == AINPUT_SOURCE_CLASS_POINTER ||
-            sourceClass == AINPUT_SOURCE_CLASS_JOYSTICK);
-}
-
-void android_main(struct android_app *pApp) {
-
-    // Register an event handler for Android events
-    pApp->onAppCmd = handle_cmd;
-
-    // Set input event filters (set it to NULL if the app wants to process all inputs).
-    // Note that for key inputs, this example uses the default default_key_filter()
-    // implemented in android_native_app_glue.c.
-    android_app_set_motion_event_filter(pApp, motion_event_filter_func);
-
-    do {
-        // Process all pending events before running game logic.
-        bool done = false;
-        while (!done) {
-            // 0 is non-blocking.
-            int timeout = 0;
-            int events;
-            android_poll_source *pSource;
-            int result = ALooper_pollOnce(timeout, nullptr, &events,
-                                          reinterpret_cast<void**>(&pSource));
-            switch (result) {
-                case ALOOPER_POLL_TIMEOUT:
-                    [[clang::fallthrough]];
-                case ALOOPER_POLL_WAKE:
-                    // No events occurred before the timeout or explicit wake. Stop checking for events.
-                    done = true;
-                    break;
-                case ALOOPER_EVENT_ERROR:
-                    //aout << "ALooper_pollOnce returned an error" << std::endl;
-                    break;
-                case ALOOPER_POLL_CALLBACK:
-                    break;
-                default:
-                    if (pSource) {
-                        pSource->process(pApp, pSource);
-                    }
-            }
-        }
-
-        if (appStarted) {
-
-            Game::Game* gameInstance = Game::Game::getInstance();
-            if(gameInstance->shouldOpen)
-                gameInstance->update();
-
-        }
-    } while (!pApp->destroyRequested);
-}
+    AndroidApplication* instance = AndroidApplication::getInstance();
+    instance->init(app);
+    instance->run();
 }
 
 #elif PLATFORM == WIN
 
+#include "WindowsApplication.h"
+
 int main() {
 
-    std::cout << "Welcome to Space game !" << std::endl;
-
-    Game::Game* gameInstance = Game::Game::getInstance();
-    gameInstance->init();
-    while (gameInstance->shouldOpen)
-        gameInstance->update();
-
+    WindowsApplication* instance = WindowsApplication::getInstance();
+    instance->run();
     return 0;
 }
 

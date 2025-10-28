@@ -17,7 +17,7 @@ namespace Engine {
 
         clickBuffer = 0;
 
-        auto *inputBuffer = android_app_swap_input_buffers(AndroidApplication::application);
+        auto *inputBuffer = android_app_swap_input_buffers(AndroidApplication::getInstance()->app);
         if (!inputBuffer)
             return;
 

@@ -71,6 +71,7 @@ elseif (${platform} STREQUAL ${win})
             "Engine/Platform/Glfw/GlfwContext.cpp"
             "Engine/Platform/Glfw/GlfwInput.cpp"
             "Engine/Platform/Windows/WindowsAssetManager.cpp"
+            "Engine/Platform/Windows/WindowsApplication.cpp"
             "ThirdParty/imgui/imgui.cpp"
             "ThirdParty/imgui/imgui_draw.cpp"
             "ThirdParty/imgui/imgui_impl_glfw.cpp"

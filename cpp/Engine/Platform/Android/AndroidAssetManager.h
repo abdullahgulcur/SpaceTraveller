@@ -14,7 +14,7 @@ namespace Engine{
         template<typename T>
         void readBytesFromAsset(const char* filename, T& buffer) {
 
-            AAsset* asset = AAssetManager_open(AndroidApplication::application->activity->assetManager, filename, AASSET_MODE_BUFFER);
+            AAsset* asset = AAssetManager_open(AndroidApplication::getInstance()->app->activity->assetManager, filename, AASSET_MODE_BUFFER);
             if (asset == nullptr) {
                 //std::cerr << "Failed to open asset file: " << filename << std::endl;
                 return;

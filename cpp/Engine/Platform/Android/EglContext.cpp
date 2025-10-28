@@ -83,7 +83,7 @@ namespace Engine {
 
     void EglContext::makeContextCurrent(){
 
-        EGLSurface surface = eglCreateWindowSurface(display, config, AndroidApplication::application->window, nullptr);
+        EGLSurface surface = eglCreateWindowSurface(display, config, AndroidApplication::getInstance()->app->window, nullptr);
         EGLint contextAttribs[] = {EGL_CONTEXT_CLIENT_VERSION, 3, EGL_CONTEXT_MINOR_VERSION, 2, EGL_NONE};
         EGLContext context = eglCreateContext(display, config, nullptr, contextAttribs);
         eglMakeCurrent(display, surface, surface, context);
