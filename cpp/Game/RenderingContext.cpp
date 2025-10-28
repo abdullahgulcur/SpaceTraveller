@@ -29,13 +29,18 @@ namespace Game {
 
     void RenderingContext::draw() {
 
+        Game* game = Game::getInstance();
+
         Engine::FrameBuffer::bindFbo(0);
-        glViewport(0, 0, 1920, 1080); // TODO:
+
+        glm::ivec2 screenSize;
+        game->appSurface.getScreenSize(screenSize);
+
+        glViewport(0, 0, screenSize.x, screenSize.y);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         //glEnable(GL_DEPTH_TEST);
 
-        Game* game = Game::getInstance();
 
         if (bufferDataStars.isActive) {
             Shader::updateUniforms(game->assetGenerator.shaderParticleSolarSystem, bufferDataStars.shaderDataParticleSolarSystem[renderingQueueIndex]);
@@ -58,9 +63,9 @@ namespace Game {
             if (bufferDataTerrainClipmaps.gpuData[renderingQueueIndex].size()) {
                 Shader::updateUniforms(game->assetGenerator.shaderTerrain, bufferDataTerrainClipmaps.shaderDataTerrain[renderingQueueIndex]);
                 Engine::VertexBuffer::bufferSubData(game->assetGenerator.instanceBufferTerrain, 0, bufferDataTerrainClipmaps.gpuData[renderingQueueIndex].size() * sizeof(TerrainGPUData), &bufferDataTerrainClipmaps.gpuData[renderingQueueIndex][0]);
-                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+                //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
                 Engine::DrawCommand::drawInstanced(game->assetGenerator.vaoTerrainBlock, game->assetGenerator.terrainBlockMeshData.indexBuffer.totalIndices, game->assetGenerator.terrainBlockMeshData.indexBuffer.indexElementType, bufferDataTerrainClipmaps.gpuData[renderingQueueIndex].size());
-                glPolygonMode(GL_BACK, GL_FILL);
+                //glPolygonMode(GL_BACK, GL_FILL);
             }
         }
     }

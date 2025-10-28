@@ -1,6 +1,7 @@
 #pragma once
 
 #include <EGL/egl.h>
+#include "glm.hpp"
 
 namespace Engine {
 
@@ -21,10 +22,11 @@ namespace Engine {
         ~EglContext() {}
 
         void init();
-        void updateRenderArea();
+        void checkScreenSize();
         void swapBuffers();
         void makeContextCurrent();
-
+        float getAspectRatio();
+        void getScreenSize(glm::ivec2& size);
 
     };
 }

@@ -2,9 +2,10 @@
 
 #include "UniverseScene.h"
 #include "TerrainSceneTest.h"
+#include "PlanetScene.h"
 #if PLATFORM == WIN
 #include "PlanetSceneTest.h"
-#include "PlanetScene.h"
+
 #include "SunSceneTest.h"
 #endif
 

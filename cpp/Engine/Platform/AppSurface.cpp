@@ -5,90 +5,55 @@ namespace Engine {
 
     void AppSurface::init() {
 
-#if PLATFORM == ANDROID
-        eglContext.init();
-#elif PLATFORM == WIN
-        glfwContext.init();
-#endif
+        glContext.init();
     }
 
-    void AppSurface::update() {
-#if PLATFORM == ANDROID
-        eglContext.swapBuffers();
-        eglContext.updateRenderArea();
-#elif PLATFORM == WIN
-        glfwContext.swapBuffers();
-#endif
+    void AppSurface::swapBuffers() {
+
+        glContext.swapBuffers();
+    }
+
+    void AppSurface::checkScreenSize() {
+
+        glContext.checkScreenSize();
     }
 
     float AppSurface::getAspectRatio(){
-#if PLATFORM == ANDROID
-        return (float)eglContext.width / eglContext.height;
-#elif PLATFORM == WIN
-        return (float)glfwContext.mode->width / glfwContext.mode->height;
-#endif
+
+        return glContext.getAspectRatio();
     }
 
     bool AppSurface::aspectChanged() {
-#if PLATFORM == ANDROID
-        return eglContext.aspectChanged;
-#elif PLATFORM == WIN
-        return false;
-#endif
+
+        return glContext.aspectChanged;
     }
 
-    unsigned int AppSurface::getWidth(){
-#if PLATFORM == ANDROID
-        return eglContext.width;
-#elif PLATFORM == WIN
-        return glfwContext.mode->width;
-#endif
-    }
+    void AppSurface::getScreenSize(glm::ivec2& size) {
 
-    unsigned int AppSurface::getHeight(){
-#if PLATFORM == ANDROID
-        return eglContext.height;
-#elif PLATFORM == WIN
-        return glfwContext.mode->height;
-#endif
-    }
-
-    void AppSurface::getSize(glm::ivec2& size) {
-        size = glm::ivec2(AppSurface::getWidth(), AppSurface::getHeight());
+        glContext.getScreenSize(size);
     }
 
     void AppSurface::getScreenSpaceCoordinate(glm::ivec2& screenSpaceCoordinate, glm::vec2 normalizedCoordinate) {
         glm::ivec2 size;
-        AppSurface::getSize(size);
-
+        AppSurface::getScreenSize(size);
         screenSpaceCoordinate.x = (normalizedCoordinate.x + 1.0f) * 0.5f * size.x;
         //screenSpaceCoordinate.y = (normalizedCoordinate.y + 1.0f) * 0.5f * size.y;
         screenSpaceCoordinate.y = (1.0f - normalizedCoordinate.y) * 0.5f * size.y;
     }
 
+    void AppSurface::makeRenderingContextCurrent() {
+
+        glContext.makeContextCurrent();
+    }
+
+#if PLATFORM == WIN
+    void AppSurface::pollEvents() {
+        glContext.pollEvents();
+    }
 
     bool AppSurface::shouldClose() {
-#if PLATFORM == ANDROID
-
-#elif PLATFORM == WIN
-        return glfwContext.shouldClose();
-#endif
+        return glContext.shouldClose();
     }
-
-    void AppSurface::pollEvents() {
-#if PLATFORM == ANDROID
-
-#elif PLATFORM == WIN
-        glfwContext.pollEvents();
 #endif
-    }
 
-
-    void AppSurface::makeRenderingContextCurrent() {
-#if PLATFORM == ANDROID
-        eglContext.makeContextCurrent();
-#elif PLATFORM == WIN
-        glfwContext.makeContextCurrent();
-#endif
-    }
 }

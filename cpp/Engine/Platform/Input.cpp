@@ -16,7 +16,7 @@ namespace Engine {
 #if PLATFORM == ANDROID
         input.init();
 #elif PLATFORM == WIN
-        input.init(this->appSurface->glfwContext.GLFW_window);
+        input.init(this->appSurface->glContext.GLFW_window);
 #endif
     }
 
@@ -46,13 +46,13 @@ namespace Engine {
 
 #if PLATFORM == ANDROID
         glm::ivec2 size;
-        appSurface->getSize(size);
+        appSurface->getScreenSize(size);
         position.x = (input.pointerPosition[0].x / (float)size.x) * 2.0f - 1.0f;
         //position.y = (input.pointerPosition.y / (float)size.y) * 2.0f - 1.0f;
         position.y = 1.0f - (input.pointerPosition[0].y / (float)size.y) * 2.0f;
 #elif PLATFORM == WIN
         glm::ivec2 size;
-        appSurface->getSize(size);
+        appSurface->getScreenSize(size);
         position.x = (input.pointerPosition.x / (float)size.x) * 2.0f - 1.0f;
         //position.y = (input.pointerPosition.y / (float)size.y) * 2.0f - 1.0f;
         position.y = 1.0f - (input.pointerPosition.y / (float)size.y) * 2.0f;

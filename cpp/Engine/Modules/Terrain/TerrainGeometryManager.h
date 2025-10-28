@@ -19,7 +19,7 @@ namespace Engine {
 
 	public:
 
-		static constexpr int terrainSize = 2048;
+		static constexpr int terrainSize = 1024;
 		static constexpr int blockSize = 16;
 		static constexpr int blocksPerLevel = 36;
 		static constexpr int totalClipmapLevel = intLog2(terrainSize / blockSize) + 1;

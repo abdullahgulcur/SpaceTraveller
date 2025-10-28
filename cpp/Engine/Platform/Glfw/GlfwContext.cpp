@@ -3,7 +3,6 @@
 
 namespace Engine {
 
-	
 	void GlfwContext::init() {
 
 		if (!glfwInit())
@@ -13,17 +12,18 @@ namespace Engine {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-		monitor = glfwGetPrimaryMonitor();
-		mode = glfwGetVideoMode(monitor);
+		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
-		//GLFW_window = glfwCreateWindow(mode->width, mode->height, "Application", NULL, NULL); // windowed
-		GLFW_window = glfwCreateWindow(mode->width, mode->height, "Application", monitor, NULL); // fullscreen
+		GLFW_window = glfwCreateWindow(mode->width, mode->height, "Application", NULL, NULL); // windowed
+		//GLFW_window = glfwCreateWindow(mode->width, mode->height, "Application", monitor, NULL); // fullscreen
 
 		glfwMaximizeWindow(GLFW_window);
-		//glfwMakeContextCurrent(GLFW_window);
 
 		glfwSetInputMode(GLFW_window, GLFW_STICKY_KEYS, GL_TRUE);
 		glfwSetInputMode(GLFW_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+
+		screenSize = glm::ivec2(mode->width, mode->height);
 	}
 
 	void GlfwContext::makeContextCurrent() {
@@ -62,7 +62,26 @@ namespace Engine {
 
 	void GlfwContext::getScreenSize(glm::ivec2& screenSize) {
 
-		screenSize = glm::ivec2(mode->width, mode->height);
+		screenSize = this->screenSize;
+	}
+
+	float GlfwContext::getAspectRatio() {
+
+		return screenSize.x / (float)screenSize.y;
+	}
+
+	void GlfwContext::checkScreenSize() {
+
+		int width, height;
+		glfwGetWindowSize(GLFW_window, &width, &height);
+
+		if (width != screenSize.x || height != screenSize.y) {
+			this->screenSize.x = width;
+			this->screenSize.y = height;
+			aspectChanged = true;
+			return;
+		}
+		aspectChanged = false;
 	}
 
 }

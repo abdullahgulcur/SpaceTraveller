@@ -10,7 +10,7 @@ namespace Game {
 
     void PlanetScene::start() {
 
-        cameraCtrl.init(Engine::Camera::CameraTransform(glm::vec3(1000.f, 50.f, 1000.f), -89.f, 0.f));
+        cameraCtrl.init(Engine::Camera::CameraTransform(glm::vec3(500.f, 10.f, 500.f), -89.f, 0.f));
 
         Game* game = Game::getInstance();
         Engine::Camera::Camera& camera = game->camera;

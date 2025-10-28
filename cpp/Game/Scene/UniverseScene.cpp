@@ -228,15 +228,24 @@ namespace Game {
         if (UniverseScene::planetClick())
             return;
 
-#if PLATFORM == WIN
-        if (input.getButtonPress(Engine::InputCode::Space)) { 
+
+        if (input.getPointerDown()) {
             glm::vec3 arrivalPoint = currentPlanet.relativePosition + glm::vec3(currentSun.position);
             UniverseScene::setCameraTransformQueue(arrivalPoint, arrivalPoint);
             translateCameraCtrl.init();
             stateCameraMovement = StateCamera::ORBIT_MOVE_TARGET;
             return;
         }
-#endif
+
+//#if PLATFORM == WIN
+//        if (input.getButtonPress(Engine::InputCode::Space)) { 
+//            glm::vec3 arrivalPoint = currentPlanet.relativePosition + glm::vec3(currentSun.position);
+//            UniverseScene::setCameraTransformQueue(arrivalPoint, arrivalPoint);
+//            translateCameraCtrl.init();
+//            stateCameraMovement = StateCamera::ORBIT_MOVE_TARGET;
+//            return;
+//        }
+//#endif
 
     }
 
@@ -449,8 +458,8 @@ namespace Game {
         Engine::Input& input = Game::getInstance()->input;
 
         if (input.getPointerDown()) {
-            float deltaX = -input.getPointerDelta().x * 0.1f;
-            float deltaY = input.getPointerDelta().y * 0.1f;
+            float deltaX = -input.getPointerDelta().x * 0.001f;
+            float deltaY = input.getPointerDelta().y * 0.001f;
 
             //std::cout << "X: " << deltaX << " Y: " << deltaY << std::endl;
 

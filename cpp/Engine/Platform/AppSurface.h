@@ -12,9 +12,9 @@ namespace Engine {
     private:
 
 #if PLATFORM == ANDROID
-        EglContext eglContext;
+        EglContext glContext;
 #elif PLATFORM == WIN
-        GlfwContext glfwContext;
+        GlfwContext glContext;
 #endif
 
     public:
@@ -23,18 +23,18 @@ namespace Engine {
 
         AppSurface() {}
         ~AppSurface() {}
-
         void init();
-        void update();
+        void swapBuffers();
+        void checkScreenSize();
+        //void update();
         float getAspectRatio();
         bool aspectChanged();
-        unsigned int getWidth();
-        unsigned int getHeight();
-        void getSize(glm::ivec2& size);
+        void getScreenSize(glm::ivec2& size);
         void getScreenSpaceCoordinate(glm::ivec2& screenSpaceCoordinate, glm::vec2 normalizedCoordinate);
-
         void makeRenderingContextCurrent();
-        bool shouldClose();
+#if PLATFORM == WIN
         void pollEvents();
+        bool shouldClose();
+#endif
     };
 }

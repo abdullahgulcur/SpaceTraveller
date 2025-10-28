@@ -6,17 +6,14 @@
 
 namespace Engine {
 
-	// buradan gelebilecek butun data triple buffere yazilacak
-
 	class GlfwContext {
 	private:
-
-		GLFWmonitor* monitor;
 
 	public:
 
 		GLFWwindow* GLFW_window;
-		const GLFWvidmode* mode;
+		glm::ivec2 screenSize;
+		bool aspectChanged;
 
 		GlfwContext() {}
 		~GlfwContext() {}
@@ -29,5 +26,8 @@ namespace Engine {
 		void destroy();
 		void setTitle(const char* title);
 		void getScreenSize(glm::ivec2& screenSize);
+		float getAspectRatio();
+		void checkScreenSize();
+
 	};
 }

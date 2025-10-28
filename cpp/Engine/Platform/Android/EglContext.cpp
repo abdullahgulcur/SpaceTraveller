@@ -54,9 +54,12 @@ namespace Engine {
 
         this->display = display;
         this->config = config;
+
+        eglQuerySurface(display, surface, EGL_WIDTH, &this->width);
+        eglQuerySurface(display, surface, EGL_WIDTH, &this->height);
     }
 
-    void EglContext::updateRenderArea() {
+    void EglContext::checkScreenSize() {
 
         EGLint width;
         eglQuerySurface(display, surface, EGL_WIDTH, &width);
@@ -88,4 +91,16 @@ namespace Engine {
         this->context = context;
         this->surface = surface;
     }
+
+    float EglContext::getAspectRatio() {
+        if(width == 0 || height == 0)
+            return 1.0f;
+        return width / (float)height;
+    }
+
+    void EglContext::getScreenSize(glm::ivec2& size) {
+        size = glm::ivec2(width, height);
+    }
+
+
 }

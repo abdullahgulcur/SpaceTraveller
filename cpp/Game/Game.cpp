@@ -15,7 +15,7 @@ namespace Game {
         universe.init();
         assetGenerator.init();
         sceneManager.init();
-        Engine::Camera::init(camera, 45.0f, 1.5);
+        Engine::Camera::init(camera, 45.0f, appSurface.getAspectRatio());
         renderThread = std::thread(&Game::threadRendering, this);
     }
 
@@ -33,7 +33,7 @@ namespace Game {
 
         while (shouldOpen) {
             renderingContext.update();
-            appSurface.update();
+            appSurface.swapBuffers();
         }
     }
 
@@ -61,6 +61,7 @@ namespace Game {
         renderingContext.setLastFilledBufferIndex();
         // ---------------------------------------
 
+        appSurface.checkScreenSize();
         if (appSurface.aspectChanged())
             Engine::Camera::setAspect(camera, appSurface.getAspectRatio());
     }
