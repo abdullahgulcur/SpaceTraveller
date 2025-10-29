@@ -6,7 +6,6 @@
 
 #include "Camera.h"
 #include "SceneFrame.h"
-#include "Universe.h"
 #include "RenderingContext.h"
 #include "AssetGenerator.h"
 #include "SceneManager.h"
@@ -16,7 +15,6 @@ namespace Game {
     class Game {
     private:
 
-        std::thread renderThread;
 
         static Game* instance;
 
@@ -26,13 +24,13 @@ namespace Game {
         Engine::Input input;
         Timer::SystemTimer systemTimer;
 
-        Universe universe;
         AssetGenerator assetGenerator;
         SceneManager sceneManager;
         SceneFrame sceneFrame;
         Engine::Camera::Camera camera;
 
         RenderingContext renderingContext;
+        std::thread renderThread;
 
         bool shouldOpen = false;
 
@@ -41,6 +39,7 @@ namespace Game {
         void threadRendering();
         void init();
         void update();
+        void shutDown();
         static Game* getInstance();
     };
 }

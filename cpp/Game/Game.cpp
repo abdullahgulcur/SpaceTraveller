@@ -2,7 +2,6 @@
 #include "Game.h"
 #include "Graphics.h"
 
-
 namespace Game {
 
     Game* Game::instance;
@@ -11,12 +10,11 @@ namespace Game {
 
         shouldOpen = true;
         appSurface.init();
-        input.init(&appSurface);
-        universe.init();
-        assetGenerator.init();
-        sceneManager.init();
-        Engine::Camera::init(camera, 45.0f, appSurface.getAspectRatio());
         renderThread = std::thread(&Game::threadRendering, this);
+        input.init(&appSurface);
+        assetGenerator.init();
+        Engine::Camera::init(camera, 45.0f, appSurface.getAspectRatio());
+        sceneManager.init();
     }
 
     void Game::threadRendering() {
@@ -34,36 +32,21 @@ namespace Game {
         while (shouldOpen) {
             renderingContext.update();
             appSurface.swapBuffers();
+            appSurface.checkScreenSize();
         }
     }
 
     void Game::update() {
 
-#if PLATFORM == WIN
-        if (appSurface.shouldClose())
-            shouldOpen = false;
-#endif
-        if (!shouldOpen) {
-            renderThread.join();
-            return;
-        }
-
-#if PLATFORM == WIN
-        appSurface.pollEvents();
-#endif
-
         input.update();
         systemTimer.update();
-
-        // -------- sequence is important --------
-        renderingContext.setSimulationBufferIndex();
         sceneManager.update(systemTimer.getDeltaSeconds());
-        renderingContext.setLastFilledBufferIndex();
-        // ---------------------------------------
-
-        appSurface.checkScreenSize();
         if (appSurface.aspectChanged())
             Engine::Camera::setAspect(camera, appSurface.getAspectRatio());
+    }
+
+    void Game::shutDown() {
+        renderThread.join();
     }
 
     Game* Game::getInstance() {

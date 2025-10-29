@@ -41,7 +41,14 @@ namespace Game {
         int renderingQueueIndex = -1;
         int simulationBufferIndex = -1;
 
+        std::mutex newFrameMutex;
+        std::condition_variable newFrameCV;
+        bool readyForNewFrame = false;
+
         void draw();
+        void cleanBuffers();
+        void setSimulationBufferIndex();
+        void setLastFilledBufferIndex();
 
     public:
 
@@ -52,13 +59,12 @@ namespace Game {
 
         RenderingContext() {}
         ~RenderingContext() {}
-        //void renderMain();
         void init();
         void update();
-        void setSimulationBufferIndex();
-        void setLastFilledBufferIndex();
-        void cleanBuffers();
         
+        static void setBeforeSim();
+        static void setAfterSim();
+
         template<std::size_t N>
         void submit(ParticleSystem::ParticleSolarSystem<N>& p, Shader::ShaderDataParticleSolarSystem& shaderDataParticleSolarSystem) {
 
@@ -79,5 +85,7 @@ namespace Game {
 
         void submit(Shader::ShaderDataPlanet& shaderDataPlanet);
         void submit(Engine::TerrainGeometryManager& terrainGeometryManager, Shader::ShaderDataTerrain& shaderDataTerrain);
+
+        
     };
 }

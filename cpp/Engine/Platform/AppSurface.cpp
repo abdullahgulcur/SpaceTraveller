@@ -25,7 +25,7 @@ namespace Engine {
 
     bool AppSurface::aspectChanged() {
 
-        return glContext.aspectChanged;
+        return glContext.getAspectChanged();
     }
 
     void AppSurface::getScreenSize(glm::ivec2& size) {

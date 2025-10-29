@@ -12,16 +12,14 @@ void AndroidApplication::init(android_app* app){
 }
 
 void AndroidApplication::handle_cmd_proxy(android_app* app, int32_t cmd) {
-    auto* self = reinterpret_cast<AndroidApplication*>(app->userData);
-    if (self)
-        self->handleCommand(cmd);
+
+    AndroidApplication::getInstance()->handleCommand(cmd);
 }
 
 void AndroidApplication::handleCommand(int32_t cmd) {
     switch (cmd) {
         case APP_CMD_INIT_WINDOW: {
-            Game::Game* gameInstance = Game::Game::getInstance();
-            gameInstance->init();
+            Game::Game::getInstance()->init();
             appStarted = true;
             break;
         }
@@ -29,6 +27,7 @@ void AndroidApplication::handleCommand(int32_t cmd) {
             if (app->userData) {
                 Game::Game* gameInstance = Game::Game::getInstance();
                 gameInstance->shouldOpen = false;
+                gameInstance->shutDown();
             }
             break;
         }
@@ -61,7 +60,7 @@ void AndroidApplication::run() {
             }
         }
 
-        if (appStarted) {
+        if(appStarted){
             Game::Game* gameInstance = Game::Game::getInstance();
             if (gameInstance->shouldOpen)
                 gameInstance->update();
@@ -73,4 +72,16 @@ AndroidApplication* AndroidApplication::getInstance() {
     if (!instance)
         instance = new AndroidApplication;
     return instance;
+}
+
+AAssetManager* AndroidApplication::getAssetManager(){
+    return AndroidApplication::getInstance()->app->activity->assetManager;
+}
+
+android_app* AndroidApplication::getAndroidApp(){
+    return AndroidApplication::getInstance()->app;
+}
+
+ANativeWindow* AndroidApplication::getAndroidWindow(){
+    return AndroidApplication::getInstance()->app->window;
 }

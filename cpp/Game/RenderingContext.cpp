@@ -13,6 +13,12 @@ namespace Game {
 
     void RenderingContext::update() {
 
+        {
+            std::unique_lock<std::mutex> lock(newFrameMutex);
+            newFrameCV.wait(lock, [this] { return readyForNewFrame; });
+            readyForNewFrame = false;
+        }
+
         int queueIndex;
         {
             std::lock_guard<std::mutex> lock(queueMutex);
@@ -83,6 +89,13 @@ namespace Game {
     void RenderingContext::setLastFilledBufferIndex() {
         std::lock_guard<std::mutex> lock(queueMutex);
         lastFilledQueueIndex = simulationBufferIndex;
+
+        {
+            std::lock_guard<std::mutex> lock_(newFrameMutex);
+            readyForNewFrame = true;
+        }
+        newFrameCV.notify_one();
+
         //std::cout << "Sim End, Queue " << queueIndex << std::endl;
     }
 
@@ -117,5 +130,12 @@ namespace Game {
 
     }
 
+    void RenderingContext::setBeforeSim() {
+        Game::getInstance()->renderingContext.setSimulationBufferIndex();
+    }
+
+    void RenderingContext::setAfterSim() {
+        Game::getInstance()->renderingContext.setLastFilledBufferIndex();
+    }
 
 }

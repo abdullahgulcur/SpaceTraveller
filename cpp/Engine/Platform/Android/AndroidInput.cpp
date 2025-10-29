@@ -17,7 +17,7 @@ namespace Engine {
 
         clickBuffer = 0;
 
-        auto *inputBuffer = android_app_swap_input_buffers(AndroidApplication::getInstance()->app);
+        auto *inputBuffer = android_app_swap_input_buffers(AndroidApplication::getAndroidApp());
         if (!inputBuffer)
             return;
 
@@ -112,7 +112,7 @@ namespace Engine {
                         pointerDelta[pointer.id] = newPosition - pointerPosition[pointer.id];
                         pointerPosition[pointer.id] = newPosition;
 
-                        //__android_log_print(ANDROID_LOG_DEBUG, "MyAppTag", "x: %d y: %d", pointerDelta[pointer.id].x, pointerDelta[pointer.id].y);
+                        __android_log_print(ANDROID_LOG_DEBUG, "InputDebug", "x: %d y: %d", pointerDelta[pointer.id].x, pointerDelta[pointer.id].y);
 
                         //aout << "(" << pointer.id << ", " << x << ", " << y << ")";
 

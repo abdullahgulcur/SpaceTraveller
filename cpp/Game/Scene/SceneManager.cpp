@@ -1,9 +1,12 @@
 #include "pch.h"
 #include "SceneManager.h"
+#include "RenderingContext.h"
 
 namespace Game {
 
 	void SceneManager::init() {
+
+        universe.init();
 
         //sceneType = SceneType::TERRAIN_TEST;
         sceneType = SceneType::UNIVERSE;
@@ -38,26 +41,21 @@ namespace Game {
 
     void SceneManager::update(float dt) {
 
-        switch (sceneType) {
-        case SceneType::UNIVERSE: {
-            universeScene.update(dt); break;
-        }
-        case SceneType::PLANET: {
-            planetScene.update(dt); break;
-        }
-//        case SceneType::TERRAIN_TEST: {
-//            terrainSceneTest.update(dt); break;
-//        }
-//#if PLATFORM == WIN
-//        case SceneType::PLANET_TEST: {
-//            planetSceneTest.update(dt); break;
-//        }
-//        case SceneType::SUN_TEST: {
-//            sunSceneTest.update(dt); break;
-//        }
-//#endif
+        RenderingContext::setBeforeSim();
 
+        switch (sceneType) {
+            case SceneType::UNIVERSE: {
+                universeScene.update(dt);
+                break;
+            }
+            case SceneType::PLANET: {
+                planetScene.update(dt);
+                break;
+            }
         }
+
+        RenderingContext::setAfterSim();
+
     }
 
 

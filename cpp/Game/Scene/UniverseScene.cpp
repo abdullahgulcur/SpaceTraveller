@@ -30,8 +30,8 @@ namespace Game {
         cameraCtrl.init(Engine::Camera::CameraTransform());
 
         glm::i16vec3 solarSystemPositions[256];
-        for (int i = 0; i < game->universe.solarSystemList.size(); i++)
-            solarSystemPositions[i] = game->universe.solarSystemList[i].position;
+        for (int i = 0; i < game->sceneManager.universe.solarSystemList.size(); i++)
+            solarSystemPositions[i] = game->sceneManager.universe.solarSystemList[i].position;
 
         ParticleSystem::start(game->assetGenerator.particleSolarSystems, solarSystemPositions);
 
@@ -378,7 +378,7 @@ namespace Game {
         Game* game = Game::getInstance();
 
         previousSun = currentSun;
-        currentSun = Sun(solarSystemId, game->universe.solarSystemList[solarSystemId].position);
+        currentSun = Sun(solarSystemId, game->sceneManager.universe.solarSystemList[solarSystemId].position);
         currentPlanet.id = -1;
 
         previousPlanetList.clean();
@@ -387,8 +387,8 @@ namespace Game {
             previousPlanetList.push(currentPlanetList[i]);
 
         currentPlanetList.clean();
-        for (int i = 0; i < game->universe.planetList.size(); i++) {
-            Planet& planet = game->universe.planetList[i];
+        for (int i = 0; i < game->sceneManager.universe.planetList.size(); i++) {
+            Planet& planet = game->sceneManager.universe.planetList[i];
             if (planet.solarSystemId == solarSystemId) {
                 currentPlanetList.push(planet);
             }
@@ -409,8 +409,8 @@ namespace Game {
         if (input.getPointerClick()) {
             glm::vec2 pointerPosition = glm::vec2(input.getPointerPosition());
 
-            for (int i = 0; i < game->universe.solarSystemList.size(); i++) {
-                glm::vec3 sunPosition = glm::vec3(game->universe.solarSystemList[i].position);
+            for (int i = 0; i < game->sceneManager.universe.solarSystemList.size(); i++) {
+                glm::vec3 sunPosition = glm::vec3(game->sceneManager.universe.solarSystemList[i].position);
                 glm::vec2 screenSpaceSunPosition = UniverseScene::getPointScreenSpacePosition(camera.projectionView, sunPosition);
 
                 if (glm::distance(screenSpaceSunPosition, pointerPosition) < 30.f) {
@@ -418,7 +418,7 @@ namespace Game {
                     UniverseScene::setCameraTransformQueue(arrivalPoint, sunPosition);
                     translateCameraCtrl.init();
                     stateCameraMovement = StateCamera::UNIVERSE_MOVE_TARGET;
-                    UniverseScene::setPlanetList(game->universe.solarSystemList[i].id);
+                    UniverseScene::setPlanetList(game->sceneManager.universe.solarSystemList[i].id);
                     return true;
                 }
             }
@@ -458,8 +458,8 @@ namespace Game {
         Engine::Input& input = Game::getInstance()->input;
 
         if (input.getPointerDown()) {
-            float deltaX = -input.getPointerDelta().x * 0.1f;
-            float deltaY = input.getPointerDelta().y * 0.1f;
+            float deltaX = -input.getPointerDelta().x * 0.001f;
+            float deltaY = input.getPointerDelta().y * 0.001f;
 
             //std::cout << "X: " << deltaX << " Y: " << deltaY << std::endl;
 

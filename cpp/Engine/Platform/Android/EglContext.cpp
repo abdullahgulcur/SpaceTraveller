@@ -60,6 +60,7 @@ namespace Engine {
     }
 
     void EglContext::checkScreenSize() {
+        std::lock_guard<std::mutex> lock(mtx);
 
         EGLint width;
         eglQuerySurface(display, surface, EGL_WIDTH, &width);
@@ -73,7 +74,6 @@ namespace Engine {
             aspectChanged = true;
             return;
         }
-
         aspectChanged = false;
     }
 
@@ -82,8 +82,7 @@ namespace Engine {
     }
 
     void EglContext::makeContextCurrent(){
-
-        EGLSurface surface = eglCreateWindowSurface(display, config, AndroidApplication::getInstance()->app->window, nullptr);
+        EGLSurface surface = eglCreateWindowSurface(display, config, AndroidApplication::getAndroidWindow(), nullptr);
         EGLint contextAttribs[] = {EGL_CONTEXT_CLIENT_VERSION, 3, EGL_CONTEXT_MINOR_VERSION, 2, EGL_NONE};
         EGLContext context = eglCreateContext(display, config, nullptr, contextAttribs);
         eglMakeCurrent(display, surface, surface, context);
@@ -93,14 +92,19 @@ namespace Engine {
     }
 
     float EglContext::getAspectRatio() {
+        std::lock_guard<std::mutex> lock(mtx);
         if(width == 0 || height == 0)
             return 1.0f;
         return width / (float)height;
     }
 
     void EglContext::getScreenSize(glm::ivec2& size) {
+        std::lock_guard<std::mutex> lock(mtx);
         size = glm::ivec2(width, height);
     }
 
-
+    bool EglContext::getAspectChanged(){
+        std::lock_guard<std::mutex> lock(mtx);
+        return aspectChanged;
+    }
 }

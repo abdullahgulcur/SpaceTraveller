@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(win 0)
 set(android 1)
-set(platform ${win})
+set(platform ${android})
 
 set(sourceFiles
 
@@ -60,7 +60,6 @@ if(${platform} STREQUAL ${android})
     list(APPEND sourceFiles
             "Engine/Platform/Android/AndroidApplication.cpp"
             "Engine/Platform/Android/EglContext.cpp"
-            "Engine/Platform/Android/AndroidAssetManager.cpp"
             "Engine/Platform/Android/AndroidInput.cpp"
             )
 elseif (${platform} STREQUAL ${win})

@@ -61,16 +61,19 @@ namespace Engine {
 	}
 
 	void GlfwContext::getScreenSize(glm::ivec2& screenSize) {
-
+		std::lock_guard<std::mutex> lock(mtx);
 		screenSize = this->screenSize;
 	}
 
 	float GlfwContext::getAspectRatio() {
-
+		std::lock_guard<std::mutex> lock(mtx);
+		if (screenSize.x == 0 || screenSize.y == 0)
+			return 1.0f;
 		return screenSize.x / (float)screenSize.y;
 	}
 
 	void GlfwContext::checkScreenSize() {
+		std::lock_guard<std::mutex> lock(mtx);
 
 		int width, height;
 		glfwGetWindowSize(GLFW_window, &width, &height);
@@ -82,6 +85,11 @@ namespace Engine {
 			return;
 		}
 		aspectChanged = false;
+	}
+
+	bool GlfwContext::getAspectChanged() {
+		std::lock_guard<std::mutex> lock(mtx);
+		return aspectChanged;
 	}
 
 }

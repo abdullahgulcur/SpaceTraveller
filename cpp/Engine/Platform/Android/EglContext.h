@@ -8,8 +8,6 @@ namespace Engine {
     class EglContext {
     private:
 
-    public:
-
         EGLDisplay display;
         EGLSurface surface;
         EGLContext context;
@@ -17,6 +15,8 @@ namespace Engine {
         EGLint width;
         EGLint height;
         bool aspectChanged = false;
+        std::mutex mtx;
+    public:
 
         EglContext() {}
         ~EglContext() {}
@@ -27,6 +27,7 @@ namespace Engine {
         void makeContextCurrent();
         float getAspectRatio();
         void getScreenSize(glm::ivec2& size);
+        bool getAspectChanged();
 
     };
 }

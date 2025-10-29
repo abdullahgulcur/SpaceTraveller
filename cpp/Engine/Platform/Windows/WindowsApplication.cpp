@@ -8,8 +8,15 @@ void WindowsApplication::run() {
     
     Game::Game* gameInstance = Game::Game::getInstance();
     gameInstance->init();
-    while (gameInstance->shouldOpen)
+    while (gameInstance->shouldOpen) {
+        if (gameInstance->appSurface.shouldClose()) {
+            gameInstance->shouldOpen = false;
+            gameInstance->shutDown();
+        }
+        gameInstance->appSurface.pollEvents();
         gameInstance->update();
+    }
+        
 }
 
 WindowsApplication* WindowsApplication::getInstance() {

@@ -14,6 +14,7 @@ namespace Engine {
 		GLFWwindow* GLFW_window;
 		glm::ivec2 screenSize;
 		bool aspectChanged;
+		std::mutex mtx;
 
 		GlfwContext() {}
 		~GlfwContext() {}
@@ -28,6 +29,6 @@ namespace Engine {
 		void getScreenSize(glm::ivec2& screenSize);
 		float getAspectRatio();
 		void checkScreenSize();
-
+		bool getAspectChanged();
 	};
 }

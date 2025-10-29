@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Universe.h"
+
 #include "UniverseScene.h"
 #include "TerrainSceneTest.h"
 #include "PlanetScene.h"
@@ -22,7 +24,11 @@ namespace Game {
 	class SceneManager {
 
 	private:
+
+
 	public:
+
+		Universe universe;
 
 		UniverseScene universeScene;
 		PlanetScene planetScene;
