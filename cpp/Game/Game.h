@@ -9,6 +9,7 @@
 #include "RenderingContext.h"
 #include "AssetGenerator.h"
 #include "SceneManager.h"
+#include "AsyncTextureGenerator.h"
 
 namespace Game {
 
@@ -30,13 +31,18 @@ namespace Game {
         Engine::Camera::Camera camera;
 
         RenderingContext renderingContext;
+        //AsyncTextureGenerator asyncTextureGenerator;
         std::thread renderThread;
+        std::thread asyncTextureGeneratorThread;
 
         bool shouldOpen = false;
+
+        //bool temp = false;
 
         Game() {}
         ~Game() {}
         void threadRendering();
+        //void threadAsyncTextureGenerator();
         void init();
         void update();
         void shutDown();

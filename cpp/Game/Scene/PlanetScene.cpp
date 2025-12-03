@@ -2,6 +2,8 @@
 #include "PlanetScene.h"
 #include "Game.h"
 
+#include "stb_image_write.h"
+
 namespace Game {
 
     void PlanetScene::init() {
@@ -10,7 +12,7 @@ namespace Game {
 
     void PlanetScene::start() {
 
-        cameraCtrl.init(Engine::Camera::CameraTransform(glm::vec3(500.f, 10.f, 500.f), -89.f, 0.f));
+        cameraCtrl.init(Engine::Camera::CameraTransform(glm::vec3(500.f, 100.f, 500.f), -89.f, 0.f));
 
         Game* game = Game::getInstance();
         Engine::Camera::Camera& camera = game->camera;
@@ -55,8 +57,12 @@ namespace Game {
         cameraCtrl.update(dt);
         Engine::Camera::lookAt(camera, cameraCtrl.getPosition(), cameraCtrl.getPosition() + cameraCtrl.getForward(), glm::vec3(0.f, 1.f, 0.f));
        
-        Shader::ShaderDataTerrain shaderData(camera, terrainGeometryManager.getBlockSize());
+        Shader::ShaderDataTerrain shaderData(camera, terrainGeometryManager.getBlockSize(), game->assetGenerator.heightmapTextureId);
+        //shaderData.setHeightmap(game->asyncTextureGenerator.heightmapTextureId);
         game->renderingContext.submit(terrainGeometryManager, shaderData);
+
+        //std::cout << "Camera x: " << camera.position.x << " z: " << camera.position.z << std::endl;
+
     }
 
 }

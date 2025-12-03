@@ -22,7 +22,13 @@ namespace Engine {
         void uniform(unsigned int location, glm::uvec2& value);
         void uniform(unsigned int location, glm::vec3& value);
         void uniform(unsigned int location, glm::mat4& value);
-        
+
+        //void uniform(unsigned int location, glm::vec2 value);
+        //void uniform(unsigned int location, glm::ivec2 value);
+        //void uniform(unsigned int location, glm::uvec2 value);
+        //void uniform(unsigned int location, glm::vec3 value);
+        //void uniform(unsigned int location, glm::mat4 value);
+        //
         void uniformTexture(unsigned int location, unsigned int slot, unsigned int textureId);
         void uniformTextureArray(unsigned int location, unsigned int slot, unsigned int textureId);
         void getLocation(unsigned int& location, unsigned int shaderProgramId, const char* uniformName);

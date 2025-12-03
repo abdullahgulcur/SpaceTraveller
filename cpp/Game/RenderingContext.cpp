@@ -5,6 +5,8 @@
 #include "FrameBuffer.h"
 #include "Game.h"
 
+#include "stb_image_write.h"
+
 namespace Game {
 
     void RenderingContext::init() {
@@ -13,20 +15,17 @@ namespace Game {
 
     void RenderingContext::update() {
 
+        RenderingContext::generateTextures();
+
         {
             std::unique_lock<std::mutex> lock(newFrameMutex);
             newFrameCV.wait(lock, [this] { return readyForNewFrame; });
             readyForNewFrame = false;
         }
 
-        int queueIndex;
         {
             std::lock_guard<std::mutex> lock(queueMutex);
-            queueIndex = lastFilledQueueIndex;
-            if (queueIndex == -1)
-                return;
-            renderingQueueIndex = queueIndex;
-            //std::cout << "Rendering Start, Queue " << queueIndex << std::endl;
+            renderingQueueIndex = lastFilledQueueIndex;
         }
 
         RenderingContext::draw();
@@ -36,7 +35,8 @@ namespace Game {
 
         Game* game = Game::getInstance();
 
-        Engine::FrameBuffer::bindFbo(0);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 
         glm::ivec2 screenSize;
         game->appSurface.getScreenSize(screenSize);
@@ -44,10 +44,19 @@ namespace Game {
         glViewport(0, 0, screenSize.x, screenSize.y);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
         //glEnable(GL_DEPTH_TEST);
+        //glDepthFunc(GL_LESS);
+
+        //glEnable(GL_CULL_FACE);
+        //glCullFace(GL_BACK);
+        //glFrontFace(GL_CCW);
+
+        //glEnable(GL_BLEND);
+        //glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
 
-        if (bufferDataStars.isActive) {
+        if (bufferDataStars.any(renderingQueueIndex)) {
             Shader::updateUniforms(game->assetGenerator.shaderParticleSolarSystem, bufferDataStars.shaderDataParticleSolarSystem[renderingQueueIndex]);
             glEnable(GL_BLEND);
             glDepthMask(GL_FALSE);
@@ -57,21 +66,61 @@ namespace Game {
             glDepthMask(GL_TRUE);
         }
 
-        if (bufferDataSolarSystem.isActive) {
+        if (bufferDataSolarSystem.any(renderingQueueIndex)) {
             for (int i = 0; i < bufferDataSolarSystem.shaderDataPlanet[renderingQueueIndex].size(); i++) {
                 Shader::updateUniforms(game->assetGenerator.planetShader, bufferDataSolarSystem.shaderDataPlanet[renderingQueueIndex][i]);
                 Engine::DrawCommand::draw(game->assetGenerator.vaoSphereMesh, game->assetGenerator.sphereMeshData.indexBuffer.totalIndices, game->assetGenerator.sphereMeshData.indexBuffer.indexElementType);
             }
         }
 
-        if (bufferDataTerrainClipmaps.isActive) {
+        if (bufferDataTerrainClipmaps.any(renderingQueueIndex)) {
             if (bufferDataTerrainClipmaps.gpuData[renderingQueueIndex].size()) {
+
+                //std::vector<unsigned char> pixels(1024 * 1024);
+                //glBindTexture(GL_TEXTURE_2D, bufferDataTerrainClipmaps.shaderDataTerrain[renderingQueueIndex].heightmap);
+                //glGetTexImage(GL_TEXTURE_2D, 0, GL_RED, GL_UNSIGNED_BYTE, pixels.data());
+                //stbi_write_png("outputtt.png", 1024, 1024, 1, pixels.data(), 1024);
+
                 Shader::updateUniforms(game->assetGenerator.shaderTerrain, bufferDataTerrainClipmaps.shaderDataTerrain[renderingQueueIndex]);
                 Engine::VertexBuffer::bufferSubData(game->assetGenerator.instanceBufferTerrain, 0, bufferDataTerrainClipmaps.gpuData[renderingQueueIndex].size() * sizeof(TerrainGPUData), &bufferDataTerrainClipmaps.gpuData[renderingQueueIndex][0]);
                 //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
                 Engine::DrawCommand::drawInstanced(game->assetGenerator.vaoTerrainBlock, game->assetGenerator.terrainBlockMeshData.indexBuffer.totalIndices, game->assetGenerator.terrainBlockMeshData.indexBuffer.indexElementType, bufferDataTerrainClipmaps.gpuData[renderingQueueIndex].size());
                 //glPolygonMode(GL_BACK, GL_FILL);
             }
+        }
+    }
+
+    void RenderingContext::generateTextures() {
+
+
+        if (terrainHeightmapGeneratorJobSystem.has()) {
+
+            Game* game = Game::getInstance();
+
+            game->assetGenerator.fbo.bind();
+
+            glViewport(0, 0, 1024, 1024);
+            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            Engine::Shader::bind(game->assetGenerator.shaderTerrainHeightmapGenerator.programId);
+
+            terrainHeightmapGeneratorJobSystem.drawData[0].tex = game->assetGenerator.noiseTexture;
+
+            Shader::updateUniforms(game->assetGenerator.shaderTerrainHeightmapGenerator, terrainHeightmapGeneratorJobSystem.drawData[0]);
+
+            Engine::DrawCommand::drawQuad(game->assetGenerator.quadVAO);
+
+            Engine::Shader::unbind();
+
+            ////std::vector<unsigned char> pixels(1024 * 1024);
+            ////glBindTexture(GL_TEXTURE_2D, heightmapTextureId);
+            ////glGetTexImage(GL_TEXTURE_2D, 0, GL_RED, GL_UNSIGNED_BYTE, pixels.data());
+            ////stbi_write_jpg("outputtt.jpg", 1024, 1024, 1, pixels.data(), 100);
+
+            game->assetGenerator.fbo.unbind();
+
+            terrainHeightmapGeneratorJobSystem.reset();
         }
     }
 
@@ -101,9 +150,9 @@ namespace Game {
 
     void RenderingContext::cleanBuffers() {
 
-        bufferDataStars.isActive[simulationBufferIndex] = false;
-        bufferDataSolarSystem.isActive[simulationBufferIndex] = false;
-        bufferDataTerrainClipmaps.isActive[simulationBufferIndex] = false;
+        //bufferDataStars.isActive[simulationBufferIndex] = false;
+        //bufferDataSolarSystem.isActive[simulationBufferIndex] = false;
+        //bufferDataTerrainClipmaps.isActive[simulationBufferIndex] = false;
 
         bufferDataStars.gpuData[simulationBufferIndex].clean();
         bufferDataSolarSystem.shaderDataPlanet[simulationBufferIndex].clean();
@@ -111,13 +160,13 @@ namespace Game {
     }
 
     void RenderingContext::submit(Shader::ShaderDataPlanet& shaderDataPlanet) {
-        bufferDataSolarSystem.isActive[simulationBufferIndex] = true;
+        //bufferDataSolarSystem.isActive[simulationBufferIndex] = true;
         bufferDataSolarSystem.shaderDataPlanet[simulationBufferIndex].push(shaderDataPlanet);
     }
 
     void RenderingContext::submit(Engine::TerrainGeometryManager& terrainGeometryManager, Shader::ShaderDataTerrain& shaderDataTerrain) {
 
-        bufferDataTerrainClipmaps.isActive[simulationBufferIndex] = true;
+        //bufferDataTerrainClipmaps.isActive[simulationBufferIndex] = true;
         bufferDataTerrainClipmaps.shaderDataTerrain[simulationBufferIndex] = shaderDataTerrain;
 
         for (int i = terrainGeometryManager.getStartClipmapLevel(); i < terrainGeometryManager.getTotalClipmapLevel(); i++) {

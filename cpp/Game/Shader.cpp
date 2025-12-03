@@ -73,6 +73,7 @@ namespace Game {
             Engine::Shader::getLocation(shader.loc_ProjectionView, shader.programId, "projectionView");
             Engine::Shader::getLocation(shader.loc_CameraPosition, shader.programId, "cameraPosition");
             Engine::Shader::getLocation(shader.loc_BlockSize, shader.programId, "blockSize");
+            Engine::Shader::getLocation(shader.loc_Heightmap, shader.programId, "heightmap");
         }
 
         void createShader(ShaderFXAA& shader) {
@@ -158,7 +159,20 @@ namespace Game {
             
             Engine::Shader::getLocation(shader.loc_NoiseOctaveTexIndex0, shader.programId, "noiseOctaveTexIndex0");
             Engine::Shader::getLocation(shader.loc_NoiseOctaveTexIndex1, shader.programId, "noiseOctaveTexIndex1");
+        }
 
+        void createShader(ShaderTerrainHeightmapGenerator& shader) {
+
+            std::string vertShader = "shader/generator/terrain/terrain_heightmap_gen.vert";
+            std::string fragShader = "shader/generator/terrain/terrain_heightmap_gen.frag";
+
+            Engine::Shader::createShaderProgram(shader.programId, vertShader.c_str(), fragShader.c_str());
+            Engine::Shader::bind(shader.programId);
+            Engine::Shader::getLocation(shader.loc_Position, shader.programId, "position");
+            Engine::Shader::getLocation(shader.loc_Rotation, shader.programId, "rotation");
+            Engine::Shader::getLocation(shader.loc_Scale, shader.programId, "scale");
+            Engine::Shader::getLocation(shader.loc_IsBase, shader.programId, "isBase");
+            Engine::Shader::getLocation(shader.loc_Tex, shader.programId, "tex");
         }
 
         void updateUniforms(ShaderPlanet& shader, ShaderDataPlanet& shaderData) {
@@ -238,16 +252,12 @@ namespace Game {
             Engine::Shader::uniformTexture(program.loc_Tex, 0, shaderData.textureId);
         }
 
-        //void updateUniforms(ShaderGrid& shaderProgram, glm::mat4& projectionView) {
-        //    Engine::Shader::bind(shaderProgram.programId);
-        //    Engine::Shader::uniform(shaderProgram.loc_ProjectionView, projectionView);
-        //}
-
         void updateUniforms(ShaderTerrain& program, ShaderDataTerrain& shaderData) {
             Engine::Shader::bind(program.programId);
             Engine::Shader::uniform(program.loc_ProjectionView, shaderData.projectionView);
             Engine::Shader::uniform(program.loc_CameraPosition, shaderData.cameraPosition);
             Engine::Shader::uniform(program.loc_BlockSize, shaderData.blockSize);
+            Engine::Shader::uniformTexture(program.loc_Heightmap, 0, shaderData.heightmap);
         }
 
         void updateUniforms(ShaderFXAA& program, ShaderDataFXAA& shaderData) {
@@ -255,6 +265,17 @@ namespace Game {
             Engine::Shader::uniformTexture(program.loc_Tex, 0, shaderData.textureId);
             Engine::Shader::uniform(program.loc_ScreenSize, shaderData.screenSize);
         }
+
+        void updateUniforms(ShaderTerrainHeightmapGenerator& shader, ShaderDataTerrainHeightmapGenerator& shaderData) {
+            Engine::Shader::bind(shader.programId);
+            Engine::Shader::uniform(shader.loc_Position, shaderData.position);
+            Engine::Shader::uniform(shader.loc_Rotation, shaderData.rotation);
+            Engine::Shader::uniform(shader.loc_Scale, shaderData.scale);
+            Engine::Shader::uniform(shader.loc_IsBase, shaderData.isBase);
+            Engine::Shader::uniformTexture(shader.loc_Tex, 0, shaderData.tex);
+        }
+
+
 
     }
 

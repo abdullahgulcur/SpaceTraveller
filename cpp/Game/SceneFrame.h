@@ -2,6 +2,8 @@
 
 #include "glm.hpp"
 #include "Shader.h"
+#include "FrameBuffer.h"
+#include "RenderBuffer.h"
 
 namespace Game {
 
@@ -14,7 +16,11 @@ namespace Game {
         unsigned int planeVAO;
         unsigned int colorTextureId;
         unsigned int depthTextureId;
-        unsigned int FBO;
+        //unsigned int FBO;
+
+        Engine::FrameBuffer fbo;
+        Engine::RenderBuffer rbo;
+
         unsigned int RBO;
         Shader::ShaderFXAA shaderFXAA;
 

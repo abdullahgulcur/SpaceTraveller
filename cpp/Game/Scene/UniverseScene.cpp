@@ -234,6 +234,14 @@ namespace Game {
             UniverseScene::setCameraTransformQueue(arrivalPoint, arrivalPoint);
             translateCameraCtrl.init();
             stateCameraMovement = StateCamera::ORBIT_MOVE_TARGET;
+
+            glm::vec2 position = glm::vec2(0.f);
+            float rotation = 0.f;
+            float scale = 1.f;
+            float isBase = 0.f;
+            game->renderingContext.terrainHeightmapGeneratorJobSystem.push(Shader::ShaderDataTerrainHeightmapGenerator(glm::vec2(0.f), 0.f, 1.f, 0.f));
+            game->renderingContext.terrainHeightmapGeneratorJobSystem.set();
+
             return;
         }
 
@@ -458,8 +466,8 @@ namespace Game {
         Engine::Input& input = Game::getInstance()->input;
 
         if (input.getPointerDown()) {
-            float deltaX = -input.getPointerDelta().x * 0.001f;
-            float deltaY = input.getPointerDelta().y * 0.001f;
+            float deltaX = -input.getPointerDelta().x * 0.1f;
+            float deltaY = input.getPointerDelta().y * 0.1f;
 
             //std::cout << "X: " << deltaX << " Y: " << deltaY << std::endl;
 

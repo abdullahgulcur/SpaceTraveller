@@ -15,25 +15,29 @@ namespace Engine {
 		GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 		const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 
-		GLFW_window = glfwCreateWindow(mode->width, mode->height, "Application", NULL, NULL); // windowed
-		//GLFW_window = glfwCreateWindow(mode->width, mode->height, "Application", monitor, NULL); // fullscreen
+		glfwMainWindow = glfwCreateWindow(mode->width, mode->height, "SpaceTraveller", NULL, NULL); // windowed
+		glfwMaximizeWindow(glfwMainWindow);
 
-		glfwMaximizeWindow(GLFW_window);
+		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+		//glfwAsyncTextureGeneratorWindow = glfwCreateWindow(1, 1, "", nullptr, glfwMainWindow);
 
-		glfwSetInputMode(GLFW_window, GLFW_STICKY_KEYS, GL_TRUE);
-		glfwSetInputMode(GLFW_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		glfwSetInputMode(glfwMainWindow, GLFW_STICKY_KEYS, GL_TRUE);
+		glfwSetInputMode(glfwMainWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 		screenSize = glm::ivec2(mode->width, mode->height);
+
+		//GLFW_window = glfwCreateWindow(mode->width, mode->height, "Application", monitor, NULL); // fullscreen
+
 	}
 
 	void GlfwContext::makeContextCurrent() {
 
-		glfwMakeContextCurrent(GLFW_window);
+		glfwMakeContextCurrent(glfwMainWindow);
 	}
 
 	bool GlfwContext::shouldClose() {
 
-		return glfwGetKey(GLFW_window, GLFW_KEY_ESCAPE) == GLFW_PRESS || glfwWindowShouldClose(GLFW_window);
+		return glfwGetKey(glfwMainWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS || glfwWindowShouldClose(glfwMainWindow);
 	}
 
 	void GlfwContext::pollEvents() {
@@ -43,21 +47,21 @@ namespace Engine {
 
 	void GlfwContext::swapBuffers() {
 
-		glfwSwapBuffers(GLFW_window);
+		glfwSwapBuffers(glfwMainWindow);
 	}
 
 	void GlfwContext::destroy() {
 
-		if (GLFW_window) {
-			glfwDestroyWindow(GLFW_window);
-			GLFW_window = nullptr;
+		if (glfwMainWindow) {
+			glfwDestroyWindow(glfwMainWindow);
+			glfwMainWindow = nullptr;
 		}
 		glfwTerminate();
 	}
 
 	void GlfwContext::setTitle(const char* title) {
 
-		glfwSetWindowTitle(GLFW_window, title);
+		glfwSetWindowTitle(glfwMainWindow, title);
 	}
 
 	void GlfwContext::getScreenSize(glm::ivec2& screenSize) {
@@ -76,7 +80,7 @@ namespace Engine {
 		std::lock_guard<std::mutex> lock(mtx);
 
 		int width, height;
-		glfwGetWindowSize(GLFW_window, &width, &height);
+		glfwGetWindowSize(glfwMainWindow, &width, &height);
 
 		if (width != screenSize.x || height != screenSize.y) {
 			this->screenSize.x = width;

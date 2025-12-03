@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(win 0)
 set(android 1)
-set(platform ${android})
+set(platform ${win})
 
 set(sourceFiles
 
@@ -48,6 +48,7 @@ set(sourceFiles
         "Engine/Rendering/VertexBuffer.cpp"
         "Engine/Rendering/DrawCommand.cpp"
         "Engine/Rendering/FrameBuffer.cpp"
+        "Engine/Rendering/RenderBuffer.cpp"
 
         "Engine/Resource/MeshData.cpp"
 

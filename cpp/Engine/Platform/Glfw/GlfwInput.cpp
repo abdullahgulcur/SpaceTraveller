@@ -4,26 +4,26 @@
 
 namespace Engine {
 
-    void GlfwInput::init(GLFWwindow* GLFW_window) {
-        this->GLFW_window = GLFW_window;
+    void GlfwInput::init(GLFWwindow* glfwMainWindow) {
+        this->glfwMainWindow = glfwMainWindow;
     }
 
     void GlfwInput::update() {
 
 		auto getMousePress = [&](GlfwInputCode key) {
-			return glfwGetMouseButton(GLFW_window, int(key)) == GLFW_PRESS;
+			return glfwGetMouseButton(glfwMainWindow, int(key)) == GLFW_PRESS;
 		};
 
 		auto getMouseRelease = [&](GlfwInputCode key) {
-			return glfwGetMouseButton(GLFW_window, int(key)) == GLFW_RELEASE;
+			return glfwGetMouseButton(glfwMainWindow, int(key)) == GLFW_RELEASE;
 		};
 
 		auto getKeyPress = [&](GlfwInputCode key) {
-			return glfwGetKey(GLFW_window, int(key)) == GLFW_PRESS;
+			return glfwGetKey(glfwMainWindow, int(key)) == GLFW_PRESS;
 		};
 
 		auto getKeyRelease = [&](GlfwInputCode key) {
-			return glfwGetKey(GLFW_window, int(key)) == GLFW_RELEASE;
+			return glfwGetKey(glfwMainWindow, int(key)) == GLFW_RELEASE;
 		};
 
 		auto pressButton = [&](InputCode key) {
@@ -171,19 +171,19 @@ namespace Engine {
 	}
 
 	void GlfwInput::setCursorPos(glm::ivec2 cursorPos) {
-		glfwSetCursorPos(GLFW_window, cursorPos.x, cursorPos.y);
+		glfwSetCursorPos(glfwMainWindow, cursorPos.x, cursorPos.y);
 	}
 
 	void GlfwInput::getCursorPos(glm::ivec2& cursorPos) {
 		double xPos, yPos;
-		glfwGetCursorPos(GLFW_window, &xPos, &yPos);
+		glfwGetCursorPos(glfwMainWindow, &xPos, &yPos);
 		cursorPos = glm::ivec2(xPos, yPos);
 	}
 
 	void GlfwInput::setCursorVisible(bool visible) {
 
 		int value = visible ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_HIDDEN;
-		glfwSetInputMode(GLFW_window, GLFW_CURSOR, value);
+		glfwSetInputMode(glfwMainWindow, GLFW_CURSOR, value);
 	}
 
 }

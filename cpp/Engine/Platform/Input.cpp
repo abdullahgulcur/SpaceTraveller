@@ -16,7 +16,7 @@ namespace Engine {
 #if PLATFORM == ANDROID
         input.init();
 #elif PLATFORM == WIN
-        input.init(this->appSurface->glContext.GLFW_window);
+        input.init(this->appSurface->glContext.glfwMainWindow);
 #endif
     }
 

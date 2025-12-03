@@ -46,6 +46,11 @@ namespace Engine {
         glContext.makeContextCurrent();
     }
 
+    //void AppSurface::makeAsyncTextureGeneratorContextCurrent() {
+
+    //    glContext.makeContextCurrent(glContext.glfwAsyncTextureGeneratorWindow);
+    //}
+
 #if PLATFORM == WIN
     void AppSurface::pollEvents() {
         glContext.pollEvents();

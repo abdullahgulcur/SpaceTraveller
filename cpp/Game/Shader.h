@@ -183,6 +183,44 @@ namespace Game {
             float fresnelBias;
         };
 
+        struct ShaderTerrainHeightmapGenerator {
+            unsigned int programId;
+            unsigned int loc_Position;
+            unsigned int loc_Rotation;
+            unsigned int loc_Scale;
+            unsigned int loc_IsBase;
+            unsigned int loc_Tex;
+        };
+
+        struct ShaderDataTerrainHeightmapGenerator {
+            
+            glm::vec2 position;
+            float rotation;
+            float scale;
+            float isBase;
+            unsigned int tex;
+
+            ShaderDataTerrainHeightmapGenerator() {}
+
+            ShaderDataTerrainHeightmapGenerator(glm::vec2 position, float rotation, float scale, float isBase) :
+                position(position),
+                rotation(rotation),
+                scale(scale),
+                isBase(isBase)
+            {
+            }
+
+            ShaderDataTerrainHeightmapGenerator(glm::vec2 position, float rotation, float scale, float isBase, unsigned int tex) :
+                position(position),
+                rotation(rotation),
+                scale(scale),
+                isBase(isBase),
+                tex(tex)
+            {
+            }
+
+        };
+
         struct ShaderParticle {
             unsigned int programId;
             unsigned int loc_ProjectionView;
@@ -246,19 +284,24 @@ namespace Game {
             unsigned int loc_ProjectionView;
             unsigned int loc_CameraPosition;
             unsigned int loc_BlockSize;
+            unsigned int loc_Heightmap;
         };
 
         struct ShaderDataTerrain {
             glm::mat4 projectionView;
             glm::vec3 cameraPosition;
             unsigned int blockSize;
+            unsigned int heightmap;
 
             ShaderDataTerrain() {}
-            ShaderDataTerrain(Engine::Camera::Camera& camera, unsigned int blockSize) {
+            ShaderDataTerrain(Engine::Camera::Camera& camera, unsigned int blockSize, unsigned int heightmap) {
                 projectionView = camera.projectionView;
                 cameraPosition = camera.position;
                 this->blockSize = blockSize;
+                this->heightmap = heightmap;
             }
+
+            //void setHeightmap(unsigned int heightmap) { this->heightmap = heightmap; }
 
         };
 
@@ -291,12 +334,15 @@ namespace Game {
         void createShader(ShaderPlanet& shader);
         void createShader(ShaderSun& shader);
         void createShader(ShaderPlanet& shader);
+        void createShader(ShaderTerrainHeightmapGenerator& shader);
 
         void updateUniforms(ShaderPlanet& shader, ShaderDataPlanet& planetShaderData);
         void updateUniforms(ShaderSun& shader, ShaderDataSun& shaderDataSun);
         void updateUniforms(ShaderParticleSolarSystem& program, ShaderDataParticleSolarSystem& shaderData);
         void updateUniforms(ShaderTerrain& program, ShaderDataTerrain& shaderData);
         void updateUniforms(ShaderFXAA& program, ShaderDataFXAA& shaderData);
+        void updateUniforms(ShaderTerrainHeightmapGenerator& shader, ShaderDataTerrainHeightmapGenerator& shaderData);
+
     }
 
 }

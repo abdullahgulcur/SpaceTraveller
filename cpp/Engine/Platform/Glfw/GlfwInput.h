@@ -37,7 +37,7 @@ namespace Engine {
     class GlfwInput {
     private:
 
-        GLFWwindow* GLFW_window;
+        GLFWwindow* glfwMainWindow;
 
     public:
 
@@ -57,7 +57,7 @@ namespace Engine {
 
         GlfwInput(){}
         ~GlfwInput(){}
-        void init(GLFWwindow* GLFW_window);
+        void init(GLFWwindow* glfwMainWindow);
         void update();
         bool getButtonDown(InputCode inputCode);
         bool getButtonPress(InputCode inputCode);

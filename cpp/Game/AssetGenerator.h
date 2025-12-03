@@ -3,6 +3,7 @@
 #include "MeshData.h"
 #include "ShaderProgram.h"
 #include "ParticleSystem.h"
+#include "FrameBuffer.h"
 
 namespace Game {
 
@@ -21,12 +22,15 @@ namespace Game {
         Shader::ShaderSun shaderSun;
         Shader::ShaderParticleSolarSystem shaderParticleSolarSystem;
         Shader::ShaderTerrain shaderTerrain;
+        Shader::ShaderTerrainHeightmapGenerator shaderTerrainHeightmapGenerator;
 
         // ------- TEXTURE -------
         unsigned int perlinTextureId;
         unsigned int macroTextureId;
         unsigned int noiseTextureArrayId;
         unsigned int sunFarBillboardTextureId;
+        unsigned int heightmapTextureId;
+        unsigned int noiseTexture;
 
         // ------- VAO -------
         unsigned int vaoSphereMesh;
@@ -46,13 +50,16 @@ namespace Game {
         // ------- INSTANCE BUFFER -------
         unsigned int instanceBufferParticleDynamic;
         unsigned int instanceBufferTerrain;
-        
+
+        // -------- FBO --------
+        Engine::FrameBuffer fbo;
+
 		AssetGenerator() {}
 		~AssetGenerator() {}
 
         void init();
         void initRenderObjects();
-		void generateSunBillboardTexture();
+        void generateSunBillboardTexture();
 
         // -------------- VAO --------------
 

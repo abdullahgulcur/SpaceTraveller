@@ -27,29 +27,28 @@ namespace Game {
 
         Engine::Texture::createTexture2D(this->depthTextureId, config);
 
-        Engine::FrameBuffer::generateFbo(FBO);
-        Engine::FrameBuffer::bindFbo(FBO);
-        Engine::FrameBuffer::setFrameBufferTexture(GL_COLOR_ATTACHMENT0, this->colorTextureId);
-        Engine::FrameBuffer::setFrameBufferTexture(GL_DEPTH_ATTACHMENT, this->depthTextureId);
+        fbo.generate();
+        fbo.bind();
+        fbo.attachTexColor(colorTextureId);
+        fbo.attachTexDepth(depthTextureId);
 
-        Engine::FrameBuffer::generateRBO(RBO, size);
+        rbo.generate();
+        rbo.bind();
+        rbo.setStorage(size);
+        rbo.unbind();
 
-        Engine::FrameBuffer::unbindFbo();
-
-        //if (!Engine::FrameBuffer::frameBufferComplete()) {
-        //    int x = 5;
-        //}
+        fbo.attachDepthRbo(rbo.id);
+        fbo.unbind();
 
         Shader::createShader(shaderFXAA);
 
         Game* game = Game::getInstance();
         planeVAO = game->assetGenerator.quadVAO;
-
     }
 
     void SceneFrame::activate() {
 
-        Engine::FrameBuffer::bindFbo(FBO);
+        fbo.bind();
         glViewport(0, 0, size.x, size.y);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -58,7 +57,7 @@ namespace Game {
 
     void SceneFrame::postProcess() {
 
-        Engine::FrameBuffer::unbindFbo();
+        fbo.unbind();
         glViewport(0, 0, size.x, size.y);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);

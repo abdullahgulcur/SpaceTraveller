@@ -11,6 +11,7 @@ namespace Game {
         shouldOpen = true;
         appSurface.init();
         renderThread = std::thread(&Game::threadRendering, this);
+        //asyncTextureGeneratorThread = std::thread(&Game::threadAsyncTextureGenerator, this);
         input.init(&appSurface);
         assetGenerator.init();
         Engine::Camera::init(camera, 45.0f, appSurface.getAspectRatio());
@@ -21,6 +22,9 @@ namespace Game {
 
         appSurface.makeRenderingContextCurrent();
         Engine::Graphics::init();
+
+        //temp = true;
+
         assetGenerator.initRenderObjects();
 
         //glm::ivec2 screenSize;
@@ -36,6 +40,24 @@ namespace Game {
         }
     }
 
+    //void Game::threadAsyncTextureGenerator() {
+
+    //    /*while (!temp) {
+
+    //    }*/
+
+    //    appSurface.makeAsyncTextureGeneratorContextCurrent();
+    //    asyncTextureGenerator.init();
+    //    while (shouldOpen) {
+
+    //        int x = 5;
+    //        int y = x;
+
+    //        asyncTextureGenerator.update();
+
+    //    }
+    //}
+
     void Game::update() {
 
         input.update();
@@ -47,6 +69,7 @@ namespace Game {
 
     void Game::shutDown() {
         renderThread.join();
+        //asyncTextureGeneratorThread.join();
     }
 
     Game* Game::getInstance() {

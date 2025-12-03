@@ -11,7 +11,7 @@ namespace Engine {
 
 	public:
 
-		GLFWwindow* GLFW_window;
+		GLFWwindow* glfwMainWindow;
 		glm::ivec2 screenSize;
 		bool aspectChanged;
 		std::mutex mtx;

@@ -125,6 +125,31 @@ namespace Engine {
             glUniform2uiv(location, 1, &value[0]);
         }
 
+        /// 
+        
+
+        //void uniform(unsigned int location, glm::mat4 value) {
+        //    glUniformMatrix4fv(location, 1, GL_FALSE, &value[0][0]);
+        //}
+
+        //void uniform(unsigned int location, glm::vec3 value) {
+        //    glUniform3fv(location, 1, &value[0]);
+        //}
+
+        //void uniform(unsigned int location, glm::vec2 value) {
+        //    glUniform2fv(location, 1, &value[0]);
+        //}
+
+        //void uniform(unsigned int location, glm::ivec2 value) {
+        //    glUniform2iv(location, 1, &value[0]);
+        //}
+
+        //void uniform(unsigned int location, glm::uvec2 value) {
+        //    glUniform2uiv(location, 1, &value[0]);
+        //}
+
+        /// 
+
         void uniformTexture(unsigned int location, unsigned int slot, unsigned int textureId) {
             glActiveTexture(GL_TEXTURE0 + slot);
             glBindTexture(GL_TEXTURE_2D, textureId);

@@ -14,6 +14,21 @@ namespace Engine {
             configure();
 		}
 
+        void initWorkerContext() {
+
+#if PLATFORM == WIN
+            glewExperimental = true;
+            glewInit();
+
+            /*glEnable(GL_CULL_FACE);
+            glCullFace(GL_BACK);
+            glFrontFace(GL_CCW);*/
+
+            //glEnable(GL_BLEND);
+            //glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+#endif
+        }
+
 		void configure() {
 
             glEnable(GL_DEPTH_TEST);

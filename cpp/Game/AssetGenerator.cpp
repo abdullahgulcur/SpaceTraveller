@@ -52,11 +52,29 @@ namespace Game {
         };
         Engine::Texture::createTextureArray2D(noiseTextureArrayId, pathList);
 
-        Shader::createShader(shaderTerrain);
+        Engine::Texture::Texture2DConfig config;
+        config.width = 1024;
+        config.height = 1024;
+        config.minFilter = GL_NEAREST;
+        config.magFilter = GL_NEAREST;
+        config.wrap_s = GL_CLAMP_TO_EDGE;
+        config.wrap_t = GL_CLAMP_TO_EDGE;
+        config.internalFormat = GL_R8;
+        config.format = GL_RED;
+        Engine::Texture::createTexture2D(heightmapTextureId, config);
+
+        Engine::Texture::createTexture2D(noiseTexture, "texture/perlin/output.jpg");
 
         AssetGenerator::generateSunBillboardTexture();
-    }
 
+        fbo.generate();
+        fbo.bind();
+        fbo.attachTexColor(heightmapTextureId);
+        fbo.unbind();
+
+        Shader::createShader(shaderTerrainHeightmapGenerator);
+        Shader::createShader(shaderTerrain);
+    }
 
     //TODO: burdaki vao, vbo gibi seyler genelde kullaniliyor. olusturup sildirmek gereksiz is yuku
 	void AssetGenerator::generateSunBillboardTexture() {
@@ -72,8 +90,10 @@ namespace Game {
 
         Engine::Texture::createTexture2D(sunFarBillboardTextureId, sunTexConfig);
 
-        unsigned int fbo;
-        Engine::FrameBuffer::generateFbo(fbo, sunFarBillboardTextureId, GL_COLOR_ATTACHMENT0);
+        Engine::FrameBuffer fbo;
+        fbo.generate();
+        fbo.bind();
+        fbo.attachTexColor(sunFarBillboardTextureId);
 
         Shader::ShaderTextureGeneratorSun program;
         Shader::createShader(program);
@@ -99,7 +119,7 @@ namespace Game {
         Engine::Vao::deleteVao(vao);
         Engine::Shader::deleteShaderProgram(program.programId);
         Engine::Texture::clearTex(noiseTextureId);
-        Engine::FrameBuffer::deleteFbo(fbo);
+        fbo.deleteFbo();
 	}
 
     // -------------- VAO --------------
